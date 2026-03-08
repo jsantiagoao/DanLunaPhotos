@@ -1,0 +1,14 @@
+<section class="what-includes">
+  <div class="what-includes__inner">
+    <h2 class="what-includes__title">¿Qué incluye la sesión?</h2>
+
+    <ul class="what-includes__list">
+      @for (item of includes; track item.title) {
+        <li class="what-includes__item">
+          <span class="what-includes__icon">{{ item.icon }}</span>
+          <span class="what-includes__text">{{ item.title }}</span>
+        </li>
+      }
+    </ul>
+  </div>
+</section>

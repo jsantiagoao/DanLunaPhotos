@@ -1,0 +1,28 @@
+<div class="mothers-day">
+  <!-- Header Row: Breadcrumb and Title -->
+  <div class="mothers-day__header">
+    <div class="mothers-day__header-inner">
+      <div class="mothers-day__title-group">
+        <h1 class="mothers-day__title">Mother's Day 2026</h1>
+        <p class="mothers-day__subtitle">Mini Sesiones</p>
+      </div>
+      <div class="mothers-day__breadcrumb-wrapper">
+        <app-breadcrumb [items]="breadcrumbs" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero Section with Carousel -->
+  <section class="mothers-day__hero">
+    <app-mothers-day-carousel />
+  </section>
+
+  <!-- What Includes Section -->
+  <app-what-includes id="que-incluye" />
+
+  <!-- Booking Steps Section -->
+  <app-booking-steps id="pasos-reserva" />
+
+  <!-- Calendar Picker Section -->
+  <app-calendar-picker id="calendario" />
+</div>

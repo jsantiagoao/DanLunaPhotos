@@ -1,0 +1,76 @@
+<section class="calendar">
+  <div class="calendar__inner">
+    <h2 class="calendar__title">Fechas y horarios</h2>
+    <p class="calendar__subtitle">Sesión de Día de las Madres</p>
+
+    <div class="calendar__container">
+      <div class="calendar__card">
+        <div class="calendar__header">
+          <button class="calendar__nav-btn" (click)="previousMonth()" aria-label="Mes anterior">
+            ←
+          </button>
+          <h3 class="calendar__month">
+            {{ monthNames[currentDate().getMonth()] }} {{ currentDate().getFullYear() }}
+          </h3>
+          <button class="calendar__nav-btn" (click)="nextMonth()" aria-label="Próximo mes">
+            →
+          </button>
+        </div>
+
+        <div class="calendar__weekdays">
+          @for (day of dayNames; track day) {
+            <div class="calendar__weekday">{{ day }}</div>
+          }
+        </div>
+
+        <div class="calendar__grid">
+          @for (week of getWeekRows(); track week) {
+            @for (day of week; track day.date.getTime()) {
+              <button 
+                class="calendar__day"
+                [class.calendar__day--other-month]="!day.isCurrentMonth"
+                [class.calendar__day--disabled]="!day.isAvailable || !day.isCurrentMonth"
+                [class.calendar__day--selected]="day.isSelected"
+                [disabled]="!day.isAvailable || !day.isCurrentMonth"
+                (click)="selectDay(day)"
+                [attr.aria-label]="day.day + ' de ' + monthNames[currentDate().getMonth()]"
+              >
+                {{ day.day }}
+              </button>
+            }
+          }
+        </div>
+
+        <div class="calendar__legend">
+          <div class="calendar__legend-item">
+            <span class="calendar__legend-dot calendar__legend-dot--available"></span>
+            Disponible
+          </div>
+          <div class="calendar__legend-item">
+            <span class="calendar__legend-dot calendar__legend-dot--selected"></span>
+            Seleccionado
+          </div>
+          <div class="calendar__legend-item">
+            <span class="calendar__legend-dot calendar__legend-dot--disabled"></span>
+            No disponible
+          </div>
+        </div>
+
+        @if (selectedDate()) {
+          <div class="calendar__selected">
+            <p class="calendar__selected-label">Fecha seleccionada:</p>
+            <p class="calendar__selected-date">{{ getFormattedDate() }}</p>
+            <button class="calendar__cta" (click)="continueToPixieset()">
+              Continuar a reserva
+            </button>
+          </div>
+        }
+      </div>
+    </div>
+
+    <p class="calendar__info">
+      <strong>Selecciona una fecha</strong> de las disponibles en el calendario. Después de confirmar, 
+      serás redirigido a nuestro sistema de reserva para completar los detalles de tu sesión.
+    </p>
+  </div>
+</section>

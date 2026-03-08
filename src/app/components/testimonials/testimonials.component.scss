@@ -1,0 +1,109 @@
+.testimonials {
+  background-color: var(--color-white);
+  padding: var(--section-padding);
+
+  &__inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__overline {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-gold);
+    letter-spacing: 0.08em;
+  }
+
+  &__title {
+    font-family: var(--font-serif);
+    font-size: 44px;
+    font-weight: 600;
+    color: var(--color-dark);
+    line-height: 1.15;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 36px 32px;
+    background-color: var(--color-cream);
+    border-radius: 20px;
+  }
+
+  &__stars {
+    font-family: var(--font-sans);
+    font-size: 18px;
+    color: var(--color-gold);
+    letter-spacing: 2px;
+  }
+
+  &__quote {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--color-warm-gray);
+    line-height: 1.65;
+    flex: 1;
+  }
+
+  &__author {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__author-name {
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-dark);
+  }
+
+  &__author-type {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--color-gold);
+  }
+}
+
+@media (max-width: 1199px) {
+  .testimonials {
+    &__inner { gap: 48px; }
+    &__title { font-size: 40px; }
+    &__grid { grid-template-columns: repeat(2, 1fr); }
+  }
+}
+
+@media (max-width: 767px) {
+  .testimonials {
+    &__inner { gap: 40px; }
+    &__title { font-size: 32px; }
+    &__grid { grid-template-columns: 1fr; gap: 20px; }
+    &__card { padding: 28px 24px; }
+  }
+}
+
+@media (max-width: 479px) {
+  .testimonials {
+    &__title { font-size: 28px; }
+    &__quote { font-size: 15px; }
+  }
+}

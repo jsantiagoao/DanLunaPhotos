@@ -1,0 +1,18 @@
+<nav class="breadcrumb">
+  <ol class="breadcrumb__list">
+    @for (item of items; track item.label; let last = $last) {
+      <li class="breadcrumb__item">
+        @if (item.href && !last) {
+          <a class="breadcrumb__link" [href]="item.href" (click)="scrollTo(item.href); $event.preventDefault()">
+            {{ item.label }}
+          </a>
+        } @else {
+          <span class="breadcrumb__text">{{ item.label }}</span>
+        }
+        @if (!last) {
+          <span class="breadcrumb__separator">/</span>
+        }
+      </li>
+    }
+  </ol>
+</nav>

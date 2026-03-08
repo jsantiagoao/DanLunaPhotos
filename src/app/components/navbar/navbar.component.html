@@ -1,0 +1,47 @@
+<nav class="navbar">
+  <div class="navbar__inner">
+
+    <a class="navbar__logo" href="#inicio" (click)="scrollTo('#inicio'); $event.preventDefault()">
+      <img src="assets/images/logo-light.png" alt="Dan Luna Photo" />
+    </a>
+
+    <ul class="navbar__links" [class.navbar__links--open]="menuOpen()">
+      @for (link of links; track link.label) {
+        <li class="navbar__item" [class.navbar__item--has-submenu]="link.submenu">
+          @if (link.submenu) {
+            <button class="navbar__link">
+              {{ link.label }}
+              <span class="navbar__arrow">▼</span>
+            </button>
+            <ul class="navbar__submenu">
+              <div class="navbar__submenu-content">
+                @for (subitem of link.submenu; track subitem.label) {
+                  <li>
+                    <a [href]="subitem.href" (click)="scrollTo(subitem.href); $event.preventDefault()">
+                      {{ subitem.label }}
+                    </a>
+                  </li>
+                }
+              </div>
+            </ul>
+          } @else {
+            <a class="navbar__link" [href]="link.href" (click)="scrollTo(link.href!); $event.preventDefault()">
+              {{ link.label }}
+            </a>
+          }
+        </li>
+      }
+    </ul>
+
+    <div class="navbar__right">
+      <a class="navbar__cta" href="#contacto" (click)="scrollTo('#contacto'); $event.preventDefault()">
+        Reservar sesión
+      </a>
+    </div>
+
+    <button class="navbar__hamburger" (click)="toggleMenu()" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+
+  </div>
+</nav>

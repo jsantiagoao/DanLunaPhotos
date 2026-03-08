@@ -1,0 +1,37 @@
+<section class="booking-steps">
+  <div class="booking-steps__inner">
+    <h2 class="booking-steps__title">Pasos para reservar tu sesión hoy</h2>
+
+    <div class="booking-steps__container">
+      @for (step of steps; track step.number; let index = $index) {
+        <div class="booking-steps__item" [class.booking-steps__item--open]="isStepOpen(index)">
+          <button 
+            class="booking-steps__header"
+            (click)="toggleStep(index)"
+            [attr.aria-expanded]="isStepOpen(index)"
+            [attr.aria-label]="step.title"
+          >
+            <span class="booking-steps__number">{{ step.number }}</span>
+            <span class="booking-steps__step-title">{{ step.title }}</span>
+            <span class="booking-steps__icon">▶</span>
+          </button>
+          
+          <div class="booking-steps__content" [class.booking-steps__content--open]="isStepOpen(index)">
+            @for (line of step.contentLines; track $index) {
+              <p class="booking-steps__step-description">{{ line }}</p>
+            }
+            @if (step.button) {
+              <a
+                [href]="step.button.url"
+                target="_blank"
+                class="booking-steps__btn"
+              >
+                {{ step.button.text }}
+              </a>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>

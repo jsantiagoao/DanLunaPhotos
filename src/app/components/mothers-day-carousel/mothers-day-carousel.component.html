@@ -1,0 +1,35 @@
+<div class="carousel">
+  <div class="carousel__container"
+    (touchstart)="onTouchStart($event)"
+    (touchend)="onTouchEnd($event)">
+    <div class="carousel__grid" #carousel>
+      @for (photo of getVisiblePhotos(); track photo.id) {
+        <div class="carousel__item">
+          <img 
+            [src]="photo.src" 
+            [alt]="photo.alt"
+            class="carousel__image"
+            loading="lazy"
+          />
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="carousel__dots">
+    @for (dot of getDots(); track dot) {
+      <button 
+        class="carousel__dot" 
+        [class.carousel__dot--active]="dot === currentIndex"
+        (click)="selectDot(dot)"
+        [attr.aria-label]="'Ir a foto ' + (dot + 1)"
+      ></button>
+    }
+  </div>
+
+  <div class="carousel__caption">
+    <p class="carousel__caption-text">
+      "Un momento único, un recuerdo para siempre"
+    </p>
+  </div>
+</div>

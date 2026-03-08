@@ -1,0 +1,1579 @@
+{
+  "version": "2.8",
+  "children": [
+    {
+      "type": "frame",
+      "id": "bi8Au",
+      "x": 0,
+      "y": 0,
+      "name": "Frame",
+      "clip": true,
+      "width": 800,
+      "height": 600,
+      "fill": "#FFFFFF",
+      "layout": "none"
+    },
+    {
+      "type": "frame",
+      "id": "HSVdg",
+      "x": 0,
+      "y": 0,
+      "name": "Dan Luna Photography — SPA",
+      "width": 1440,
+      "fill": "#ffffff",
+      "layout": "vertical",
+      "children": [
+        {
+          "type": "frame",
+          "id": "n7DKQ",
+          "name": "01 — Navbar",
+          "width": "fill_container",
+          "height": 72,
+          "fill": "#ffffffff",
+          "padding": [
+            0,
+            50
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "frame",
+              "id": "MCwvV",
+              "name": "navLogoImg",
+              "width": 160,
+              "height": 44,
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "./logo-light.png",
+                "mode": "fit"
+              },
+              "layout": "none"
+            },
+            {
+              "type": "frame",
+              "id": "MiYrk",
+              "name": "navLinks",
+              "height": "fill_container",
+              "gap": 40,
+              "justifyContent": "center",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "text",
+                  "id": "4pJ7A",
+                  "name": "navLink1",
+                  "fill": "#86816C",
+                  "content": "Sesiones al Aire Libre",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 15,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "nl3MG",
+                  "name": "navLink2",
+                  "fill": "#86816C",
+                  "content": "Eventos & Celebraciones",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 15,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "OgWqW",
+                  "name": "navLink3",
+                  "fill": "#86816C",
+                  "content": "Fotos para Redes Sociales",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 15,
+                  "fontWeight": "500"
+                },
+                {
+                  "type": "text",
+                  "id": "wfEYJ",
+                  "name": "navLink4",
+                  "fill": "#86816C",
+                  "content": "Contáctame",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 15,
+                  "fontWeight": "500"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "qgdgP",
+          "name": "02 — Hero",
+          "metadata": {
+            "type": "unsplash",
+            "username": "jd_photo",
+            "link": "https://unsplash.com/@jd_photo",
+            "author": "JD-Photos"
+          },
+          "width": "fill_container",
+          "height": 860,
+          "fill": "#2D242077",
+          "layout": "vertical",
+          "children": [
+            {
+              "type": "frame",
+              "id": "r5Mhl",
+              "name": "heroInner",
+              "width": "fill_container",
+              "height": "fill_container",
+              "layout": "vertical",
+              "padding": [
+                200,
+                140,
+                100,
+                140
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "U8yju",
+                  "name": "heroBadge",
+                  "fill": "#AD8A6A33",
+                  "cornerRadius": 20,
+                  "padding": [
+                    6,
+                    16
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "TesA2",
+                      "name": "heroBadgeText",
+                      "fill": "#EAE7E1",
+                      "content": "FOTOGRAFÍA PROFESIONAL",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 12,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Q2FaZ",
+                  "name": "heroGap1",
+                  "width": 1,
+                  "height": 28,
+                  "fill": "#00000000"
+                },
+                {
+                  "type": "text",
+                  "id": "YnhO1",
+                  "name": "heroHeadline",
+                  "fill": "#F9F5F2",
+                  "content": "Cada momento,\nuna obra.",
+                  "fontFamily": "Fraunces",
+                  "fontSize": 80,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "2vr3N",
+                  "name": "heroGap2",
+                  "width": 1,
+                  "height": 24,
+                  "fill": "#00000000"
+                },
+                {
+                  "type": "text",
+                  "id": "CRlWc",
+                  "name": "heroSub",
+                  "fill": "#EAE7E190",
+                  "content": "Fotografía de retratos, bodas y sesiones artísticas.\nCapturando la esencia de cada persona y momento.",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 19,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "1uyOI",
+                  "name": "heroGap3",
+                  "width": 1,
+                  "height": 48,
+                  "fill": "#00000000"
+                },
+                {
+                  "type": "frame",
+                  "id": "DWtDI",
+                  "name": "heroCTAs",
+                  "gap": 16,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "GgM7z",
+                      "name": "heroCTAPrimary",
+                      "fill": "#AD8A6A",
+                      "cornerRadius": 28,
+                      "padding": [
+                        16,
+                        36
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "79yc6",
+                          "name": "heroCTAPrimaryText",
+                          "fill": "#F9F5F2",
+                          "content": "Ver portfolio",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 16,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "JI2WQ",
+                      "name": "heroCTASecondary",
+                      "fill": "#F9F5F220",
+                      "cornerRadius": 28,
+                      "padding": [
+                        16,
+                        36
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "RNEO3",
+                          "name": "heroCTASecondaryText",
+                          "fill": "#F9F5F2",
+                          "content": "Reservar sesión",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 16,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "hnGzl",
+                  "name": "heroScroll",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "p7iaD",
+                      "name": "heroScrollLine",
+                      "width": 1,
+                      "height": 60,
+                      "fill": "#F9F5F250"
+                    },
+                    {
+                      "type": "text",
+                      "id": "YAkWo",
+                      "name": "heroScrollText",
+                      "fill": "#F9F5F260",
+                      "content": "Scroll",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 11,
+                      "fontWeight": "600"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "rvpVR",
+          "name": "03 — Galería / Portfolio",
+          "width": "fill_container",
+          "fill": "#F9F5F2",
+          "layout": "vertical",
+          "gap": 56,
+          "padding": [
+            96,
+            120
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "ScEBu",
+              "name": "galleryHeader",
+              "width": "fill_container",
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "BYJyI",
+                  "name": "galleryTitleGroup",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "oGRS3",
+                      "name": "galleryOverline",
+                      "fill": "#AD8A6A",
+                      "content": "PORTFOLIO",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 12,
+                      "fontWeight": "600"
+                    },
+                    {
+                      "type": "text",
+                      "id": "fyzQy",
+                      "name": "galleryTitle",
+                      "fill": "#2D2420",
+                      "content": "Servicios",
+                      "fontFamily": "Fraunces",
+                      "fontSize": 48,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Y755R",
+                  "name": "galleryLink",
+                  "gap": 8,
+                  "padding": [
+                    12,
+                    0
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "0NIGv",
+                      "name": "galleryLinkText",
+                      "fill": "#AD8A6A",
+                      "content": "Ver todo el trabajo →",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 15,
+                      "fontWeight": "500"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "qPyl2",
+              "name": "galleryGrid",
+              "width": "fill_container",
+              "gap": 20,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "sFScL",
+                  "name": "card1",
+                  "metadata": {
+                    "type": "unsplash",
+                    "username": "nikolph",
+                    "link": "https://unsplash.com/@nikolph",
+                    "author": "Николай"
+                  },
+                  "width": "fill_container",
+                  "height": 480,
+                  "fill": "#2D242044",
+                  "cornerRadius": 16,
+                  "layout": "vertical",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "zdz6V",
+                      "name": "card1Info",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "padding": [
+                        20,
+                        24
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "UZOXc",
+                          "name": "card1Num",
+                          "fill": "#AD8A6A",
+                          "content": "01",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "3nicl",
+                          "name": "card1Name",
+                          "fill": "#F9F5F2",
+                          "content": "Retratos",
+                          "fontFamily": "Fraunces",
+                          "fontSize": 20,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "4Z3UE",
+                          "name": "card1Count",
+                          "fill": "#EAE7E1AA",
+                          "content": "48 sesiones",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "GCpUh",
+                  "name": "card2",
+                  "metadata": {
+                    "type": "unsplash",
+                    "username": "meroga_",
+                    "link": "https://unsplash.com/@meroga_",
+                    "author": "Melanie Rosillo Galvan"
+                  },
+                  "width": "fill_container",
+                  "height": 480,
+                  "fill": "#2D242044",
+                  "cornerRadius": 16,
+                  "layout": "vertical",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "6tVmF",
+                      "name": "card2Info",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "padding": [
+                        20,
+                        24
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "PIQKB",
+                          "name": "card2Num",
+                          "fill": "#AD8A6A",
+                          "content": "02",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "tZ2bK",
+                          "name": "card2Name",
+                          "fill": "#F9F5F2",
+                          "content": "Bodas",
+                          "fontFamily": "Fraunces",
+                          "fontSize": 20,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "q6fR6",
+                          "name": "card2Count",
+                          "fill": "#EAE7E1AA",
+                          "content": "32 sesiones",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "pQpaI",
+                  "name": "card3",
+                  "metadata": {
+                    "type": "unsplash",
+                    "username": "jahan_photobox",
+                    "link": "https://unsplash.com/@jahan_photobox",
+                    "author": "Jahanzeb Ahsan"
+                  },
+                  "width": "fill_container",
+                  "height": 480,
+                  "fill": "#2D242044",
+                  "cornerRadius": 16,
+                  "layout": "vertical",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "ztETK",
+                      "name": "card3Info",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "padding": [
+                        20,
+                        24
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "SwskG",
+                          "name": "card3Num",
+                          "fill": "#AD8A6A",
+                          "content": "03",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "fbDDr",
+                          "name": "card3Name",
+                          "fill": "#F9F5F2",
+                          "content": "Sesiones personales",
+                          "fontFamily": "Fraunces",
+                          "fontSize": 20,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "aIXzq",
+                          "name": "card3Count",
+                          "fill": "#EAE7E1AA",
+                          "content": "86 sesiones",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "S2jzq",
+                  "name": "card4",
+                  "metadata": {
+                    "type": "unsplash",
+                    "username": "marhko88",
+                    "link": "https://unsplash.com/@marhko88",
+                    "author": "Marko Slavkovic"
+                  },
+                  "width": "fill_container",
+                  "height": 480,
+                  "fill": "#2D242044",
+                  "cornerRadius": 16,
+                  "layout": "vertical",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Ewh6n",
+                      "name": "card4Info",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "padding": [
+                        20,
+                        24
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "uNu0l",
+                          "name": "card4Num",
+                          "fill": "#AD8A6A",
+                          "content": "04",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 13,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "P0KUQ",
+                          "name": "card4Name",
+                          "fill": "#F9F5F2",
+                          "content": "Fotografía artística",
+                          "fontFamily": "Fraunces",
+                          "fontSize": 20,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "DRXmO",
+                          "name": "card4Count",
+                          "fill": "#EAE7E1AA",
+                          "content": "24 sesiones",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "SLQcw",
+          "name": "04 — Sobre mí",
+          "width": "fill_container",
+          "fill": "#EAE7E1",
+          "gap": 80,
+          "padding": [
+            96,
+            120
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "UZUCO",
+              "name": "aboutPhoto",
+              "metadata": {
+                "type": "unsplash",
+                "username": "samsungmemory",
+                "link": "https://unsplash.com/@samsungmemory",
+                "author": "Samsung Memory"
+              },
+              "width": 520,
+              "height": 640,
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "./Daniela_Luna_Fotografa-1024x776.jpg",
+                "mode": "fill"
+              },
+              "cornerRadius": 20
+            },
+            {
+              "type": "frame",
+              "id": "0eZQL",
+              "name": "aboutContent",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 28,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "TUf15",
+                  "name": "aboutOverline",
+                  "fill": "#AD8A6A",
+                  "content": "SOBRE MÍ",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 12,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "wWIrD",
+                  "name": "aboutName",
+                  "fill": "#2D2420",
+                  "content": "Dan Luna",
+                  "fontFamily": "Fraunces",
+                  "fontSize": 52,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "Lx3P4",
+                  "name": "aboutRole",
+                  "fill": "#AD8A6A",
+                  "content": "Fotógrafo profesional",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 18,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "hNjVb",
+                  "name": "aboutDivider",
+                  "width": 48,
+                  "height": 2,
+                  "fill": "#AD8A6A"
+                },
+                {
+                  "type": "text",
+                  "id": "Z6nxp",
+                  "name": "aboutBio",
+                  "fill": "#86816C",
+                  "content": "Mi trabajo nace de la convicción de que cada persona tiene una historia\núnica que merece ser contada con luz, emoción y honestidad.\nDesde Buenos Aires hasta donde me lleve la cámara, busco ese instante\ngenuino que solo ocurre una vez.",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 17,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "W78gf",
+                  "name": "aboutStats",
+                  "width": "fill_container",
+                  "gap": 40,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "4J9rj",
+                      "name": "stat1",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "kweCN",
+                          "name": "stat1Num",
+                          "fill": "#2D2420",
+                          "content": "12+",
+                          "fontFamily": "Fraunces",
+                          "fontSize": 36,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "RN1jo",
+                          "name": "stat1Label",
+                          "fill": "#86816C",
+                          "content": "años de experiencia",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "orG1N",
+                      "name": "stat2",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Lp3Ek",
+                          "name": "stat2Num",
+                          "fill": "#2D2420",
+                          "content": "+300",
+                          "fontFamily": "Fraunces",
+                          "fontSize": 36,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "7CWJY",
+                          "name": "stat2Label",
+                          "fill": "#86816C",
+                          "content": "sesiones realizadas",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "DUP9Q",
+                      "name": "stat3",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ftKJ8",
+                          "name": "stat3Num",
+                          "fill": "#2D2420",
+                          "content": "8",
+                          "fontFamily": "Fraunces",
+                          "fontSize": 36,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "uwriF",
+                          "name": "stat3Label",
+                          "fill": "#86816C",
+                          "content": "ciudades",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "i5q1V",
+                  "name": "aboutCTA",
+                  "gap": 8,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "V8OqK",
+                      "name": "aboutCTABtn",
+                      "fill": "#AD8A6A",
+                      "cornerRadius": 28,
+                      "padding": [
+                        14,
+                        32
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "8sfwR",
+                          "name": "aboutCTAText",
+                          "fill": "#F9F5F2",
+                          "content": "Conocé mi historia completa →",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 15,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Na9cn",
+          "name": "06 — Testimonios",
+          "width": "fill_container",
+          "fill": "#ffffff",
+          "layout": "vertical",
+          "gap": 56,
+          "padding": [
+            96,
+            120
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "wLJMv",
+              "name": "testHeader",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 12,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "4fvRW",
+                  "name": "testOverline",
+                  "fill": "#AD8A6A",
+                  "content": "TESTIMONIOS",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 12,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "dr9Nv",
+                  "name": "testTitle",
+                  "fill": "#2D2420",
+                  "content": "Lo que dicen quienes\nconfiaron en mi lente.",
+                  "fontFamily": "Fraunces",
+                  "fontSize": 44,
+                  "fontWeight": "600"
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "3tRJR",
+              "name": "testGrid",
+              "width": "fill_container",
+              "gap": 24,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "WwVuE",
+                  "name": "t1",
+                  "width": "fill_container",
+                  "fill": "#F9F5F2",
+                  "cornerRadius": 20,
+                  "layout": "vertical",
+                  "gap": 20,
+                  "padding": [
+                    36,
+                    32
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Juhw9",
+                      "name": "t1Stars",
+                      "fill": "#AD8A6A",
+                      "content": "★★★★★",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 18,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "hR5EE",
+                      "name": "t1Quote",
+                      "fill": "#86816C",
+                      "content": "\"Dan captó exactamente lo que quería.\nFue una experiencia increíble, las fotos\nsuperaron todas mis expectativas.\"",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 16,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "qCVHz",
+                      "name": "t1Author",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Pn8cn",
+                          "name": "t1Name",
+                          "fill": "#2D2420",
+                          "content": "María G.",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 15,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "Hxmie",
+                          "name": "t1Type",
+                          "fill": "#AD8A6A",
+                          "content": "Sesión Retratos",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "7VuQh",
+                  "name": "t2",
+                  "width": "fill_container",
+                  "fill": "#F9F5F2",
+                  "cornerRadius": 20,
+                  "layout": "vertical",
+                  "gap": 20,
+                  "padding": [
+                    36,
+                    32
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "v1iha",
+                      "name": "t2Stars",
+                      "fill": "#AD8A6A",
+                      "content": "★★★★★",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 18,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "teoUE",
+                      "name": "t2Quote",
+                      "fill": "#86816C",
+                      "content": "\"Nuestras fotos de boda son\nsimplemente mágicas. Dan tiene\nojo para los momentos únicos.\nLos recomendamos al 100%!\"",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 16,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "A7HHU",
+                      "name": "t2Author",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "UCD1g",
+                          "name": "t2Name",
+                          "fill": "#2D2420",
+                          "content": "Lucía y Tomás R.",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 15,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "f6O2l",
+                          "name": "t2Type",
+                          "fill": "#AD8A6A",
+                          "content": "Boda — Nov. 2024",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Joshn",
+                  "name": "t3",
+                  "width": "fill_container",
+                  "fill": "#F9F5F2",
+                  "cornerRadius": 20,
+                  "layout": "vertical",
+                  "gap": 20,
+                  "padding": [
+                    36,
+                    32
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "I9dlr",
+                      "name": "t3Stars",
+                      "fill": "#AD8A6A",
+                      "content": "★★★★★",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 18,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "86nBk",
+                      "name": "t3Quote",
+                      "fill": "#86816C",
+                      "content": "\"Nunca me había sentido tan cómodo\nfrente a una cámara. El resultado\nes increíble. Definitivamente repetiré.\"",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 16,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "frame",
+                      "id": "VP2q7",
+                      "name": "t3Author",
+                      "layout": "vertical",
+                      "gap": 2,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "VVqKQ",
+                          "name": "t3Name",
+                          "fill": "#2D2420",
+                          "content": "Carlos M.",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 15,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "dAcdX",
+                          "name": "t3Type",
+                          "fill": "#AD8A6A",
+                          "content": "Sesión personal urbana",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "85vli",
+          "name": "07 — Contacto",
+          "width": "fill_container",
+          "fill": "#F9F5F2",
+          "gap": 80,
+          "padding": [
+            96,
+            120
+          ],
+          "children": [
+            {
+              "type": "frame",
+              "id": "SkVDD",
+              "name": "contactForm",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 24,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "rjC5N",
+                  "name": "formOverline",
+                  "fill": "#AD8A6A",
+                  "content": "CONTACTO",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 12,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "214rJ",
+                  "name": "formTitle",
+                  "fill": "#2D2420",
+                  "content": "Hablemos de\ntu próxima sesión.",
+                  "fontFamily": "Fraunces",
+                  "fontSize": 40,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "frame",
+                  "id": "eHFrR",
+                  "name": "formFields",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 16,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "illKD",
+                      "name": "field1",
+                      "width": "fill_container",
+                      "fill": "#FFFFFF",
+                      "cornerRadius": 12,
+                      "padding": [
+                        14,
+                        20
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "tSB9R",
+                          "name": "field1Text",
+                          "fill": "#D8D2CA",
+                          "content": "Nombre",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 15,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "fM41a",
+                      "name": "field2",
+                      "width": "fill_container",
+                      "fill": "#FFFFFF",
+                      "cornerRadius": 12,
+                      "padding": [
+                        14,
+                        20
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "SvfFv",
+                          "name": "field2Text",
+                          "fill": "#D8D2CA",
+                          "content": "Email",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 15,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "FxkmF",
+                      "name": "field3",
+                      "width": "fill_container",
+                      "fill": "#FFFFFF",
+                      "cornerRadius": 12,
+                      "padding": [
+                        14,
+                        20
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "YBWb1",
+                          "name": "field3Text",
+                          "fill": "#D8D2CA",
+                          "content": "Tipo de sesión  ▾",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 15,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "r4MPG",
+                      "name": "field4",
+                      "width": "fill_container",
+                      "height": 120,
+                      "fill": "#FFFFFF",
+                      "cornerRadius": 12,
+                      "layout": "vertical",
+                      "padding": [
+                        14,
+                        20
+                      ],
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "1YB9O",
+                          "name": "field4Text",
+                          "fill": "#D8D2CA",
+                          "content": "Mensaje...",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 15,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "A85K3",
+                  "name": "formSubmit",
+                  "fill": "#AD8A6A",
+                  "cornerRadius": 28,
+                  "padding": [
+                    16,
+                    36
+                  ],
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "EgvRc",
+                      "name": "formSubmitText",
+                      "fill": "#F9F5F2",
+                      "content": "Enviar mensaje →",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 16,
+                      "fontWeight": "600"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "MbrDU",
+              "name": "contactInfo",
+              "width": 400,
+              "layout": "vertical",
+              "gap": 40,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "ByiA5",
+                  "name": "infoTitle",
+                  "fill": "#2D2420",
+                  "content": "Hablemos.",
+                  "fontFamily": "Fraunces",
+                  "fontSize": 44,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "2qsab",
+                  "name": "infoSubtitle",
+                  "fill": "#86816C",
+                  "content": "Respondo en menos de 24 horas.",
+                  "fontFamily": "DM Sans",
+                  "fontSize": 15,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "eUEQ7",
+                  "name": "infoDivider",
+                  "width": 48,
+                  "height": 2,
+                  "fill": "#AD8A6A"
+                },
+                {
+                  "type": "frame",
+                  "id": "1aSAN",
+                  "name": "infoItems",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 24,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "0Ot5I",
+                      "name": "infoWA",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "jxD6j",
+                          "name": "infoWALabel",
+                          "fill": "#AD8A6A",
+                          "content": "WhatsApp",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "XeIgI",
+                          "name": "infoWAVal",
+                          "fill": "#2D2420",
+                          "content": "+54 9 11 0000-0000",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 18,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "EZQwT",
+                      "name": "infoEmail",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "T04sB",
+                          "name": "infoEmailLabel",
+                          "fill": "#AD8A6A",
+                          "content": "Email",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "pZq5J",
+                          "name": "infoEmailVal",
+                          "fill": "#2D2420",
+                          "content": "hola@danlunaphoto.com",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 18,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ygV6b",
+                      "name": "infoIG",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "EjmzR",
+                          "name": "infoIGLabel",
+                          "fill": "#AD8A6A",
+                          "content": "Instagram",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "U6NkI",
+                          "name": "infoIGVal",
+                          "fill": "#2D2420",
+                          "content": "@danlunaphoto",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 18,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "UX8jM",
+                      "name": "infoCity",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "mlBlM",
+                          "name": "infoCityLabel",
+                          "fill": "#AD8A6A",
+                          "content": "Ciudad",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 12,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "vZqHF",
+                          "name": "infoCityVal",
+                          "fill": "#2D2420",
+                          "content": "Buenos Aires, Argentina",
+                          "fontFamily": "DM Sans",
+                          "fontSize": 18,
+                          "fontWeight": "600"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "dwLj4",
+          "name": "08 — Footer",
+          "width": "fill_container",
+          "fill": "#FFFFFF",
+          "layout": "vertical",
+          "gap": 32,
+          "padding": [
+            80,
+            340
+          ],
+          "children": [
+            {
+              "type": "text",
+              "id": "X5wVe",
+              "name": "footerQuote",
+              "fill": "#6f6e6dff",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Cada imagen es una cápsula del tiempo,\nun pedacito de historia que merece ser contada.\nPermítenos ser parte de este momento tan especial para ti.",
+              "textAlign": "center",
+              "fontFamily": "DM Sans",
+              "fontSize": 18
+            },
+            {
+              "type": "text",
+              "id": "LA09g",
+              "name": "footerPhrase",
+              "fill": "#6f6e6d",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Nos encantará capturar la belleza de su amor, su fuerza y su ternura,\nen una sesión que se volverá inolvidable.",
+              "textAlign": "center",
+              "fontFamily": "DM Sans",
+              "fontSize": 18,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "text",
+              "id": "sJXmJ",
+              "name": "footerCaring",
+              "fill": "#6f6e6d",
+              "textGrowth": "fixed-width",
+              "width": "fill_container",
+              "content": "Con cariño,",
+              "textAlign": "center",
+              "fontFamily": "DM Sans",
+              "fontSize": 18,
+              "fontWeight": "normal"
+            },
+            {
+              "type": "frame",
+              "id": "ytQj0",
+              "name": "footerLogoImg",
+              "width": "fill_container",
+              "height": 80,
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "./logo-light.png",
+                "mode": "fit"
+              }
+            },
+            {
+              "type": "frame",
+              "id": "9M6tn",
+              "name": "footerSocials",
+              "width": "fill_container",
+              "height": 40,
+              "gap": 18,
+              "padding": [
+                0,
+                316
+              ],
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "w6mat",
+                  "name": "btnFacebook",
+                  "width": 40,
+                  "height": 40,
+                  "fill": "#000000",
+                  "cornerRadius": 999,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "yC8Em",
+                      "name": "fbLetter",
+                      "fill": "#FFFFFF",
+                      "content": "f",
+                      "textAlign": "center",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 22,
+                      "fontWeight": "700"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "blISD",
+                  "name": "btnInstagram",
+                  "width": 40,
+                  "height": 40,
+                  "fill": "#000000",
+                  "cornerRadius": 999,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "h0nYh",
+                      "name": "igLetter",
+                      "fill": "#FFFFFF",
+                      "content": "ig",
+                      "textAlign": "center",
+                      "fontFamily": "DM Sans",
+                      "fontSize": 16,
+                      "fontWeight": "700"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variables": {
+    "color-accent": {
+      "type": "color",
+      "value": "#AD8A6A"
+    },
+    "color-bg-primary": {
+      "type": "color",
+      "value": "#F9F5F2"
+    },
+    "color-bg-secondary": {
+      "type": "color",
+      "value": "#EAE7E1"
+    },
+    "color-border": {
+      "type": "color",
+      "value": "#D8D2CA"
+    },
+    "color-text-primary": {
+      "type": "color",
+      "value": "#2D2420"
+    },
+    "color-text-secondary": {
+      "type": "color",
+      "value": "#86816C"
+    }
+  }
+}

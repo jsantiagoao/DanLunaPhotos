@@ -1,0 +1,78 @@
+/* ============================================================
+   Dan Luna Photo — Global Styles
+   Breakpoints: xs <480 | sm 480-767 | md 768-1023 | lg 1024-1199 | xl ≥1200
+   ============================================================ */
+
+:root {
+  /* Colors */
+  --color-dark:       #2D2420;
+  --color-cream:      #F9F5F2;
+  --color-gold:       #AD8A6A;
+  --color-warm-gray:  #86816C;
+  --color-beige:      #EAE7E1;
+  --color-white:      #FFFFFF;
+  --color-overlay:    rgba(45, 36, 32, 0.47);
+
+  /* Typography */
+  --font-serif:  'Fraunces', Georgia, serif;
+  --font-sans:   'DM Sans', system-ui, sans-serif;
+
+  /* Layout */
+  --max-width:    1440px;
+  --nav-height:   72px;
+  --section-padding: 96px 120px;
+}
+
+/* Ajuste de tokens por viewport */
+@media (max-width: 1199px) {
+  :root { --section-padding: 72px 64px; }
+}
+@media (max-width: 767px) {
+  :root { --section-padding: 56px 24px; --nav-height: 64px; }
+}
+@media (max-width: 479px) {
+  :root { --section-padding: 48px 20px; }
+}
+
+/* ---- Reset ---- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-white);
+  color: var(--color-dark);
+  overflow-x: hidden;
+  line-height: 1.5;
+}
+
+/* Scroll-lock: aplicado desde el componente Navbar */
+body.menu-open {
+  overflow: hidden;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: var(--font-sans);
+}

@@ -1,0 +1,69 @@
+<section class="contact">
+  <div class="contact__inner">
+
+    <!-- Form -->
+    <div class="contact__form-wrap">
+      <p class="contact__overline">CONTACTO</p>
+      <h2 class="contact__title">
+        Hablemos de<br>tu próxima sesión.
+      </h2>
+
+      @if (sent) {
+        <div class="contact__success">
+          ¡Mensaje enviado! Te respondo en menos de 24 horas.
+        </div>
+      }
+
+      <form class="contact__form" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="contact__fields">
+          <div class="contact__field" [class.contact__field--error]="hasError('nombre')">
+            <input formControlName="nombre" type="text" placeholder="Nombre" />
+          </div>
+
+          <div class="contact__field" [class.contact__field--error]="hasError('email')">
+            <input formControlName="email" type="email" placeholder="Email" />
+          </div>
+
+          <div class="contact__field">
+            <select formControlName="tipo">
+              <option value="" disabled selected>Tipo de sesión ▾</option>
+              @for (type of sessionTypes; track type) {
+                <option [value]="type">{{ type }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="contact__field contact__field--textarea" [class.contact__field--error]="hasError('mensaje')">
+            <textarea formControlName="mensaje" placeholder="Mensaje..." rows="5"></textarea>
+          </div>
+
+          <div class="contact__field contact__field--captcha" [class.contact__field--error]="hasError('captcha')">
+            <label class="contact__captcha-label">{{ captchaQuestion }}</label>
+            <input formControlName="captcha" type="number" placeholder="Tu respuesta" />
+          </div>
+        </div>
+
+        <button type="submit" class="contact__submit">
+          Enviar mensaje →
+        </button>
+      </form>
+    </div>
+
+    <!-- Info -->
+    <div class="contact__info">
+      <h3 class="contact__info-title">Hablemos.</h3>
+      <p class="contact__info-sub">Respondo en menos de 24 horas.</p>
+      <div class="contact__info-divider"></div>
+
+      <div class="contact__info-items">
+        @for (item of infoItems; track item.label) {
+          <div class="contact__info-item">
+            <span class="contact__info-label">{{ item.label }}</span>
+            <span class="contact__info-value">{{ item.value }}</span>
+          </div>
+        }
+      </div>
+    </div>
+
+  </div>
+</section>

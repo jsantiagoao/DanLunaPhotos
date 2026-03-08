@@ -1,0 +1,51 @@
+.emotional {
+  padding: var(--section-padding);
+  background-color: var(--color-cream);
+  border-bottom: 1px solid rgba(172, 129, 108, 0.1);
+
+  &__inner {
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  &__opening {
+    font-family: var(--font-serif);
+    font-size: 20px;
+    font-style: italic;
+    color: var(--color-gold);
+    margin: 0 0 32px 0;
+    line-height: 1.8;
+
+    @media (max-width: 768px) {
+      font-size: 16px;
+      margin-bottom: 24px;
+    }
+  }
+
+  &__body {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    color: var(--color-warm-gray);
+    margin: 0 0 24px 0;
+    line-height: 1.8;
+
+    @media (max-width: 768px) {
+      font-size: 14px;
+      line-height: 1.6;
+    }
+  }
+
+  &__closing {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    color: var(--color-warm-gray);
+    margin: 0;
+    line-height: 1.8;
+    font-weight: 600;
+
+    @media (max-width: 768px) {
+      font-size: 14px;
+    }
+  }
+}

@@ -1,0 +1,22 @@
+@if (isLoading) {
+  <div class="loader">
+    <div class="loader__camera">
+      <div class="loader__body">
+        <div class="loader__viewfinder-prism"></div>
+        <div class="loader__flash-module">
+          <div class="loader__flash" [class.loader__flash--active]="showFlash"></div>
+        </div>
+        <div class="loader__lens-area">
+          <div class="loader__mount">
+            <div class="loader__lens">
+              <div class="loader__lens-glass"></div>
+              <div class="loader__lens-rings"></div>
+            </div>
+          </div>
+          <div class="loader__sensor"></div>
+        </div>
+        <div class="loader__grip"></div>
+      </div>
+    </div>
+  </div>
+}

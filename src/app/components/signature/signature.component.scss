@@ -1,0 +1,37 @@
+.signature {
+  padding: var(--section-padding);
+  background-color: var(--color-cream);
+  border-bottom: 1px solid rgba(172, 129, 108, 0.1);
+
+  &__inner {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  &__text {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    font-style: italic;
+    color: var(--color-warm-gray);
+    margin: 0 0 16px 0;
+
+    @media (max-width: 768px) {
+      font-size: 14px;
+    }
+  }
+
+  &__name {
+    font-family: var(--font-serif);
+    font-size: 44px;
+    font-weight: 700;
+    color: var(--color-gold);
+    margin: 0;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+
+    @media (max-width: 768px) {
+      font-size: 32px;
+    }
+  }
+}
