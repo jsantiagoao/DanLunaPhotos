@@ -28,8 +28,11 @@
   </div>
 
   <div class="carousel__caption">
-    <p class="carousel__caption-text">
-      "Un momento único, un recuerdo para siempre"
+    <p
+      class="carousel__caption-text"
+      [class.carousel__caption-text--visible]="phraseVisible"
+    >
+      "{{ currentPhrase }}"
     </p>
   </div>
 </div>

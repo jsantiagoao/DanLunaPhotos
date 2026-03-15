@@ -26,12 +26,12 @@ export class BookingStepsComponent {
       number: '01',
       title: 'Selecciona tu fecha disponible',
       contentLines: [
-        'Revisa la disponibilidad en el calendario y elije la fecha y hora de tu sesión fotográfica.',
-        'Si no ves disponible un horario que se te acomode, envíanos un WhatsApp para coordinar un espacio con nosotros.'
+        'Revisa la disponibilidad en el calendario y elige la fecha y hora de tu sesión fotográfica.',
+        '¿No encuentras un horario disponible? Escríbenos por WhatsApp al +52 56 6770 4976 y coordinamos un espacio para ti.'
       ],
       button: {
-        text: 'Solicitar un espacio',
-        url: 'https://wa.me/525667704976?text=Hola%20vi%20su%20calendario%20en%20la%20p%C3%A1gina%20web,%20pero%20no%20encontr%C3%A9%20un%20horario%20que%20se%20ajuste%20a%20mi%20disponibilidad.%20Me%20gustar%C3%ADa%20saber%20que%20otros%20espacios%20tiene.%20Quedo%20atento(a)%20a%20su%20respuesta.%20%C2%A1Gracias!'
+        text: 'Ver fechas disponibles',
+        url: 'https://danlunaphotos.pixieset.com/booking/prueba-calendario'
       }
     },
     {

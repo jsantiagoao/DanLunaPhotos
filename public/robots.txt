@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Bloquear rutas internas que no deben indexarse
+Disallow: /assets/
+
+# Sitemap
+Sitemap: https://danlunaphotos.com/sitemap.xml

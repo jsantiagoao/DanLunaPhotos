@@ -18,27 +18,27 @@ export class WhatIncludesComponent {
   readonly includes: SessionInclude[] = [
     {
       icon: '✓',
-      title: 'Sesión de 20 a 30 minutos'
+      title: '40 minutos de sesión en nuestro set'
     },
     {
       icon: '✓',
-      title: 'Tres cambios de ropa'
+      title: '25 a 30 fotografías digitales en alta calidad con edición una a una'
     },
     {
       icon: '✓',
-      title: 'Tres fotografías digitales'
+      title: 'Hasta 5 personas por sesión (persona extra: $250 c/u)'
     },
     {
       icon: '✓',
-      title: 'Tres fotografías impresas en alta resolución'
+      title: 'Entrega de 6 a 8 días hábiles'
     },
     {
       icon: '✓',
-      title: 'Un link de descarga'
+      title: 'Opción a dos cambios de ropa'
     },
     {
       icon: '✓',
-      title: 'Entrega express 24–48 horas'
+      title: 'Link de outfits propuesta'
     }
   ];
 }

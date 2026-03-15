@@ -17,6 +17,22 @@ export interface CarouselPhoto {
 export class MothersDayCarouselComponent implements OnInit, OnDestroy {
   @ViewChild('carousel') carousel!: ElementRef<HTMLDivElement>;
 
+  readonly phrases: string[] = [
+    'Un momento único, un recuerdo para siempre',
+    'El amor de mamá, hecho fotografía',
+    'Memorias que el corazón nunca olvida',
+    'Un abrazo que dura toda la vida',
+    'Donde el tiempo se detiene y el amor se vuelve eterno'
+  ];
+
+  currentPhraseIndex = 0;
+  phraseVisible = true;
+  private phraseIntervalId: any;
+
+  get currentPhrase(): string {
+    return this.phrases[this.currentPhraseIndex];
+  }
+
   readonly photos: CarouselPhoto[] = [
     {
       id: 1,
@@ -44,12 +60,22 @@ export class MothersDayCarouselComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.startAutoScroll();
+    this.startPhraseRotation();
   }
 
   ngOnDestroy() {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-    }
+    if (this.intervalId) clearInterval(this.intervalId);
+    if (this.phraseIntervalId) clearInterval(this.phraseIntervalId);
+  }
+
+  startPhraseRotation() {
+    this.phraseIntervalId = setInterval(() => {
+      this.phraseVisible = false;
+      setTimeout(() => {
+        this.currentPhraseIndex = (this.currentPhraseIndex + 1) % this.phrases.length;
+        this.phraseVisible = true;
+      }, 700);
+    }, 4500);
   }
 
   startAutoScroll() {
