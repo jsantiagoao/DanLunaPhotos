@@ -1,4 +1,4 @@
-.hero {
+  .hero {
   position: relative;
   width: 100%;
   height: 860px;
@@ -138,10 +138,15 @@
 @media (max-width: 600px) {
   .hero {
     min-height: 500px;
-    &__inner { padding: 100px 24px 48px; }
+    &__inner { padding: 100px 24px 40px; }
     &__headline { font-size: 36px; }
-    &__sub { font-size: 15px; }
-    &__ctas { flex-direction: column; width: 100%; }
+    &__sub { font-size: 15px; margin-bottom: 0; }
+    &__ctas {
+      flex-direction: column;
+      width: 100%;
+      margin-top: 50px;   // empuja el botón al fondo del banner
+      margin-bottom: 0;
+    }
     &__cta { justify-content: center; padding: 14px 28px; font-size: 15px; }
   }
 }

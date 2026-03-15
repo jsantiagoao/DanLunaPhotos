@@ -5,4 +5,4 @@ Allow: /
 Disallow: /api/
 
 # Sitemap
-Sitemap: https://danlunaphotos.com/sitemap.xml
+Sitemap: https://danlunaphoto.duodigitalservice.com/sitemap.xml

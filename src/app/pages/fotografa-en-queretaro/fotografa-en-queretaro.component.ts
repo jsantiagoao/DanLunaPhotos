@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Title, Meta } from '@angular/platform-browser';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
@@ -12,7 +12,9 @@ import { BreadcrumbComponent, BreadcrumbItem } from '../../components/breadcrumb
   templateUrl: './fotografa-en-queretaro.component.html',
   styleUrl: './fotografa-en-queretaro.component.scss'
 })
-export class FotografaEnQueretaroComponent implements OnInit {
+export class FotografaEnQueretaroComponent implements OnInit, OnDestroy {
+
+  private jsonLdScript: HTMLScriptElement | null = null;
 
   readonly breadcrumbs: BreadcrumbItem[] = [
     { label: 'Inicio', href: '/' },
@@ -24,6 +26,12 @@ export class FotografaEnQueretaroComponent implements OnInit {
     private meta: Meta,
     @Inject(PLATFORM_ID) private platformId: object
   ) {}
+
+  ngOnDestroy(): void {
+    if (this.jsonLdScript?.parentNode) {
+      this.jsonLdScript.parentNode.removeChild(this.jsonLdScript);
+    }
+  }
 
   ngOnInit(): void {
     this.titleSvc.setTitle('Daniela Luna · Fotógrafa Profesional en Querétaro | Dan Luna Photo');
@@ -39,20 +47,20 @@ export class FotografaEnQueretaroComponent implements OnInit {
       canonical.rel = 'canonical';
       document.head.appendChild(canonical);
     }
-    canonical.href = 'https://danlunaphotos.com/fotografa-en-queretaro';
+    canonical.href = 'https://danlunaphoto.duodigitalservice.com/fotografa-en-queretaro';
 
     // Open Graph
     this.meta.updateTag({ property: 'og:title',       content: 'Daniela Luna · Fotógrafa en Querétaro | Dan Luna Photo' });
     this.meta.updateTag({ property: 'og:description', content: 'Fotografía con arquitectura y alma. Daniela Luna — fotógrafa profesional en Querétaro.' });
-    this.meta.updateTag({ property: 'og:url',         content: 'https://danlunaphotos.com/fotografa-en-queretaro' });
-    this.meta.updateTag({ property: 'og:image',       content: 'https://danlunaphotos.com/assets/images/Daniela_Luna_Fotografa-1024x776.jpg' });
+    this.meta.updateTag({ property: 'og:url',         content: 'https://danlunaphoto.duodigitalservice.com/fotografa-en-queretaro' });
+    this.meta.updateTag({ property: 'og:image',       content: 'https://danlunaphoto.duodigitalservice.com/assets/images/Daniela_Luna_Fotografa-1024x776.jpg' });
     this.meta.updateTag({ property: 'og:type',        content: 'profile' });
 
     // Twitter Cards
     this.meta.updateTag({ name: 'twitter:card',        content: 'summary_large_image' });
     this.meta.updateTag({ name: 'twitter:title',       content: 'Daniela Luna · Fotógrafa en Querétaro | Dan Luna Photo' });
     this.meta.updateTag({ name: 'twitter:description', content: 'Fotografía con arquitectura y alma. Daniela Luna — fotógrafa profesional en Querétaro.' });
-    this.meta.updateTag({ name: 'twitter:image',       content: 'https://danlunaphotos.com/assets/images/Daniela_Luna_Fotografa-1024x776.jpg' });
+    this.meta.updateTag({ name: 'twitter:image',       content: 'https://danlunaphoto.duodigitalservice.com/assets/images/Daniela_Luna_Fotografa-1024x776.jpg' });
 
     if (isPlatformBrowser(this.platformId)) {
       this.injectJsonLd();
@@ -65,13 +73,13 @@ export class FotografaEnQueretaroComponent implements OnInit {
       '@graph': [
         {
           '@type': 'Person',
-          '@id': 'https://danlunaphotos.com/fotografa-en-queretaro#daniela',
+          '@id': 'https://danlunaphoto.duodigitalservice.com/fotografa-en-queretaro#daniela',
           name: 'Daniela Luna',
           jobTitle: 'Fotógrafa Profesional',
           description: 'Fotógrafa profesional en Querétaro con formación en arquitectura. Especializada en retratos, familias y mini sesiones con narrativa visual.',
-          url: 'https://danlunaphotos.com/fotografa-en-queretaro',
-          image: 'https://danlunaphotos.com/assets/images/Daniela_Luna_Fotografa-1024x776.jpg',
-          worksFor: { '@id': 'https://danlunaphotos.com/#business' },
+          url: 'https://danlunaphoto.duodigitalservice.com/fotografa-en-queretaro',
+          image: 'https://danlunaphoto.duodigitalservice.com/assets/images/Daniela_Luna_Fotografa-1024x776.jpg',
+          worksFor: { '@id': 'https://danlunaphoto.duodigitalservice.com/#business' },
           sameAs: [
             'https://www.instagram.com/danlunaphotos',
             'https://www.facebook.com/people/Dan-Luna-Photo/61574229764276'
@@ -85,9 +93,9 @@ export class FotografaEnQueretaroComponent implements OnInit {
         },
         {
           '@type': 'LocalBusiness',
-          '@id': 'https://danlunaphotos.com/#business',
+          '@id': 'https://danlunaphoto.duodigitalservice.com/#business',
           name: 'Dan Luna Photo',
-          url: 'https://danlunaphotos.com',
+          url: 'https://danlunaphoto.duodigitalservice.com',
           telephone: '+52-56-6770-4976',
           address: {
             '@type': 'PostalAddress',
@@ -99,17 +107,17 @@ export class FotografaEnQueretaroComponent implements OnInit {
         {
           '@type': 'BreadcrumbList',
           itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Inicio',                  item: 'https://danlunaphotos.com' },
-            { '@type': 'ListItem', position: 2, name: 'Fotógrafa en Querétaro',  item: 'https://danlunaphotos.com/fotografa-en-queretaro' }
+            { '@type': 'ListItem', position: 1, name: 'Inicio',                  item: 'https://danlunaphoto.duodigitalservice.com' },
+            { '@type': 'ListItem', position: 2, name: 'Fotógrafa en Querétaro',  item: 'https://danlunaphoto.duodigitalservice.com/fotografa-en-queretaro' }
           ]
         }
       ]
     };
 
-    const script = document.createElement('script');
-    script.type = 'application/ld+json';
-    script.id   = 'fotografa-jsonld';
-    script.text  = JSON.stringify(schema);
-    document.head.appendChild(script);
+    this.jsonLdScript = document.createElement('script');
+    this.jsonLdScript.type = 'application/ld+json';
+    this.jsonLdScript.id   = 'fotografa-jsonld';
+    this.jsonLdScript.text  = JSON.stringify(schema);
+    document.head.appendChild(this.jsonLdScript);
   }
 }

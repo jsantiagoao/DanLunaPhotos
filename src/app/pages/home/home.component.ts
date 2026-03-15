@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Title, Meta } from '@angular/platform-browser';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
@@ -37,13 +37,21 @@ import { FooterComponent } from '../../components/footer/footer.component';
   `,
   styles: [`main { display: block; }`]
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
+
+  private jsonLdScript: HTMLScriptElement | null = null;
 
   constructor(
     private titleSvc: Title,
     private meta: Meta,
     @Inject(PLATFORM_ID) private platformId: object
   ) {}
+
+  ngOnDestroy(): void {
+    if (this.jsonLdScript?.parentNode) {
+      this.jsonLdScript.parentNode.removeChild(this.jsonLdScript);
+    }
+  }
 
   ngOnInit(): void {
     this.titleSvc.setTitle('Dan Luna Photo · Fotografía Profesional en Querétaro');
@@ -54,14 +62,20 @@ export class HomeComponent implements OnInit {
 
     this.meta.updateTag({ property: 'og:title',       content: 'Dan Luna Photo · Fotografía Profesional en Querétaro' });
     this.meta.updateTag({ property: 'og:description', content: 'Estudio de fotografía profesional en Querétaro. Retratos, familias y mini sesiones especiales. Capturamos los momentos que importan.' });
-    this.meta.updateTag({ property: 'og:url',         content: 'https://danlunaphotos.com' });
-    this.meta.updateTag({ property: 'og:image',       content: 'https://danlunaphotos.com/assets/images/og-default.jpg' });
+    this.meta.updateTag({ property: 'og:url',         content: 'https://danlunaphoto.duodigitalservice.com' });
+    this.meta.updateTag({ property: 'og:image',       content: 'https://danlunaphoto.duodigitalservice.com/assets/images/og-default.jpg' });
     this.meta.updateTag({ property: 'og:type',        content: 'website' });
 
     this.meta.updateTag({ name: 'twitter:card',        content: 'summary_large_image' });
     this.meta.updateTag({ name: 'twitter:title',       content: 'Dan Luna Photo · Fotografía Profesional en Querétaro' });
     this.meta.updateTag({ name: 'twitter:description', content: 'Estudio de fotografía profesional en Querétaro. Retratos, familias y mini sesiones especiales.' });
-    this.meta.updateTag({ name: 'twitter:image',       content: 'https://danlunaphotos.com/assets/images/og-default.jpg' });
+    this.meta.updateTag({ name: 'twitter:image',       content: 'https://danlunaphoto.duodigitalservice.com/assets/images/og-default.jpg' });
+
+    // Resetear canonical al home (puede venir de otra ruta)
+    if (isPlatformBrowser(this.platformId)) {
+      const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+      if (canonical) canonical.href = 'https://danlunaphoto.duodigitalservice.com';
+    }
 
     if (isPlatformBrowser(this.platformId)) {
       this.injectJsonLd();
@@ -74,12 +88,12 @@ export class HomeComponent implements OnInit {
       '@graph': [
         {
           '@type': 'LocalBusiness',
-          '@id': 'https://danlunaphotos.com/#business',
+          '@id': 'https://danlunaphoto.duodigitalservice.com/#business',
           name: 'Dan Luna Photo',
           description: 'Estudio de fotografía profesional en Querétaro. Sesiones de retrato, familias, eventos y mini sesiones especiales.',
-          url: 'https://danlunaphotos.com',
+          url: 'https://danlunaphoto.duodigitalservice.com',
           telephone: '+52-56-6770-4976',
-          image: 'https://danlunaphotos.com/assets/images/og-default.jpg',
+          image: 'https://danlunaphoto.duodigitalservice.com/assets/images/og-default.jpg',
           address: {
             '@type': 'PostalAddress',
             addressLocality: 'Querétaro',
@@ -94,12 +108,12 @@ export class HomeComponent implements OnInit {
         },
         {
           '@type': 'Organization',
-          '@id': 'https://danlunaphotos.com/#organization',
+          '@id': 'https://danlunaphoto.duodigitalservice.com/#organization',
           name: 'Dan Luna Photo',
-          url: 'https://danlunaphotos.com',
+          url: 'https://danlunaphoto.duodigitalservice.com',
           logo: {
             '@type': 'ImageObject',
-            url: 'https://danlunaphotos.com/assets/images/DL.png'
+            url: 'https://danlunaphoto.duodigitalservice.com/assets/images/DL.png'
           },
           contactPoint: {
             '@type': 'ContactPoint',
@@ -110,8 +124,8 @@ export class HomeComponent implements OnInit {
         },
         {
           '@type': 'AggregateRating',
-          '@id': 'https://danlunaphotos.com/#rating',
-          itemReviewed: { '@id': 'https://danlunaphotos.com/#business' },
+          '@id': 'https://danlunaphoto.duodigitalservice.com/#rating',
+          itemReviewed: { '@id': 'https://danlunaphoto.duodigitalservice.com/#business' },
           ratingValue: '5',
           bestRating: '5',
           worstRating: '1',
