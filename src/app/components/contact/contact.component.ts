@@ -33,8 +33,8 @@ export class ContactComponent {
   ];
 
   readonly infoItems = [
-    { label: 'WhatsApp',   value: '+54 9 11 0000-0000'   },
-    { label: 'Email',      value: 'hola@danlunaphoto.com' },
+    { label: 'WhatsApp',   value: '+52 56 6770 4976'   },
+    { label: 'Email',      value: 'hola@danlunaphoto.duodigitalservice.com' },
     { label: 'Instagram',  value: '@danlunaphoto'         },
     { label: 'Ciudad',     value: 'Querétaro, México' }
   ];
