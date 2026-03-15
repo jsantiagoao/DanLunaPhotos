@@ -1,4 +1,6 @@
-<section class="testimonials">
+<section class="testimonials"
+  (mouseenter)="pauseAutoplay()"
+  (mouseleave)="resumeAutoplay()">
   <div class="testimonials__inner">
 
     <header class="testimonials__header">
@@ -8,18 +10,48 @@
       </h2>
     </header>
 
-    <div class="testimonials__grid">
-      @for (t of testimonials; track t.name) {
-        <div class="testimonials__card">
-          <span class="testimonials__stars">{{ t.stars }}</span>
-          <p class="testimonials__quote">{{ t.quote }}</p>
-          <div class="testimonials__author">
-            <span class="testimonials__author-name">{{ t.name }}</span>
-            <span class="testimonials__author-type">{{ t.type }}</span>
+    <!-- Viewport del slider -->
+    <div class="testimonials__viewport">
+      <div
+        class="testimonials__track"
+        [style.transform]="trackTransform"
+        (touchstart)="onTouchStart($event)"
+        (touchend)="onTouchEnd($event)"
+      >
+        @for (t of testimonials; track t.name) {
+          <div
+            class="testimonials__card"
+            [style.minWidth]="cardFlexBasis"
+            [style.maxWidth]="cardFlexBasis"
+          >
+            <div class="testimonials__card-body">
+              <span class="testimonials__stars">{{ t.stars }}</span>
+              <p class="testimonials__quote">{{ t.quote }}</p>
+              <div class="testimonials__author">
+                <span class="testimonials__author-name">{{ t.name }}</span>
+                <span class="testimonials__author-type">{{ t.type }}</span>
+              </div>
+            </div>
           </div>
-        </div>
-      }
+        }
+      </div>
     </div>
+
+    <!-- Dots de navegación -->
+    @if (dots.length > 1) {
+      <div class="testimonials__dots" role="tablist">
+        @for (dot of dots; track dot) {
+          <button
+            class="testimonials__dot"
+            [class.testimonials__dot--active]="dot === currentIndex"
+            (click)="goTo(dot)"
+            role="tab"
+            [attr.aria-label]="'Ir al testimonio ' + (dot + 1)"
+            [attr.aria-selected]="dot === currentIndex"
+          ></button>
+        }
+      </div>
+    }
 
   </div>
 </section>
