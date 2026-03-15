@@ -1,0 +1,87 @@
+<app-navbar />
+
+<main class="sobre-mi">
+
+  <!-- ── Breadcrumb ────────────────────────────────────── -->
+  <div class="sobre-mi__breadcrumb-bar">
+    <div class="sobre-mi__breadcrumb-inner">
+      <div class="sobre-mi__breadcrumb-title-group">
+        <h1 class="sobre-mi__breadcrumb-title"> Sobre mí</h1>
+        <p class="sobre-mi__breadcrumb-sub">Daniela Luna</p>
+      </div>
+      <div class="sobre-mi__breadcrumb-wrapper">
+        <app-breadcrumb [items]="breadcrumbs" />
+      </div>
+    </div>
+  </div>
+
+  <!-- ── HERO dos columnas ─────────────────────────────── -->
+  <article class="sobre-mi__hero">
+    <div class="sobre-mi__inner">
+
+      <!-- Columna izquierda: retrato -->
+      <div class="sobre-mi__photo-col">
+        <div class="sobre-mi__photo-wrap">
+          <img
+            src="assets/images/Daniela_Luna_Fotografa-1024x776.jpg"
+            alt="Daniela Luna — Fotógrafa profesional en Querétaro"
+            class="sobre-mi__photo"
+          />
+        </div>
+      </div>
+
+      <!-- Columna derecha: texto -->
+      <div class="sobre-mi__content-col">
+
+        <p class="sobre-mi__overline">LA MIRADA DETRÁS DEL LENTE: SOY DANIELA LUNA</p>
+
+        <h2 class="sobre-mi__title">Fotografía con<br>Arquitectura y Alma</h2>
+
+        <div class="sobre-mi__divider" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+
+        <p class="sobre-mi__body">
+          Mi historia comenzó estudiando arquitectura, donde aprendí a observar los espacios,
+          entender la luz y componer con intención. Descubrí que, al igual que en el diseño,
+          una buena imagen no solo se ve bien: se siente. Cada fotografía debe tener una
+          estructura, sí, pero también alma.
+        </p>
+
+        <p class="sobre-mi__body">
+          Como fotógrafa, mi trabajo es resolver visualmente una emoción. ¿Cómo capturar un
+          momento auténtico? ¿Cómo transmitir la esencia de una persona, una celebración o
+          una historia? Ahí es donde entra el arte de ver lo que otros no notan y traducirlo
+          en imágenes que hablan por sí solas.
+        </p>
+
+        <p class="sobre-mi__body">
+          Por eso creo en sesiones pensadas con intención, en retratos con narrativa, y en una
+          fotografía que no solo documenta… sino que conecta.
+        </p>
+
+        <blockquote class="sobre-mi__quote">
+          "…y descubrí que cada fotografía tiene el poder de conmover, de detener el tiempo
+          por un instante. La fotografía no solo se mira, se siente."
+        </blockquote>
+
+        <a
+          href="https://wa.me/525667704976?text=Hola%2C%20vi%20tu%20perfil%20y%20me%20gustar%C3%ADa%20saber%20qu%C3%A9%20sesiones%20de%20fotograf%C3%ADa%20tienes%20disponibles.%20%C2%BFMe%20puedes%20dar%20m%C3%A1s%20informaci%C3%B3n%3F"
+          target="_blank"
+          rel="noopener"
+          class="sobre-mi__cta"
+        >
+          Tu historia, mi lente
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </a>
+
+      </div>
+    </div>
+  </article>
+
+</main>
+
+<app-footer />

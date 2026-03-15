@@ -1,0 +1,239 @@
+.sobre-mi {
+  background-color: #ffffff;
+  min-height: 100vh;
+
+  // ── Breadcrumb bar ────────────────────────────────────
+  &__breadcrumb-bar {
+    background-color: #ffffff;
+    border-bottom: 1px solid rgba(172, 129, 108, 0.1);
+    padding: 24px 0;
+  }
+
+  &__breadcrumb-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 120px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+
+    @media (max-width: 767px) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+  }
+
+  &__breadcrumb-title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__breadcrumb-title {
+    font-family: var(--font-serif);
+    font-size: 2.75rem;
+    font-weight: 400;
+    color: #000000;
+    margin: 0;
+
+    @media (max-width: 768px) { font-size: 2rem; }
+    @media (max-width: 480px) { font-size: 1.6rem; }
+  }
+
+  &__breadcrumb-sub {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--color-gold);
+    margin: 0;
+    font-style: italic;
+    letter-spacing: 0.05em;
+  }
+
+  &__breadcrumb-wrapper {
+    flex-shrink: 0;
+
+    @media (max-width: 767px) { width: 100%; }
+  }
+
+  // ── Hero wrapper ──────────────────────────────────────
+  &__hero {
+    padding: clamp(60px, 8vw, 120px) 0;
+  }
+
+  &__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 120px);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(40px, 6vw, 96px);
+    align-items: start;
+
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+  }
+
+  // ── Columna foto ──────────────────────────────────────
+  &__photo-col {
+    position: sticky;
+    top: 100px;
+
+    @media (max-width: 900px) {
+      position: static;
+    }
+  }
+
+  &__photo-wrap {
+    overflow: hidden;
+    border-radius: 2px;
+
+    // sutil sombra que refuerza la profundidad
+    box-shadow:
+      8px 8px 0 0 rgba(173, 138, 106, 0.12),
+      0 20px 60px rgba(45, 36, 32, 0.1);
+  }
+
+  &__photo {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    filter: grayscale(100%);
+    transition: filter 0.5s ease;
+
+    &:hover {
+      filter: grayscale(0%);
+    }
+  }
+
+  // ── Columna texto ─────────────────────────────────────
+  &__content-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding-top: 8px;
+  }
+
+  &__overline {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-gold);
+    margin: 0 0 20px 0;
+  }
+
+  &__title {
+    font-family: var(--font-serif);
+    font-size: clamp(2rem, 4vw, 3.25rem);
+    font-weight: 400;
+    color: var(--color-dark);
+    line-height: 1.15;
+    margin: 0 0 28px 0;
+  }
+
+  // ── Divisor decorativo de tres puntos ─────────────────
+  &__divider {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 32px;
+
+    span {
+      display: block;
+      background-color: var(--color-gold);
+
+      &:nth-child(1) { width: 32px; height: 1px; }
+      &:nth-child(2) { width: 6px;  height: 6px; border-radius: 50%; }
+      &:nth-child(3) { width: 16px; height: 1px; }
+    }
+  }
+
+  &__body {
+    font-family: var(--font-sans);
+    font-size: clamp(0.9rem, 1.5vw, 1.0625rem);
+    font-weight: 400;
+    color: #4a4540;
+    line-height: 1.8;
+    margin: 0 0 22px 0;
+
+    &:last-of-type {
+      margin-bottom: 36px;
+    }
+  }
+
+  // ── Cita destacada ────────────────────────────────────
+  &__quote {
+    position: relative;
+    font-family: var(--font-serif);
+    font-size: clamp(1rem, 2vw, 1.1875rem);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--color-dark);
+    line-height: 1.7;
+    margin: 0 0 44px 0;
+    padding: 24px 24px 24px 32px;
+    border-left: 2px solid var(--color-gold);
+    background-color: rgba(173, 138, 106, 0.05);
+    border-radius: 0 2px 2px 0;
+
+    &::before {
+      content: '\201C';
+      position: absolute;
+      top: -10px;
+      left: 16px;
+      font-family: var(--font-serif);
+      font-size: 4rem;
+      color: var(--color-gold);
+      opacity: 0.35;
+      line-height: 1;
+      pointer-events: none;
+    }
+  }
+
+  // ── CTA ───────────────────────────────────────────────
+  &__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 36px;
+    background-color: var(--color-dark);
+    color: #ffffff;
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: background-color 0.25s ease, gap 0.25s ease;
+    align-self: flex-start;
+
+    svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.25s ease;
+    }
+
+    &:hover {
+      background-color: var(--color-gold);
+      gap: 14px;
+
+      svg {
+        transform: translateX(3px);
+      }
+    }
+
+    @media (max-width: 480px) {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}

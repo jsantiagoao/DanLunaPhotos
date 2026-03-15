@@ -15,6 +15,19 @@
     </image:image>
   </url>
 
+  <!-- Sobre mí / Fotógrafa en Querétaro -->
+  <url>
+    <loc>https://danlunaphotos.com/fotografa-en-queretaro</loc>
+    <lastmod>2026-03-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://danlunaphotos.com/assets/images/Daniela_Luna_Fotografa-1024x776.jpg</image:loc>
+      <image:title>Daniela Luna — Fotógrafa Profesional en Querétaro</image:title>
+      <image:caption>Fotografía con arquitectura y alma. Daniela Luna, fotógrafa profesional en Querétaro.</image:caption>
+    </image:image>
+  </url>
+
   <!-- Landing Día de las Madres 2026 -->
   <url>
     <loc>https://danlunaphotos.com/dia-de-las-madres</loc>
