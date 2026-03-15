@@ -1,8 +1,8 @@
 User-agent: *
 Allow: /
 
-# Bloquear rutas internas que no deben indexarse
-Disallow: /assets/
+# Bloquear únicamente rutas internas de Angular (no deben indexarse)
+Disallow: /api/
 
 # Sitemap
 Sitemap: https://danlunaphotos.com/sitemap.xml

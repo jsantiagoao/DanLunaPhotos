@@ -3,6 +3,7 @@ import {
   Inject, PLATFORM_ID
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 
 export interface Testimonial {
   stars: string;
@@ -48,12 +49,16 @@ export class TestimonialsComponent implements OnInit, OnDestroy {
   private touchStartX = 0;
   private isPaused = false;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: object) {}
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: object,
+    @Inject(DOCUMENT) private doc: Document
+  ) {}
 
   ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.updateVisibleCount();
       this.startAutoplay();
+      this.injectReviewSchema();
     }
   }
 
@@ -158,5 +163,38 @@ export class TestimonialsComponent implements OnInit, OnDestroy {
   private resetAutoplay(): void {
     this.stopAutoplay();
     if (!this.isPaused) this.startAutoplay();
+  }
+
+  private injectReviewSchema(): void {
+    if (this.doc.getElementById('testimonials-jsonld')) return;
+
+    const reviews = this.testimonials.map(t => ({
+      '@type': 'Review',
+      author:      { '@type': 'Person', name: t.name },
+      reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
+      reviewBody:  t.quote.replace(/^"|"$/g, ''),
+      name:        t.type
+    }));
+
+    const schema = {
+      '@context': 'https://schema.org',
+      '@type': 'LocalBusiness',
+      '@id': 'https://danlunaphotos.com/#business',
+      name: 'Dan Luna Photo',
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: '5',
+        bestRating:  '5',
+        worstRating: '1',
+        reviewCount: String(this.testimonials.length)
+      },
+      review: reviews
+    };
+
+    const script = this.doc.createElement('script');
+    script.type = 'application/ld+json';
+    script.id   = 'testimonials-jsonld';
+    script.text  = JSON.stringify(schema);
+    this.doc.head.appendChild(script);
   }
 }

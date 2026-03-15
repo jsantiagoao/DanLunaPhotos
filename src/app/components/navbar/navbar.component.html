@@ -7,13 +7,21 @@
 
     <ul class="navbar__links" [class.navbar__links--open]="menuOpen()">
       @for (link of links; track link.label) {
-        <li class="navbar__item" [class.navbar__item--has-submenu]="link.submenu">
+        <li
+          class="navbar__item"
+          [class.navbar__item--has-submenu]="link.submenu"
+          [class.navbar__item--open]="link.submenu && activeSubmenu() === link.label"
+        >
           @if (link.submenu) {
-            <button class="navbar__link">
+            <button
+              class="navbar__link"
+              (click)="toggleSubmenu(link.label)"
+              [attr.aria-expanded]="activeSubmenu() === link.label"
+            >
               {{ link.label }}
               <span class="navbar__arrow">▼</span>
             </button>
-            <ul class="navbar__submenu">
+            <ul class="navbar__submenu" [class.navbar__submenu--visible]="activeSubmenu() === link.label">
               <div class="navbar__submenu-content">
                 @for (subitem of link.submenu; track subitem.label) {
                   <li>

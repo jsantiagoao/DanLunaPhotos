@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -r \"Offer\\\\|Review\\\\|Rating\\\\|OpeningHoursSpecification\" 'd:/santiago.aguillon@2bcore.com/Personal Projects/Repositorios/DanLunaPhotos/src' --include=*.ts)"
+    ]
+  }
+}

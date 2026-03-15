@@ -191,33 +191,52 @@
       padding: 16px 24px;
       box-shadow: 0 4px 16px rgba(0,0,0,0.08);
       align-items: stretch;
+      max-height: calc(100dvh - var(--nav-height));
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
 
       &--open { display: flex; }
     }
-    &__item { 
-      width: 100%;
 
+    &__item {
+      width: 100%;
+      border-bottom: 1px solid rgba(45, 36, 32, 0.06);
+
+      &:last-child { border-bottom: none; }
+
+      // Deshabilitar hover CSS en mobile
       &--has-submenu:hover .navbar__submenu {
         display: none;
       }
 
-      &--has-submenu .navbar__link:focus + .navbar__submenu,
-      &--has-submenu .navbar__link:active + .navbar__submenu {
-        display: block;
+      // Rotar flecha cuando está abierto
+      &--open .navbar__arrow {
+        transform: rotate(180deg);
       }
     }
-    &__link { 
+
+    &__link {
       display: flex;
       justify-content: space-between;
-      padding: 12px 0;
+      align-items: center;
+      padding: 14px 0;
       font-size: 16px;
       width: 100%;
+      min-height: 48px; // área táctil mínima
     }
+
+    // Submenú: oculto por defecto en mobile, visible con clase --visible
     &__submenu {
       position: static;
       margin-top: 0;
       padding-top: 0;
+      padding-bottom: 8px;
       background: transparent;
+      display: none;
+
+      &--visible {
+        display: block !important;
+      }
     }
 
     &__submenu-content {
@@ -229,9 +248,14 @@
       background: transparent;
 
       a {
-        padding: 8px 12px;
+        padding: 12px 12px;
+        min-height: 44px; // área táctil mínima
+        display: flex;
+        align-items: center;
+        font-size: 15px;
       }
     }
+
     &__right { display: none; }
     &__hamburger { display: flex; }
   }
