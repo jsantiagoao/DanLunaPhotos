@@ -15,6 +15,7 @@
     display: flex;
     flex-direction: column;
     gap: 24px;
+    min-width: 0;
   }
 
   &__overline {
@@ -53,6 +54,8 @@
   }
 
   &__field {
+    position: relative;
+
     input, select, textarea {
       width: 100%;
       padding: 14px 20px;
@@ -65,17 +68,31 @@
       outline: none;
       transition: border-color 0.2s;
       appearance: none;
+      box-sizing: border-box;
 
       &::placeholder { color: #D8D2CA; }
-      &:focus { border-color: var(--color-gold); }
+      &:focus        { border-color: var(--color-gold); }
+    }
+
+    // Flecha personalizada en el select
+    &:has(select)::after {
+      content: '';
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 5px solid var(--color-warm-gray);
+      pointer-events: none;
     }
 
     textarea { resize: vertical; min-height: 120px; }
 
     &--error {
-      input, select, textarea {
-        border-color: #e05;
-      }
+      input, select, textarea { border-color: #e05; }
     }
 
     &--captcha {
@@ -95,26 +112,30 @@
   &__submit {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     padding: 16px 36px;
     background-color: var(--color-gold);
     color: var(--color-cream);
+    border: none;
     border-radius: 28px;
     font-family: var(--font-sans);
     font-size: 16px;
     font-weight: 600;
+    cursor: pointer;
     transition: opacity 0.2s;
     align-self: flex-start;
+
     &:hover { opacity: 0.85; }
   }
 
-  /* Info panel */
+  // ── Panel de info ──────────────────────────────────────
   &__info {
-    width: 400px;
+    width: 380px;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    gap: 40px;
-    padding-top: 60px;
+    gap: 32px;
+    padding-top: 56px;
   }
 
   &__info-title {
@@ -122,20 +143,21 @@
     font-size: 44px;
     font-weight: 600;
     color: var(--color-dark);
+    line-height: 1.1;
   }
 
   &__info-sub {
     font-family: var(--font-sans);
     font-size: 15px;
     color: var(--color-warm-gray);
-    margin-top: -28px;
+    margin-top: -20px;
   }
 
   &__info-divider {
     width: 48px;
     height: 2px;
     background-color: var(--color-gold);
-    margin-top: -28px;
+    margin-top: -16px;
   }
 
   &__info-items {
@@ -152,50 +174,109 @@
 
   &__info-label {
     font-family: var(--font-sans);
-    font-size: 12px;
-    font-weight: 600;
+    font-size: 11px;
+    font-weight: 700;
     color: var(--color-gold);
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
   }
 
   &__info-value {
     font-family: var(--font-sans);
-    font-size: 18px;
+    font-size: 17px;
     font-weight: 600;
     color: var(--color-dark);
   }
 }
 
+// ── Tablet ─────────────────────────────────────────────────
 @media (max-width: 1199px) {
   .contact {
-    &__inner { gap: 60px; }
-    &__info { width: 360px; padding-top: 40px; }
+    &__inner      { gap: 56px; }
+    &__info       { width: 320px; padding-top: 40px; }
     &__info-title { font-size: 38px; }
   }
 }
 
+// ── Stack vertical ─────────────────────────────────────────
 @media (max-width: 900px) {
   .contact {
-    &__inner { flex-direction: column; gap: 48px; }
-    &__info { width: 100%; padding-top: 0; }
-    &__title { font-size: 36px; }
-    &__info-title { font-size: 36px; }
+    &__inner {
+      flex-direction: column;
+      gap: 0;
+    }
+
+    &__form-wrap {
+      width: 100%;
+      gap: 20px;
+    }
+
+    &__title { font-size: 34px; }
+
+    // En mobile el info se convierte en una banda compacta
+    &__info {
+      width: 100%;
+      padding-top: 40px;
+      margin-top: 40px;
+      border-top: 1px solid rgba(173, 138, 106, 0.2);
+      gap: 20px;
+    }
+
+    // Ocultamos el título grande redundante en mobile
+    &__info-title,
+    &__info-sub,
+    &__info-divider { display: none; }
+
+    // Items en grilla de 2 columnas
+    &__info-items {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px 32px;
+    }
+
+    &__info-item {
+      background-color: rgba(249, 245, 242, 0.7);
+      border-radius: 12px;
+      padding: 16px 18px;
+    }
+
+    &__info-value { font-size: 15px; }
   }
 }
 
+// ── Mobile ─────────────────────────────────────────────────
 @media (max-width: 600px) {
   .contact {
-    &__title { font-size: 32px; }
-    &__info-title { font-size: 32px; }
-    &__submit { width: 100%; justify-content: center; }
+    padding: 48px 20px;
+
+    &__title     { font-size: 30px; }
+    &__submit    { width: 100%; align-self: stretch; }
+
+    &__field {
+      input, select, textarea {
+        padding: 13px 16px;
+        border-radius: 10px;
+        font-size: 15px;
+      }
+    }
+
+    &__info-items {
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 16px;
+    }
   }
 }
 
-@media (max-width: 479px) {
+// ── Mobile pequeño ─────────────────────────────────────────
+@media (max-width: 400px) {
   .contact {
-    &__title { font-size: 28px; }
-    &__info-title { font-size: 28px; }
-    &__field input, &__field select, &__field textarea { font-size: 14px; }
+    padding: 40px 16px;
+
+    &__title     { font-size: 26px; }
+    &__info-items { grid-template-columns: 1fr; }
+
+    &__field {
+      input, select, textarea { font-size: 14px; }
+    }
   }
 }
