@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+
 import { Title, Meta } from '@angular/platform-browser';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { FooterComponent } from '../../components/footer/footer.component';
@@ -8,7 +8,7 @@ import { BreadcrumbComponent, BreadcrumbItem } from '../../components/breadcrumb
 @Component({
   selector: 'app-fotografa-en-queretaro',
   standalone: true,
-  imports: [RouterLink, NavbarComponent, FooterComponent, BreadcrumbComponent],
+  imports: [NavbarComponent, FooterComponent, BreadcrumbComponent],
   templateUrl: './fotografa-en-queretaro.component.html',
   styleUrl: './fotografa-en-queretaro.component.scss'
 })

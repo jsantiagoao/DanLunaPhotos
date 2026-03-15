@@ -31,7 +31,7 @@ export class BookingStepsComponent {
       ],
       button: {
         text: 'Ver fechas disponibles',
-        url: 'https://danlunaphotos.pixieset.com/booking/prueba-calendario'
+        url: 'https://danlunaphotos.pixieset.com/booking/mother-s-day-danlunaphotos'
       }
     },
     {

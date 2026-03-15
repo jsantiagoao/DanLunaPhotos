@@ -13,11 +13,12 @@ export class LoaderComponent implements OnInit {
   showFlash = false;
 
   ngOnInit() {
+    // D dibuja: 0–2.6s · L dibuja: 0.8–3.4s · pausa visible: 3.4–4.2s
     setTimeout(() => {
-      this.showFlash = true;
+      this.showFlash = true;       // dispara fade-out CSS
       setTimeout(() => {
-        this.isLoading = false;
+        this.isLoading = false;    // elimina el nodo del DOM
       }, 500);
-    }, 2500);
+    }, 4200);
   }
 }

@@ -154,7 +154,7 @@ export class MothersDayComponent implements OnInit, OnDestroy {
               priceCurrency: 'MXN',
               availability: 'https://schema.org/LimitedAvailability',
               validThrough: '2026-05-10',
-              url: 'https://danlunaphotos.pixieset.com/booking/prueba-calendario'
+              url: 'https://danlunaphotos.pixieset.com/booking/mother-s-day-danlunaphotos'
             },
             {
               '@type': 'Offer',
@@ -162,7 +162,7 @@ export class MothersDayComponent implements OnInit, OnDestroy {
               price: '2300',
               priceCurrency: 'MXN',
               availability: 'https://schema.org/InStock',
-              url: 'https://danlunaphotos.pixieset.com/booking/prueba-calendario'
+              url: 'https://danlunaphotos.pixieset.com/booking/mother-s-day-danlunaphotos'
             }
           ],
           image: 'https://danlunaphotos.com/assets/images/slider/Sesion-dia-de-las-madres-queretaro.jpeg'
