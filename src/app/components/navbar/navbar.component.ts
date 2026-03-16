@@ -76,19 +76,12 @@ export class NavbarComponent {
     if (href.startsWith('/')) {
       this.router.navigate([href]);
     } else if (href.startsWith('#')) {
-      // Si es un hash link
       const el = document.querySelector(href);
       if (el) {
         el.scrollIntoView({ behavior: 'smooth' });
       } else {
-        // Si el elemento no existe en la página actual, intenta navegar a la página principal
-        // Esto es útil cuando estamos en una sub-página como /dia-de-las-madres
-        if (!window.location.href.includes('/#/')) {
-          window.location.href = '/' + href;
-        } else {
-          // Si ya estamos en una ruta hash, navega a la página principal con el hash
-          this.router.navigate(['/'], { fragment: href.replace('#', '') });
-        }
+        // Elemento no existe en esta página — navegar al home con el fragment
+        this.router.navigate(['/'], { fragment: href.replace('#', '') });
       }
     }
   }
