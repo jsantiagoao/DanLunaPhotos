@@ -1,0 +1,163 @@
+<app-loader />
+<app-navbar />
+
+<main class="bautizos-page">
+  <!-- HERO SLIDER -->
+  <section class="hero-slider">
+    @for (img of sliderImages; track img; let i = $index) {
+      <div class="slide" [class.active]="i === currentSlide">
+        <img [src]="img" alt="Fotografía de bautizo en Querétaro" loading="eager" />
+      </div>
+    }
+    <div class="hero-overlay">
+      <span class="hero-tag">Fotografía de Bautizo</span>
+      <h1>El primer gran momento de su historia.</h1>
+      <p>Capturamos la bendición de tu bebé con amor y profesionalismo en Querétaro.</p>
+    </div>
+    <div class="slider-dots">
+      @for (img of sliderImages; track img; let i = $index) {
+        <button [class.active]="i === currentSlide" (click)="goToSlide(i)" [attr.aria-label]="'Slide ' + (i + 1)"></button>
+      }
+    </div>
+  </section>
+
+  <!-- INFO SECTION -->
+  <section class="info-section">
+    <div class="info-container">
+      <span class="section-tag">Bautizos en Querétaro</span>
+      <h2>Cada bautizo es una historia de fe y amor.</h2>
+      <p class="info-lead">
+        El bautizo de tu hijo es un día que merece ser recordado para siempre.
+        Desde la ceremonia hasta la celebración, capturamos cada detalle, cada sonrisa,
+        cada mirada llena de emoción.
+      </p>
+      <div class="info-features">
+        <div class="feature">
+          <span class="feature-icon">📸</span>
+          <h3>Fotografía profesional</h3>
+          <p>Más de 70 fotos editadas en alta resolución con retoque de color profesional.</p>
+        </div>
+        <div class="feature">
+          <span class="feature-icon">⛪</span>
+          <h3>Cobertura completa</h3>
+          <p>Ceremonia religiosa, fotos familiares y celebración. Nos adaptamos a tu evento.</p>
+        </div>
+        <div class="feature">
+          <span class="feature-icon">💝</span>
+          <h3>Entrega digital</h3>
+          <p>Galería privada con link de descarga. Tus recuerdos listos en 8-15 días hábiles.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing-section" id="paquetes">
+    <div class="pricing-container">
+      <span class="section-tag">Paquetes</span>
+      <h2>Elige el paquete perfecto para tu celebración.</h2>
+
+      <div class="pricing-grid">
+        <!-- Paquete 1 -->
+        <div class="pricing-card">
+          <div class="card-header">
+            <h3>Ceremonia</h3>
+            <div class="price">$1,850 <span>MXN</span></div>
+            <p class="apart">Aparta con el 50%</p>
+          </div>
+          <ul>
+            <li>Fotos de ceremonia (aprox. 30 min)</li>
+            <li>Fotos antes/después de la ceremonia (aprox. 30 min)</li>
+            <li>Más de <strong>70 fotografías</strong> digitales en alta resolución</li>
+            <li>Edición con retoque de color</li>
+            <li>Galería con link de descarga</li>
+            <li>Entrega en 8 a 10 días hábiles</li>
+          </ul>
+          <button class="btn-book" (click)="bookNow()">Reservar</button>
+        </div>
+
+        <!-- Paquete 2 - Best Seller -->
+        <div class="pricing-card best-seller">
+          <div class="badge">Más popular</div>
+          <div class="card-header">
+            <h3>Ceremonia + Fiesta 1h</h3>
+            <div class="price">$2,850 <span>MXN</span></div>
+            <p class="apart">Aparta con el 50%</p>
+          </div>
+          <ul>
+            <li>Fotos de ceremonia (aprox. 30 min)</li>
+            <li>Fotos antes/después de la ceremonia (aprox. 30 min)</li>
+            <li>Fotos de la fiesta (1 hora)</li>
+            <li>Más de <strong>200 fotografías</strong> digitales en alta resolución</li>
+            <li>Edición con retoque de color</li>
+            <li>Galería con link de descarga</li>
+            <li>Entrega en 8 a 15 días hábiles</li>
+          </ul>
+          <button class="btn-book" (click)="bookNow()">Reservar</button>
+        </div>
+
+        <!-- Paquete 3 -->
+        <div class="pricing-card">
+          <div class="card-header">
+            <h3>Ceremonia + Fiesta 2h</h3>
+            <div class="price">$3,950 <span>MXN</span></div>
+            <p class="apart">Aparta con $1,000 MXN</p>
+          </div>
+          <ul>
+            <li>Fotos de familia antes/después de ceremonia (aprox. 30 min)</li>
+            <li>Fotos de ceremonia (aprox. 40 min)</li>
+            <li>Fotos de la fiesta (2 horas)</li>
+            <li>Más de <strong>300 fotografías</strong> digitales en alta resolución</li>
+            <li>Edición con retoque de color</li>
+            <li><strong>25 fotos impresas</strong> tamaño 6x9"</li>
+            <li>Galería con link de descarga</li>
+            <li>Entrega en 10 a 15 días hábiles</li>
+          </ul>
+          <button class="btn-book" (click)="bookNow()">Reservar</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="gallery-section" id="galeria">
+    <div class="gallery-container">
+      <span class="section-tag">Galería</span>
+      <h2>Historias que hemos capturado.</h2>
+
+      <div class="gallery-grid">
+        @for (img of visibleImages; track img.src; let i = $index) {
+          <div class="gallery-item" [class.tall]="img.orientation === 'v'" [class.wide]="img.orientation === 'h' && i % 11 === 5">
+            <img [src]="img.src" [alt]="'Fotografía de bautizo en Querétaro ' + (i + 1)" loading="lazy" decoding="async" />
+          </div>
+        }
+      </div>
+
+      <div #sentinel style="height: 1px;"></div>
+
+      @if (hasMoreImages) {
+        <div class="load-more">
+          <button (click)="loadMoreImages()" [disabled]="loading">
+            {{ loading ? 'Cargando...' : 'Ver más fotografías' }}
+          </button>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="cta-bg">
+      <img src="assets/images/bautizos/slider/BAUTIZO-025.jpg" alt="" loading="lazy" />
+    </div>
+    <div class="cta-container">
+      <h2>¿Listo para capturar este momento único?</h2>
+      <p>El bautizo de tu bebé merece ser recordado con fotografías que cuenten su historia. Escríbenos y aparta tu fecha.</p>
+      <button class="btn-cta" (click)="bookNow()">
+        Book Now →
+      </button>
+    </div>
+  </section>
+</main>
+
+<app-footer />

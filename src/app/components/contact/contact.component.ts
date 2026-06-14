@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-contact',
@@ -11,6 +12,7 @@ import { CommonModule } from '@angular/common';
 })
 export class ContactComponent {
   private fb = inject(FormBuilder);
+  private http = inject(HttpClient);
 
   sent = false;
   captchaQuestion = '';
@@ -60,9 +62,10 @@ export class ContactComponent {
         return;
       }
       console.log('Form submitted:', this.form.value);
-      this.sent = true;
-      this.form.reset();
-      this.generateCaptcha();
+      this.http.post('https://iv28brdvae.execute-api.us-east-1.amazonaws.com/prod/contacto', this.form.value).subscribe({
+        next: () => { this.sent = true; this.form.reset(); this.generateCaptcha(); },
+        error: () => { this.sent = true; this.form.reset(); this.generateCaptcha(); }
+      });
     } else {
       this.form.markAllAsTouched();
     }

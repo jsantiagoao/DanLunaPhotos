@@ -24,7 +24,6 @@ export class NavbarComponent {
     {
       label: 'Sesiones al Aire Libre',
       submenu: [
-        { label: 'Día de las Madres', href: '/dia-de-las-madres' },
         { label: 'Día del Padre', href: '#padre-aire' },
         { label: 'En Pareja', href: '#pareja' },
         { label: 'En Familia', href: '#familia' },
@@ -34,15 +33,14 @@ export class NavbarComponent {
     {
       label: 'Estudio Fotográfico',
       submenu: [
-        { label: 'Día de las Madres', href: '/dia-de-las-madres' },
         { label: 'Navidad', href: '#navidad' }
       ]
     },
     {
       label: 'Eventos y Celebraciones',
       submenu: [
-        { label: 'Bodas', href: '#bodas' },
-        { label: 'Bautizos', href: '#bautizos' }
+        { label: 'Bodas', href: '/cotizacion-bodas' },
+        { label: 'Bautizos', href: '/fotografia-bautizo-queretaro' }
       ]
     },
     {

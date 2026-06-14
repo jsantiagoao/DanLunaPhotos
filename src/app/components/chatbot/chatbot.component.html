@@ -1,0 +1,82 @@
+<!-- Mascota toggle -->
+<div class="mascot-wrapper" [class.open]="isOpen()" (click)="toggle()">
+  @if (!isOpen()) {
+    <div class="mascot">
+      <svg class="camera-body" viewBox="0 0 100 120" width="72" height="86">
+        <!-- Piernas -->
+        <rect class="leg left-leg" x="30" y="95" width="8" height="16" rx="4" fill="#2D2420"/>
+        <rect class="leg right-leg" x="58" y="95" width="8" height="16" rx="4" fill="#2D2420"/>
+        <!-- Pies -->
+        <ellipse cx="34" cy="112" rx="8" ry="4" fill="#AD8A6A"/>
+        <ellipse cx="62" cy="112" rx="8" ry="4" fill="#AD8A6A"/>
+        <!-- Cuerpo (lente Canon) -->
+        <rect x="18" y="35" width="60" height="58" rx="12" fill="#2D2420"/>
+        <!-- Anillo exterior lente -->
+        <circle cx="48" cy="64" r="24" fill="#3a3530"/>
+        <circle cx="48" cy="64" r="20" fill="#1a1a1a"/>
+        <!-- Anillos internos lente -->
+        <circle cx="48" cy="64" r="16" fill="#2a2a2a" stroke="#AD8A6A" stroke-width="1"/>
+        <circle cx="48" cy="64" r="11" fill="#1a1a1a"/>
+        <circle cx="48" cy="64" r="7" fill="#2D2420"/>
+        <!-- Reflejo del lente -->
+        <ellipse cx="42" cy="58" rx="4" ry="3" fill="rgba(255,255,255,0.15)"/>
+        <!-- Ojos (encima del lente) -->
+        <circle class="eye" cx="36" cy="47" r="6" fill="white"/>
+        <circle class="pupil" cx="37" cy="47" r="3" fill="#2D2420"/>
+        <circle cx="38" cy="45.5" r="1.2" fill="white"/>
+        <circle class="eye" cx="60" cy="47" r="6" fill="white"/>
+        <circle class="pupil" cx="61" cy="47" r="3" fill="#2D2420"/>
+        <circle cx="62" cy="45.5" r="1.2" fill="white"/>
+        <!-- Tapa superior (como visera) -->
+        <rect x="22" y="30" width="52" height="10" rx="5" fill="#AD8A6A"/>
+        <!-- Brazos -->
+        <rect class="arm left-arm" x="6" y="55" width="14" height="8" rx="4" fill="#2D2420"/>
+        <rect class="arm right-arm" x="76" y="55" width="14" height="8" rx="4" fill="#2D2420"/>
+        <!-- Manos -->
+        <circle cx="6" cy="59" r="5" fill="#AD8A6A"/>
+        <circle cx="90" cy="59" r="5" fill="#AD8A6A"/>
+        <!-- Sonrisa -->
+        <path d="M40 75 Q48 82 56 75" stroke="#AD8A6A" stroke-width="2" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div class="speech-bubble">
+        <p>¡Hola! ¿Buscas sesión? 📸</p>
+      </div>
+    </div>
+  } @else {
+    <button class="close-btn" aria-label="Cerrar chat">✕</button>
+  }
+</div>
+
+<!-- Chat window -->
+@if (isOpen()) {
+  <div class="chat-window">
+    <div class="chat-header">
+      <span class="chat-title">Luna Bot 📷</span>
+      <span class="chat-subtitle">Dan Luna Photo · Querétaro</span>
+    </div>
+
+    <div class="chat-messages" #messagesContainer>
+      @for (msg of messages(); track $index) {
+        <div class="message" [class.user]="msg.role === 'user'" [class.bot]="msg.role === 'bot'">
+          <div [innerHTML]="formatMessage(msg.text)"></div>
+        </div>
+      }
+      @if (loading()) {
+        <div class="message bot typing">
+          <span></span><span></span><span></span>
+        </div>
+      }
+    </div>
+
+    <div class="chat-input">
+      <input
+        type="text"
+        [(ngModel)]="inputText"
+        (keydown)="onKeydown($event)"
+        placeholder="Escribe tu pregunta..."
+        [disabled]="loading()"
+      />
+      <button (click)="send()" [disabled]="loading() || !inputText.trim()">→</button>
+    </div>
+  </div>
+}

@@ -19,11 +19,10 @@ export class GalleryComponent implements OnInit, OnDestroy {
   @ViewChild('carousel') carousel!: ElementRef<HTMLDivElement>;
   
   readonly cards: GalleryCard[] = [
-    { num: '01', name: 'Día de las Madres',            count: 'Celebra a mamá con una sesión especial', image: 'assets/images/gallery/dia-de-las-madres.jpg' },
-    { num: '02', name: 'Bautizos',               count: 'Momentos sagrados, recuerdos eternos', image: 'assets/images/gallery/bautizo.png' },
-    { num: '03', name: 'Bodas', count: 'Fotografías para revivir tu gran día', image: 'assets/images/gallery/boda.png' },
-    { num: '04', name: 'Smash the Cake',count: 'La primera gran fiesta de tu bebé', image: 'assets/images/gallery/smash-the-cake.png' },
-    { num: '05', name: 'Sesión familiar',             count: 'Amor en familia', image: 'assets/images/gallery/sesion-familiar.png' }
+    { num: '01', name: 'Bautizos',               count: 'Momentos sagrados, recuerdos eternos', image: 'assets/images/gallery/bautizo.png' },
+    { num: '02', name: 'Bodas', count: 'Fotografías para revivir tu gran día', image: 'assets/images/gallery/boda.png' },
+    { num: '03', name: 'Smash the Cake',count: 'La primera gran fiesta de tu bebé', image: 'assets/images/gallery/smash-the-cake.png' },
+    { num: '04', name: 'Sesión familiar',             count: 'Amor en familia', image: 'assets/images/gallery/sesion-familiar.png' }
   ];
 
   currentIndex = 0;
