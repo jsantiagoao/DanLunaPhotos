@@ -47,20 +47,20 @@ export class FotografaEnQueretaroComponent implements OnInit, OnDestroy {
       canonical.rel = 'canonical';
       document.head.appendChild(canonical);
     }
-    canonical.href = 'https://danlunaphoto.duodigitalservice.com/fotografa-en-queretaro';
+    canonical.href = 'https://danlunaphoto.com/fotografa-en-queretaro';
 
     // Open Graph
     this.meta.updateTag({ property: 'og:title',       content: 'Daniela Luna · Fotógrafa en Querétaro | Dan Luna Photo' });
     this.meta.updateTag({ property: 'og:description', content: 'Fotografía con arquitectura y alma. Daniela Luna — fotógrafa profesional en Querétaro.' });
-    this.meta.updateTag({ property: 'og:url',         content: 'https://danlunaphoto.duodigitalservice.com/fotografa-en-queretaro' });
-    this.meta.updateTag({ property: 'og:image',       content: 'https://danlunaphoto.duodigitalservice.com/assets/images/Daniela_Luna_Fotografa-1024x776.jpg' });
+    this.meta.updateTag({ property: 'og:url',         content: 'https://danlunaphoto.com/fotografa-en-queretaro' });
+    this.meta.updateTag({ property: 'og:image',       content: 'https://danlunaphoto.com/assets/images/Daniela_Luna_Fotografa-1024x776.jpg' });
     this.meta.updateTag({ property: 'og:type',        content: 'profile' });
 
     // Twitter Cards
     this.meta.updateTag({ name: 'twitter:card',        content: 'summary_large_image' });
     this.meta.updateTag({ name: 'twitter:title',       content: 'Daniela Luna · Fotógrafa en Querétaro | Dan Luna Photo' });
     this.meta.updateTag({ name: 'twitter:description', content: 'Fotografía con arquitectura y alma. Daniela Luna — fotógrafa profesional en Querétaro.' });
-    this.meta.updateTag({ name: 'twitter:image',       content: 'https://danlunaphoto.duodigitalservice.com/assets/images/Daniela_Luna_Fotografa-1024x776.jpg' });
+    this.meta.updateTag({ name: 'twitter:image',       content: 'https://danlunaphoto.com/assets/images/Daniela_Luna_Fotografa-1024x776.jpg' });
 
     if (isPlatformBrowser(this.platformId)) {
       this.injectJsonLd();
@@ -73,13 +73,13 @@ export class FotografaEnQueretaroComponent implements OnInit, OnDestroy {
       '@graph': [
         {
           '@type': 'Person',
-          '@id': 'https://danlunaphoto.duodigitalservice.com/fotografa-en-queretaro#daniela',
+          '@id': 'https://danlunaphoto.com/fotografa-en-queretaro#daniela',
           name: 'Daniela Luna',
           jobTitle: 'Fotógrafa Profesional',
           description: 'Fotógrafa profesional en Querétaro con formación en arquitectura. Especializada en retratos, familias y mini sesiones con narrativa visual.',
-          url: 'https://danlunaphoto.duodigitalservice.com/fotografa-en-queretaro',
-          image: 'https://danlunaphoto.duodigitalservice.com/assets/images/Daniela_Luna_Fotografa-1024x776.jpg',
-          worksFor: { '@id': 'https://danlunaphoto.duodigitalservice.com/#business' },
+          url: 'https://danlunaphoto.com/fotografa-en-queretaro',
+          image: 'https://danlunaphoto.com/assets/images/Daniela_Luna_Fotografa-1024x776.jpg',
+          worksFor: { '@id': 'https://danlunaphoto.com/#business' },
           sameAs: [
             'https://www.instagram.com/danlunaphotos',
             'https://www.facebook.com/people/Dan-Luna-Photo/61574229764276'
@@ -93,9 +93,9 @@ export class FotografaEnQueretaroComponent implements OnInit, OnDestroy {
         },
         {
           '@type': 'LocalBusiness',
-          '@id': 'https://danlunaphoto.duodigitalservice.com/#business',
+          '@id': 'https://danlunaphoto.com/#business',
           name: 'Dan Luna Photo',
-          url: 'https://danlunaphoto.duodigitalservice.com',
+          url: 'https://danlunaphoto.com',
           telephone: '+52-56-6770-4976',
           address: {
             '@type': 'PostalAddress',
@@ -107,8 +107,8 @@ export class FotografaEnQueretaroComponent implements OnInit, OnDestroy {
         {
           '@type': 'BreadcrumbList',
           itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Inicio',                  item: 'https://danlunaphoto.duodigitalservice.com' },
-            { '@type': 'ListItem', position: 2, name: 'Fotógrafa en Querétaro',  item: 'https://danlunaphoto.duodigitalservice.com/fotografa-en-queretaro' }
+            { '@type': 'ListItem', position: 1, name: 'Inicio',                  item: 'https://danlunaphoto.com' },
+            { '@type': 'ListItem', position: 2, name: 'Fotógrafa en Querétaro',  item: 'https://danlunaphoto.com/fotografa-en-queretaro' }
           ]
         }
       ]

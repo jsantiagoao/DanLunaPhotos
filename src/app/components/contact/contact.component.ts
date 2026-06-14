@@ -36,7 +36,7 @@ export class ContactComponent {
 
   readonly infoItems = [
     { label: 'WhatsApp',   value: '+52 56 6770 4976'   },
-    { label: 'Email',      value: 'hola@danlunaphoto.duodigitalservice.com' },
+    { label: 'Email',      value: 'hola@danlunaphoto.com' },
     { label: 'Instagram',  value: '@danlunaphoto'         },
     { label: 'Ciudad',     value: 'Querétaro, México' }
   ];

@@ -179,7 +179,7 @@ export class TestimonialsComponent implements OnInit, OnDestroy {
     const schema = {
       '@context': 'https://schema.org',
       '@type': 'LocalBusiness',
-      '@id': 'https://danlunaphoto.duodigitalservice.com/#business',
+      '@id': 'https://danlunaphoto.com/#business',
       name: 'Dan Luna Photo',
       aggregateRating: {
         '@type': 'AggregateRating',

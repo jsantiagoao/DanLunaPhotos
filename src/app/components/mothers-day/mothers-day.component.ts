@@ -79,10 +79,10 @@ export class MothersDayComponent implements OnInit, OnDestroy {
       canonical.setAttribute('rel', 'canonical');
       this.document.head.appendChild(canonical);
     }
-    canonical.setAttribute('href', 'https://danlunaphoto.duodigitalservice.com/dia-de-las-madres');
+    canonical.setAttribute('href', 'https://danlunaphoto.com/dia-de-las-madres');
 
     // ── Open Graph — Facebook, WhatsApp, LinkedIn, Telegram ─────────────
-    const ogImage = 'https://danlunaphoto.duodigitalservice.com/assets/images/slider/Sesion-dia-de-las-madres-queretaro.jpeg';
+    const ogImage = 'https://danlunaphoto.com/assets/images/slider/Sesion-dia-de-las-madres-queretaro.jpeg';
     const ogTitle = '🌸 Mini Sesiones Día de las Madres 2026 · Dan Luna Photo · Querétaro';
     const ogDesc  =
       'Regala un recuerdo que dura para siempre. Sesión fotográfica en estudio · ' +
@@ -93,7 +93,7 @@ export class MothersDayComponent implements OnInit, OnDestroy {
     this.metaService.updateTag({ property: 'og:locale',           content: 'es_MX' });
     this.metaService.updateTag({ property: 'og:locale:alternate', content: 'es_ES' });
     this.metaService.updateTag({ property: 'og:site_name',        content: 'Dan Luna Photo' });
-    this.metaService.updateTag({ property: 'og:url',              content: 'https://danlunaphoto.duodigitalservice.com/dia-de-las-madres' });
+    this.metaService.updateTag({ property: 'og:url',              content: 'https://danlunaphoto.com/dia-de-las-madres' });
     this.metaService.updateTag({ property: 'og:title',            content: ogTitle });
     this.metaService.updateTag({ property: 'og:description',      content: ogDesc });
     this.metaService.updateTag({ property: 'og:image',            content: ogImage });
@@ -120,10 +120,10 @@ export class MothersDayComponent implements OnInit, OnDestroy {
       '@graph': [
         {
           '@type': 'LocalBusiness',
-          '@id': 'https://danlunaphoto.duodigitalservice.com/#business',
+          '@id': 'https://danlunaphoto.com/#business',
           name: 'Dan Luna Photo',
           description: 'Estudio de fotografía profesional en Querétaro especializado en retratos, familias y sesiones especiales.',
-          url: 'https://danlunaphoto.duodigitalservice.com',
+          url: 'https://danlunaphoto.com',
           telephone: '+525667704976',
           address: {
             '@type': 'PostalAddress',
@@ -139,19 +139,19 @@ export class MothersDayComponent implements OnInit, OnDestroy {
         {
           '@type': 'BreadcrumbList',
           itemListElement: [
-            { '@type': 'ListItem', position: 1, name: 'Inicio',              item: 'https://danlunaphoto.duodigitalservice.com' },
-            { '@type': 'ListItem', position: 2, name: 'Día de las Madres',   item: 'https://danlunaphoto.duodigitalservice.com/dia-de-las-madres' }
+            { '@type': 'ListItem', position: 1, name: 'Inicio',              item: 'https://danlunaphoto.com' },
+            { '@type': 'ListItem', position: 2, name: 'Día de las Madres',   item: 'https://danlunaphoto.com/dia-de-las-madres' }
           ]
         },
         {
           '@type': 'Service',
-          '@id': 'https://danlunaphoto.duodigitalservice.com/dia-de-las-madres#service',
+          '@id': 'https://danlunaphoto.com/dia-de-las-madres#service',
           name: 'Mini Sesión Fotográfica Día de las Madres 2026',
           description:
             'Mini sesión fotográfica en estudio para el Día de las Madres 2026 en Querétaro. ' +
             '40 minutos de sesión, 25 a 30 fotografías digitales editadas en alta calidad, ' +
             'hasta 5 personas, opción a dos cambios de ropa.',
-          provider: { '@id': 'https://danlunaphoto.duodigitalservice.com/#business' },
+          provider: { '@id': 'https://danlunaphoto.com/#business' },
           areaServed: { '@type': 'City', name: 'Querétaro' },
           offers: [
             {
@@ -172,7 +172,7 @@ export class MothersDayComponent implements OnInit, OnDestroy {
               url: 'https://danlunaphotos.pixieset.com/booking/mother-s-day-danlunaphotos'
             }
           ],
-          image: 'https://danlunaphoto.duodigitalservice.com/assets/images/slider/Sesion-dia-de-las-madres-queretaro.jpeg'
+          image: 'https://danlunaphoto.com/assets/images/slider/Sesion-dia-de-las-madres-queretaro.jpeg'
         }
       ]
     });

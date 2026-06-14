@@ -180,16 +180,16 @@ export class BautizosComponent implements OnInit, OnDestroy, AfterViewInit {
       canonical.setAttribute('rel', 'canonical');
       this.document.head.appendChild(canonical);
     }
-    canonical.setAttribute('href', 'https://danlunaphoto.duodigitalservice.com/fotografia-bautizo-queretaro');
+    canonical.setAttribute('href', 'https://danlunaphoto.com/fotografia-bautizo-queretaro');
 
-    const ogImage = 'https://danlunaphoto.duodigitalservice.com/assets/images/bautizos/BAUTIZO-001.jpg';
+    const ogImage = 'https://danlunaphoto.com/assets/images/bautizos/BAUTIZO-001.jpg';
     const ogTitle = '✝️ Fotografía de Bautizo en Querétaro · Dan Luna Photo';
     const ogDesc = 'Capturamos los momentos más sagrados del bautizo de tu bebé. Paquetes desde $1,850 MXN. Ceremonia + fiesta. Entrega digital en alta resolución.';
 
     this.metaService.updateTag({ property: 'og:type', content: 'website' });
     this.metaService.updateTag({ property: 'og:locale', content: 'es_MX' });
     this.metaService.updateTag({ property: 'og:site_name', content: 'Dan Luna Photo' });
-    this.metaService.updateTag({ property: 'og:url', content: 'https://danlunaphoto.duodigitalservice.com/fotografia-bautizo-queretaro' });
+    this.metaService.updateTag({ property: 'og:url', content: 'https://danlunaphoto.com/fotografia-bautizo-queretaro' });
     this.metaService.updateTag({ property: 'og:title', content: ogTitle });
     this.metaService.updateTag({ property: 'og:description', content: ogDesc });
     this.metaService.updateTag({ property: 'og:image', content: ogImage });
@@ -206,9 +206,9 @@ export class BautizosComponent implements OnInit, OnDestroy, AfterViewInit {
       '@graph': [
         {
           '@type': 'LocalBusiness',
-          '@id': 'https://danlunaphoto.duodigitalservice.com/#business',
+          '@id': 'https://danlunaphoto.com/#business',
           name: 'Dan Luna Photo',
-          url: 'https://danlunaphoto.duodigitalservice.com',
+          url: 'https://danlunaphoto.com',
           telephone: '+525667704976',
           address: { '@type': 'PostalAddress', addressLocality: 'Querétaro', addressRegion: 'Querétaro', addressCountry: 'MX' }
         },
@@ -216,7 +216,7 @@ export class BautizosComponent implements OnInit, OnDestroy, AfterViewInit {
           '@type': 'Service',
           name: 'Fotografía de Bautizo en Querétaro',
           description: 'Servicio de fotografía profesional para bautizos. Cobertura de ceremonia y fiesta con entrega digital.',
-          provider: { '@id': 'https://danlunaphoto.duodigitalservice.com/#business' },
+          provider: { '@id': 'https://danlunaphoto.com/#business' },
           areaServed: { '@type': 'City', name: 'Querétaro' },
           offers: [
             { '@type': 'Offer', name: 'Paquete Ceremonia', price: '1850', priceCurrency: 'MXN' },

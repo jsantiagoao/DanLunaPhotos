@@ -62,19 +62,19 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.meta.updateTag({ property: 'og:title',       content: 'Dan Luna Photo · Fotografía Profesional en Querétaro' });
     this.meta.updateTag({ property: 'og:description', content: 'Estudio de fotografía profesional en Querétaro. Retratos, familias y mini sesiones especiales. Capturamos los momentos que importan.' });
-    this.meta.updateTag({ property: 'og:url',         content: 'https://danlunaphoto.duodigitalservice.com' });
-    this.meta.updateTag({ property: 'og:image',       content: 'https://danlunaphoto.duodigitalservice.com/assets/images/og-default.jpg' });
+    this.meta.updateTag({ property: 'og:url',         content: 'https://danlunaphoto.com' });
+    this.meta.updateTag({ property: 'og:image',       content: 'https://danlunaphoto.com/assets/images/og-default.jpg' });
     this.meta.updateTag({ property: 'og:type',        content: 'website' });
 
     this.meta.updateTag({ name: 'twitter:card',        content: 'summary_large_image' });
     this.meta.updateTag({ name: 'twitter:title',       content: 'Dan Luna Photo · Fotografía Profesional en Querétaro' });
     this.meta.updateTag({ name: 'twitter:description', content: 'Estudio de fotografía profesional en Querétaro. Retratos, familias y mini sesiones especiales.' });
-    this.meta.updateTag({ name: 'twitter:image',       content: 'https://danlunaphoto.duodigitalservice.com/assets/images/og-default.jpg' });
+    this.meta.updateTag({ name: 'twitter:image',       content: 'https://danlunaphoto.com/assets/images/og-default.jpg' });
 
     // Resetear canonical al home (puede venir de otra ruta)
     if (isPlatformBrowser(this.platformId)) {
       const canonical = document.querySelector<HTMLLinkElement>('link[rel="canonical"]');
-      if (canonical) canonical.href = 'https://danlunaphoto.duodigitalservice.com';
+      if (canonical) canonical.href = 'https://danlunaphoto.com';
     }
 
     if (isPlatformBrowser(this.platformId)) {
@@ -88,12 +88,12 @@ export class HomeComponent implements OnInit, OnDestroy {
       '@graph': [
         {
           '@type': 'LocalBusiness',
-          '@id': 'https://danlunaphoto.duodigitalservice.com/#business',
+          '@id': 'https://danlunaphoto.com/#business',
           name: 'Dan Luna Photo',
           description: 'Estudio de fotografía profesional en Querétaro. Sesiones de retrato, familias, eventos y mini sesiones especiales.',
-          url: 'https://danlunaphoto.duodigitalservice.com',
+          url: 'https://danlunaphoto.com',
           telephone: '+52-56-6770-4976',
-          image: 'https://danlunaphoto.duodigitalservice.com/assets/images/og-default.jpg',
+          image: 'https://danlunaphoto.com/assets/images/og-default.jpg',
           address: {
             '@type': 'PostalAddress',
             addressLocality: 'Querétaro',
@@ -108,12 +108,12 @@ export class HomeComponent implements OnInit, OnDestroy {
         },
         {
           '@type': 'Organization',
-          '@id': 'https://danlunaphoto.duodigitalservice.com/#organization',
+          '@id': 'https://danlunaphoto.com/#organization',
           name: 'Dan Luna Photo',
-          url: 'https://danlunaphoto.duodigitalservice.com',
+          url: 'https://danlunaphoto.com',
           logo: {
             '@type': 'ImageObject',
-            url: 'https://danlunaphoto.duodigitalservice.com/assets/images/DL.png'
+            url: 'https://danlunaphoto.com/assets/images/DL.png'
           },
           contactPoint: {
             '@type': 'ContactPoint',
@@ -124,8 +124,8 @@ export class HomeComponent implements OnInit, OnDestroy {
         },
         {
           '@type': 'AggregateRating',
-          '@id': 'https://danlunaphoto.duodigitalservice.com/#rating',
-          itemReviewed: { '@id': 'https://danlunaphoto.duodigitalservice.com/#business' },
+          '@id': 'https://danlunaphoto.com/#rating',
+          itemReviewed: { '@id': 'https://danlunaphoto.com/#business' },
           ratingValue: '5',
           bestRating: '5',
           worstRating: '1',
