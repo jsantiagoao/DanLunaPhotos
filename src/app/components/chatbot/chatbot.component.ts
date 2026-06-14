@@ -20,7 +20,7 @@ export class ChatbotComponent {
 
   isOpen = signal(false);
   messages = signal<ChatMessage[]>([
-    { role: 'bot', text: '¡Hola! Soy Luna Bot 📷 ¿En qué puedo ayudarte? Pregúntame sobre sesiones, paquetes o disponibilidad.' }
+    { role: 'bot', text: '¡Hola! Soy Flash Bot ⚡ ¿En qué puedo ayudarte? Pregúntame sobre sesiones, paquetes o disponibilidad.' }
   ]);
   inputText = '';
   loading = signal(false);
