@@ -31,15 +31,34 @@ export class CotizacionBodasComponent {
 
   readonly questions: Question[] = [
     { id: 'nombres', label: 'Nombre de los novios', type: 'text', placeholder: 'Ej: María & Carlos', required: true },
-    { id: 'contacto', label: '¿Cuál es tu número de WhatsApp o correo?', type: 'text', placeholder: 'Ej: 442 123 4567 o tu@email.com', required: true },
+    { id: 'email', label: '¿Dónde podemos contactarte?', type: 'text', placeholder: 'Tu correo electrónico', required: true },
+    { id: 'whatsapp', label: '¿Cuál es tu número de WhatsApp?', type: 'text', placeholder: 'Ej: 442 123 4567', required: true },
     { id: 'fecha', label: '¿En qué fecha es tu evento?', type: 'date', required: true },
     { id: 'ceremonia', label: '¿Qué tipo de ceremonia es?', type: 'radio', options: ['Iglesia', 'Civil', 'Simbólica', 'Iglesia y Civil'], required: true },
     { id: 'invitados', label: '¿Cuántos invitados serán?', type: 'number', placeholder: 'Ej: 150', required: true },
     { id: 'lugar', label: '¿Ya tienes lugar para tu evento? ¿Dónde será?', type: 'text', placeholder: 'Ej: Hacienda San José, Querétaro', required: true },
-    { id: 'arreglo', label: '¿Quisieras cobertura desde el arreglo de los novios?', type: 'radio', options: ['Solo la novia', 'Ambos novios', 'No, gracias'], required: true },
+    { id: 'arreglo', label: '¿Quisieras cobertura desde el arreglo de los novios?', type: 'radio', options: ['Solo la novia', 'Solo el novio', 'Ambos novios', 'No, gracias'], required: true },
+    { id: 'zona_novia', label: '¿En qué zona será el arreglo de la novia?', type: 'text', placeholder: 'Ej: Hotel Fiesta Americana, Centro Querétaro', required: true },
+    { id: 'zona_novio', label: '¿En qué zona será el arreglo del novio?', type: 'text', placeholder: 'Ej: Casa del novio, Juriquilla', required: true },
     { id: 'horas', label: '¿Cuántas horas de cobertura les gustaría?', type: 'radio', options: ['2-3 horas', '4-5 horas', '6-8 horas', 'Más de 8 horas'], required: true },
     { id: 'impresas', label: '¿Te gustaría algún paquete de fotografías impresas o fotolibro?', type: 'radio', options: ['Fotolibro premium', 'Fotografías impresas', 'Ambos', 'No por ahora'], required: true },
+    { id: 'extras', label: '¿Te gustaría agregar algún extra especial para tu boda?', type: 'radio', options: ['Ciclorama con telas', 'Ciclorama liso', 'Spot especial', 'Otro', 'No por ahora'], required: true },
+    { id: 'extras_detalle', label: 'Especifica el extra que te gustaría', type: 'text', placeholder: 'Describe lo que tienes en mente...', required: true },
   ];
+
+  get visibleQuestions(): Question[] {
+    return this.questions.filter(q => this.isQuestionVisible(q.id));
+  }
+
+  private isQuestionVisible(id: string): boolean {
+    const arreglo = this.answers['arreglo'];
+    if (id === 'zona_novia') return arreglo === 'Solo la novia' || arreglo === 'Ambos novios';
+    if (id === 'zona_novio') return arreglo === 'Solo el novio' || arreglo === 'Ambos novios';
+    if (id === 'extras_detalle') {
+      return this.answers['extras'] === 'Otro';
+    }
+    return true;
+  }
 
   constructor(private http: HttpClient, private titleService: Title) {
     this.titleService.setTitle('Cotización Bodas · Dan Luna Photo');
@@ -104,11 +123,11 @@ export class CotizacionBodasComponent {
   }
 
   get current(): Question {
-    return this.questions[this.currentStep()];
+    return this.visibleQuestions[this.currentStep()];
   }
 
   get progress(): number {
-    return ((this.currentStep() + 1) / this.questions.length) * 100;
+    return ((this.currentStep() + 1) / this.visibleQuestions.length) * 100;
   }
 
   get canNext(): boolean {
@@ -117,7 +136,7 @@ export class CotizacionBodasComponent {
   }
 
   next(): void {
-    if (this.currentStep() < this.questions.length - 1 && this.canNext) {
+    if (this.currentStep() < this.visibleQuestions.length - 1 && this.canNext) {
       this.currentStep.update(s => s + 1);
     }
   }

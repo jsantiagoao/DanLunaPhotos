@@ -129,7 +129,7 @@
             } @else {
               <span></span>
             }
-            @if (currentStep() < questions.length - 1) {
+            @if (currentStep() < visibleQuestions.length - 1) {
               <button class="btn-gold" [disabled]="!canNext" (click)="next()">Siguiente →</button>
             } @else {
               <button class="btn-gold" [disabled]="!canNext" (click)="submit()">Enviar cotización</button>
