@@ -24,23 +24,27 @@ export class NavbarComponent {
     {
       label: 'Sesiones al Aire Libre',
       submenu: [
-        { label: 'Día del Padre', href: '#padre-aire' },
         { label: 'En Pareja', href: '#pareja' },
-        { label: 'En Familia', href: '#familia' },
-        { label: 'Smash Cake', href: '#smash-cake' }
+        { label: 'Familiares', href: '#familia' },
+        { label: 'Smash the Cake', href: '#smash-cake' }
       ]
     },
     {
       label: 'Estudio Fotográfico',
       submenu: [
-        { label: 'Navidad', href: '#navidad' }
+        { label: 'Día de las Madres', href: '/dia-de-las-madres' },
+        { label: 'Navidad', href: '#navidad' },
+        { label: 'Personalizadas', href: '#personalizadas' }
       ]
     },
     {
       label: 'Eventos y Celebraciones',
       submenu: [
         { label: 'Bodas', href: '/cotizacion-bodas' },
-        { label: 'Bautizos', href: '/fotografia-bautizo-queretaro' }
+        { label: 'Bautizos', href: '/fotografia-bautizo-queretaro' },
+        { label: 'Primera Comunión/Presentación', href: '#primera-comunion' },
+        { label: 'Fiestas/Piñatas', href: '#fiestas' },
+        { label: 'Graduaciones', href: '#graduaciones' }
       ]
     },
     {

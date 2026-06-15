@@ -273,3 +273,52 @@ $wa-bubble-bg: #ffffff;
     }
   }
 }
+
+// Instagram floating button
+.wa-float__ig-btn {
+  position: fixed;
+  bottom: 148px;
+  right: 28px;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background-color: #AD8A6A;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(173, 138, 106, 0.45), 0 2px 6px rgba(0, 0, 0, 0.15);
+  z-index: 9990;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  text-decoration: none;
+  pointer-events: all;
+
+  svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  &:hover {
+    background-color: #2D2420;
+    transform: scale(1.08);
+    box-shadow: 0 6px 20px rgba(173, 138, 106, 0.5), 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  &--hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.8);
+  }
+
+  @media (max-width: 480px) {
+    bottom: 136px;
+    right: 16px;
+    width: 52px;
+    height: 52px;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
