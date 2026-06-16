@@ -13,6 +13,7 @@ interface Question {
   placeholder?: string;
   options?: string[];
   required: boolean;
+  dynamicPlaceholder?: Record<string, string>;
 }
 
 @Component({
@@ -35,6 +36,7 @@ export class CotizacionBodasComponent {
     { id: 'whatsapp', label: '¿Cuál es tu número de WhatsApp?', type: 'tel', placeholder: 'Ej: 442 123 4567', required: true },
     { id: 'fecha', label: '¿En qué fecha es tu evento?', type: 'date', required: true },
     { id: 'ceremonia', label: '¿Qué tipo de ceremonia es?', type: 'radio', options: ['Iglesia', 'Civil', 'Simbólica', 'Iglesia y Civil'], required: true },
+    { id: 'lugar_ceremonia', label: '¿En dónde será la ceremonia?', type: 'text', placeholder: '', required: true, dynamicPlaceholder: { 'Iglesia': 'Ej: Parroquia de Santa Rosa, Querétaro', 'Civil': 'Ej: Registro Civil Centro, Querétaro', 'Simbólica': 'Ej: Jardín de eventos, Querétaro', 'Iglesia y Civil': 'Ej: Parroquia y Registro Civil' } },
     { id: 'invitados', label: '¿Cuántos invitados serán?', type: 'number', placeholder: 'Ej: 150', required: true },
     { id: 'lugar', label: '¿Ya tienes lugar para tu evento? ¿Dónde será?', type: 'text', placeholder: 'Ej: Hacienda San José, Querétaro', required: true },
     { id: 'arreglo', label: '¿Quisieras cobertura desde el arreglo de los novios?', type: 'radio', options: ['Solo la novia', 'Solo el novio', 'Ambos novios', 'No, gracias'], required: true },
@@ -124,6 +126,14 @@ export class CotizacionBodasComponent {
 
   get current(): Question {
     return this.visibleQuestions[this.currentStep()];
+  }
+
+  getPlaceholder(q: Question): string {
+    if (q.dynamicPlaceholder) {
+      const ceremonia = this.answers['ceremonia'];
+      return q.dynamicPlaceholder[ceremonia] || 'Ej: Lugar de la ceremonia';
+    }
+    return q.placeholder || '';
   }
 
   get progress(): number {

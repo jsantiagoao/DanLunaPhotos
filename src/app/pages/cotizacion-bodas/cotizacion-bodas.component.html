@@ -52,7 +52,7 @@
           @if (current.type === 'text') {
             <input
               type="text"
-              [placeholder]="current.placeholder || ''"
+              [placeholder]="getPlaceholder(current)"
               [ngModel]="answers[current.id]"
               (ngModelChange)="answers[current.id] = $event"
               class="input-field"
@@ -63,7 +63,7 @@
           @if (current.type === 'email') {
             <input
               type="email"
-              [placeholder]="current.placeholder || ''"
+              [placeholder]="getPlaceholder(current)"
               [ngModel]="answers[current.id]"
               (ngModelChange)="answers[current.id] = $event"
               pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
@@ -79,7 +79,7 @@
           @if (current.type === 'tel') {
             <input
               type="tel"
-              [placeholder]="current.placeholder || ''"
+              [placeholder]="getPlaceholder(current)"
               [ngModel]="answers[current.id]"
               (ngModelChange)="answers[current.id] = formatPhone($event)"
               (keypress)="onlyNumbers($event)"
@@ -97,7 +97,7 @@
           @if (current.type === 'number') {
             <input
               type="number"
-              [placeholder]="current.placeholder || ''"
+              [placeholder]="getPlaceholder(current)"
               [ngModel]="answers[current.id]"
               (ngModelChange)="answers[current.id] = $event"
               class="input-field"
