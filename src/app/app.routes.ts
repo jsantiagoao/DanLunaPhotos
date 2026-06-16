@@ -4,10 +4,12 @@ import { MothersDayComponent } from './components/mothers-day/mothers-day.compon
 import { FotografaEnQueretaroComponent } from './pages/fotografa-en-queretaro/fotografa-en-queretaro.component';
 import { BautizosComponent } from './pages/bautizos/bautizos.component';
 import { CotizacionBodasComponent } from './pages/cotizacion-bodas/cotizacion-bodas.component';
+import { BodasComponent } from './pages/bodas/bodas.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'fotografia-bautizo-queretaro', component: BautizosComponent },
+  { path: 'fotografia-bodas-queretaro', component: BodasComponent },
   { path: 'cotizacion-bodas', component: CotizacionBodasComponent },
   { path: 'fotografa-en-queretaro', component: FotografaEnQueretaroComponent },
   // Oculta del menú pero accesible por URL directa (no eliminada)

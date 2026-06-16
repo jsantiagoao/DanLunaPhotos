@@ -1,0 +1,71 @@
+<app-loader />
+<app-navbar />
+
+<main class="bodas-page">
+  <!-- HERO SLIDER -->
+  <section class="hero-slider">
+    @for (img of sliderImages; track img; let i = $index) {
+      <div class="slide" [class.active]="i === currentSlide">
+        <img [src]="img" alt="Fotografía de bodas en Querétaro" />
+      </div>
+    }
+    <div class="hero-overlay">
+      <div class="hero-content">
+        <p class="hero-tag">✦ Fotografía de Bodas en Querétaro ✦</p>
+        <h1>Tu historia de amor<br><span>merece ser eterna.</span></h1>
+        <p class="hero-desc">Documentamos historias de amor que se convierten en fotografías.</p>
+        <div class="hero-cta">
+          <a href="/cotizacion-bodas" class="btn-gold">Solicitar una cotización</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator" (click)="scrollToGallery()">
+      <div class="scroll-mouse">
+        <div class="scroll-dot"></div>
+      </div>
+    </div>
+
+    <!-- Dots -->
+    <div class="slider-dots">
+      @for (img of sliderImages; track img; let i = $index) {
+        <button [class.active]="i === currentSlide" (click)="goToSlide(i)"></button>
+      }
+    </div>
+  </section>
+
+  <!-- GALERÍA -->
+  <section class="gallery-section" id="galeria">
+    <div class="gallery-container">
+      <p class="section-tag">Galería</p>
+      <h2>Momentos que <span>trascienden</span></h2>
+      <div class="gallery-divider"></div>
+
+      <div class="gallery-grid">
+        <div class="gallery-item large">
+          <img src="assets/images/bodas/gallery/J_D-18.04.26-268.jpg" alt="Fotografía de boda en Querétaro" loading="lazy" />
+          <div class="gallery-overlay"><p>Amor infinito</p></div>
+        </div>
+        <div class="gallery-item">
+          <img src="assets/images/bodas/gallery/J_D-18.04.26-621.jpg" alt="Sesión fotográfica de boda" loading="lazy" />
+        </div>
+        <div class="gallery-item">
+          <img src="assets/images/bodas/gallery/S_N_16.05.16-186.jpg" alt="Fotógrafo de bodas Querétaro" loading="lazy" />
+        </div>
+        <div class="gallery-item">
+          <img src="assets/images/bodas/gallery/Delvin_Alan-381.jpg" alt="Fotografía profesional de boda" loading="lazy" />
+        </div>
+        <div class="gallery-item">
+          <img src="assets/images/bodas/gallery/S_N_16.05.16-169.jpg" alt="Fotos de boda profesionales" loading="lazy" />
+        </div>
+      </div>
+
+      <div class="gallery-cta">
+        <a href="/cotizacion-bodas" class="btn-cta">Solicitar cotización personalizada →</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<app-footer />
