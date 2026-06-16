@@ -40,7 +40,7 @@ export class NavbarComponent {
     {
       label: 'Eventos y Celebraciones',
       submenu: [
-        { label: 'Bodas', href: '/cotizacion-bodas' },
+        { label: 'Bodas', href: '/fotografia-bodas-queretaro' },
         { label: 'Bautizos', href: '/fotografia-bautizo-queretaro' },
         { label: 'Primera Comunión/Presentación', href: '#primera-comunion' },
         { label: 'Fiestas/Piñatas', href: '#fiestas' },
