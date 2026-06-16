@@ -17,6 +17,11 @@ export class BodasComponent implements OnInit, OnDestroy {
     'https://images.unsplash.com/photo-1519741497674-611481863552?w=1920&h=1080&fit=crop',
     'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=1920&h=1080&fit=crop',
   ];
+  sliderMobileImages = [
+    'assets/images/bodas/slider-mobile/slider-mobile-1.jpg',
+    'assets/images/bodas/slider-mobile/slider-mobile-2.jpg',
+  ];
+  isMobile = window.innerWidth <= 768;
   currentSlide = 0;
   private slideInterval: any;
   private jsonLdScript: HTMLScriptElement | null = null;

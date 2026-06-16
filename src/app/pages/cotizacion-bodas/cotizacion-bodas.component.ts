@@ -9,7 +9,7 @@ import { FooterComponent } from '../../components/footer/footer.component';
 interface Question {
   id: string;
   label: string;
-  type: 'text' | 'date' | 'select' | 'radio' | 'number';
+  type: 'text' | 'date' | 'select' | 'radio' | 'number' | 'email' | 'tel';
   placeholder?: string;
   options?: string[];
   required: boolean;
@@ -31,8 +31,8 @@ export class CotizacionBodasComponent {
 
   readonly questions: Question[] = [
     { id: 'nombres', label: 'Nombre de los novios', type: 'text', placeholder: 'Ej: María & Carlos', required: true },
-    { id: 'email', label: '¿Dónde podemos contactarte?', type: 'text', placeholder: 'Tu correo electrónico', required: true },
-    { id: 'whatsapp', label: '¿Cuál es tu número de WhatsApp?', type: 'text', placeholder: 'Ej: 442 123 4567', required: true },
+    { id: 'email', label: '¿Dónde podemos contactarte?', type: 'email', placeholder: 'Tu correo electrónico', required: true },
+    { id: 'whatsapp', label: '¿Cuál es tu número de WhatsApp?', type: 'tel', placeholder: 'Ej: 442 123 4567', required: true },
     { id: 'fecha', label: '¿En qué fecha es tu evento?', type: 'date', required: true },
     { id: 'ceremonia', label: '¿Qué tipo de ceremonia es?', type: 'radio', options: ['Iglesia', 'Civil', 'Simbólica', 'Iglesia y Civil'], required: true },
     { id: 'invitados', label: '¿Cuántos invitados serán?', type: 'number', placeholder: 'Ej: 150', required: true },
@@ -169,5 +169,17 @@ export class CotizacionBodasComponent {
       next: () => { this.submitted.set(true); this.sending.set(false); },
       error: () => { this.submitted.set(true); this.sending.set(false); }
     });
+  }
+
+  onlyNumbers(event: KeyboardEvent): void {
+    const char = event.key;
+    if (!/[0-9\s]/.test(char)) event.preventDefault();
+  }
+
+  formatPhone(value: string): string {
+    const digits = value.replace(/\D/g, '').slice(0, 10);
+    if (digits.length <= 3) return digits;
+    if (digits.length <= 6) return `${digits.slice(0, 3)} ${digits.slice(3)}`;
+    return `${digits.slice(0, 3)} ${digits.slice(3, 6)} ${digits.slice(6)}`;
   }
 }

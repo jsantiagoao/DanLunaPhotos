@@ -13,8 +13,7 @@
     <!-- Header -->
     <div class="wizard-header">
       <div class="brand">
-        <span class="brand-name">Dan Luna</span>
-        <span class="brand-tag">bodas</span>
+        <img src="assets/images/logo-wedding.svg" alt="Dan Luna Wedding Photos" class="brand-logo" />
       </div>
       <div class="wizard-label">
         <span>cotización personalizada</span>
@@ -28,8 +27,6 @@
       </div>
       <div class="step-count">
         <span class="current">{{ submitted() ? '✓' : currentStep() + 1 }}</span>
-        <span class="sep">/</span>
-        <span>9</span>
       </div>
     </div>
 
@@ -37,7 +34,7 @@
     @if (!submitted()) {
       <div class="wizard-title">
         <h1>Fotografía para <span class="gold">tu gran día</span></h1>
-        <p>Contesta 9 preguntas y recibe una cotización personalizada</p>
+        <p>Contesta las siguientes preguntas y recibe una cotización personalizada</p>
       </div>
     }
 
@@ -60,6 +57,40 @@
               (ngModelChange)="answers[current.id] = $event"
               class="input-field"
             />
+          }
+
+          <!-- Email input -->
+          @if (current.type === 'email') {
+            <input
+              type="email"
+              [placeholder]="current.placeholder || ''"
+              [ngModel]="answers[current.id]"
+              (ngModelChange)="answers[current.id] = $event"
+              pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}"
+              class="input-field"
+              #emailInput="ngModel"
+            />
+            @if (emailInput.invalid && answers[current.id]) {
+              <span class="field-error">Ingresa un correo válido</span>
+            }
+          }
+
+          <!-- Tel input -->
+          @if (current.type === 'tel') {
+            <input
+              type="tel"
+              [placeholder]="current.placeholder || ''"
+              [ngModel]="answers[current.id]"
+              (ngModelChange)="answers[current.id] = formatPhone($event)"
+              (keypress)="onlyNumbers($event)"
+              maxlength="12"
+              pattern="[0-9\s]{10,12}"
+              class="input-field"
+              #telInput="ngModel"
+            />
+            @if (telInput.invalid && answers[current.id]) {
+              <span class="field-error">Ingresa un número de 10 dígitos</span>
+            }
           }
 
           <!-- Number input -->

@@ -4,7 +4,7 @@
 <main class="bodas-page">
   <!-- HERO SLIDER -->
   <section class="hero-slider">
-    @for (img of sliderImages; track img; let i = $index) {
+    @for (img of (isMobile ? sliderMobileImages : sliderImages); track img; let i = $index) {
       <div class="slide" [class.active]="i === currentSlide">
         <img [src]="img" alt="Fotografía de bodas en Querétaro" />
       </div>

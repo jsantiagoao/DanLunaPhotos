@@ -48,22 +48,11 @@ $cream: #F9F5F2;
 
   .brand {
     display: flex;
-    align-items: baseline;
-    gap: 0.5rem;
+    align-items: center;
 
-    .brand-name {
-      font-family: 'Fraunces', serif;
-      font-size: 1.8rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, $gold, #e4c98a);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .brand-tag {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.3em;
-      color: $text-muted;
+    .brand-logo {
+      height: 180px;
+      width: auto;
     }
   }
 
