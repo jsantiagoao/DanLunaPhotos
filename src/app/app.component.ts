@@ -12,7 +12,7 @@ import { filter } from 'rxjs';
   template: `
     <router-outlet></router-outlet>
     <app-scroll-to-top />
-    @if (!hideChatbot) { <app-chatbot /> }
+    @if (!hideChatbot) { <!-- <app-chatbot /> --> }
     <app-whatsapp-float />
   `,
   styles: []
