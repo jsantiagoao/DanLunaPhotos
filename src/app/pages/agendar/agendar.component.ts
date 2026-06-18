@@ -6,7 +6,7 @@ import { BusySlot, BookingRequest } from './booking.models';
 import { BookingLogic } from './booking.logic';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { FooterComponent } from '../../components/footer/footer.component';
-import { SESSION_TYPES, FIELD_LABELS } from './session-types.config';
+import { SESSION_TYPES, FIELD_LABELS, FIELD_TYPES } from './session-types.config';
 
 @Component({
   selector: 'app-agendar',
@@ -51,6 +51,7 @@ export class AgendarComponent {
   }
 
   getFieldLabel(key: string): string { return FIELD_LABELS[key] || key; }
+  getFieldType(key: string): string { return FIELD_TYPES[key] || 'text'; }
 
   // Computed
   monthName = computed(() => {

@@ -111,7 +111,7 @@
         @for (f of currentFields; track f) {
           <div class="form-group">
             <label [for]="f">{{ getFieldLabel(f) }}</label>
-            <input [id]="f" type="text" [(ngModel)]="formDetails[f]" [name]="f" maxlength="200" />
+            <input [id]="f" [type]="getFieldType(f)" [(ngModel)]="formDetails[f]" [name]="f" maxlength="200" [placeholder]="getFieldType(f) === 'url' ? 'https://maps.google.com/...' : ''" />
           </div>
         }
 
