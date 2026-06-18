@@ -1,0 +1,140 @@
+<section class="booking-page">
+  <div class="booking-container">
+
+    <!-- STEP 1: Calendar -->
+    @if (step() === 'calendar') {
+      <header class="booking-header">
+        <h1>Agenda tu sesión</h1>
+        <p>Selecciona una fecha y horario disponible</p>
+      </header>
+
+      <div class="calendar">
+        <div class="calendar-nav">
+          <button (click)="prevMonth()" aria-label="Mes anterior">&lsaquo;</button>
+          <span class="month-name">{{ monthName() }}</span>
+          <button (click)="nextMonth()" aria-label="Mes siguiente">&rsaquo;</button>
+        </div>
+
+        <div class="calendar-grid">
+          <div class="day-header" *ngFor="let d of ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom']">{{ d }}</div>
+          @for (_ of [].constructor(firstDayOfMonth()); track $index) {
+            <div class="day empty"></div>
+          }
+          @for (day of [].constructor(daysInMonth()); track $index) {
+            <button
+              class="day"
+              [class.past]="isDayPast($index + 1)"
+              [class.unavailable]="!isDayAvailable($index + 1)"
+              [class.fully-booked]="isDayFullyBooked($index + 1)"
+              [class.selected]="selectedDate() === currentYear() + '-' + (currentMonth() | number:'2.0-0') + '-' + (($index + 1) | number:'2.0-0')"
+              [disabled]="!isDayAvailable($index + 1) || isDayFullyBooked($index + 1)"
+              (click)="selectDate($index + 1)"
+              [attr.aria-label]="($index + 1) + ' de ' + monthName()"
+            >
+              {{ $index + 1 }}
+            </button>
+          }
+        </div>
+      </div>
+
+      <!-- Time Slots -->
+      @if (selectedDate()) {
+        <div class="time-slots">
+          <h3>Horarios disponibles</h3>
+          @if (availableTimeSlots().length === 0) {
+            <p class="no-slots">No hay horarios disponibles para esta fecha</p>
+          } @else {
+            <div class="slots-grid">
+              @for (slot of availableTimeSlots(); track slot) {
+                <button
+                  class="slot"
+                  [class.selected]="selectedTime() === slot"
+                  (click)="selectTime(slot)"
+                  [attr.aria-label]="'Horario ' + slot"
+                >
+                  {{ slot }}
+                </button>
+              }
+            </div>
+          }
+        </div>
+      }
+
+      @if (selectedDate() && selectedTime()) {
+        <button class="btn-primary" (click)="goToForm()">Continuar</button>
+      }
+    }
+
+    <!-- STEP 2: Form -->
+    @if (step() === 'form') {
+      <header class="booking-header">
+        <h1>Completa tus datos</h1>
+        <p>{{ selectedDate() | date:'EEEE d \'de\' MMMM, y':'':'es-MX' }} a las {{ selectedTime() }}</p>
+      </header>
+
+      <form class="booking-form" (ngSubmit)="submitBooking()">
+        <div class="form-group">
+          <label for="name">Nombre completo</label>
+          <input id="name" type="text" [(ngModel)]="form.name" name="name" maxlength="100" required placeholder="Tu nombre" autocomplete="name" />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Correo electrónico</label>
+          <input id="email" type="email" [(ngModel)]="form.email" name="email" maxlength="100" required placeholder="tu@correo.com" autocomplete="email" />
+        </div>
+
+        <div class="form-group">
+          <label for="phone">WhatsApp (10 dígitos)</label>
+          <input id="phone" type="tel" [value]="form.phone" (input)="onPhoneInput($event)" name="phone" maxlength="12" required placeholder="442 123 4567" autocomplete="tel" />
+        </div>
+
+        <div class="form-group">
+          <label for="type">Tipo de sesión</label>
+          <select id="type" [(ngModel)]="form.type" name="type" required>
+            @for (t of sessionTypes; track t.value) {
+              <option [value]="t.value">{{ t.label }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="location">Lugar (opcional)</label>
+          <input id="location" type="text" [(ngModel)]="form.location" name="location" maxlength="200" placeholder="Ej: Jardín Las Flores, Querétaro" />
+        </div>
+
+        <!-- Honeypot anti-bot: hidden from users, bots fill it -->
+        <div class="hp-field" aria-hidden="true">
+          <label for="website">Website</label>
+          <input id="website" type="text" [(ngModel)]="honeypot" name="website" tabindex="-1" autocomplete="off" />
+        </div>
+
+        @if (error()) {
+          <p class="error-msg" role="alert">{{ error() }}</p>
+        }
+
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" (click)="step.set('calendar')">Regresar</button>
+          <button type="submit" class="btn-primary" [disabled]="!isFormValid() || loading()">
+            {{ loading() ? 'Reservando...' : 'Reservar' }}
+          </button>
+        </div>
+      </form>
+    }
+
+    <!-- STEP 3: Success -->
+    @if (step() === 'success') {
+      <div class="success">
+        <div class="success-icon">✓</div>
+        <h1>¡Sesión pre-agendada!</h1>
+        <p>Tu sesión de <strong>{{ form.type }}</strong> quedó apartada para el <strong>{{ form.date | date:'EEEE d \'de\' MMMM':'':'es-MX' }}</strong> a las <strong>{{ form.time }}</strong>.</p>
+        <hr>
+        <h3>Para confirmar:</h3>
+        <p>Envía tu comprobante de anticipo (50%) a nuestro WhatsApp y te confirmaremos por correo.</p>
+        <a class="btn-whatsapp" href="https://wa.me/525667704976?text=Hola%2C%20acabo%20de%20pre-agendar%20una%20sesi%C3%B3n.%20Quiero%20enviar%20mi%20comprobante%20de%20anticipo." target="_blank" rel="noopener">
+          Enviar comprobante por WhatsApp
+        </a>
+      </div>
+    }
+
+  </div>
+</section>

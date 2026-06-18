@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, Inject, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { Title, Meta } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { LoaderComponent } from '../../components/loader/loader.component';
 import { FooterComponent } from '../../components/footer/footer.component';
@@ -152,6 +153,7 @@ export class BautizosComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
     private titleService: Title,
     private metaService: Meta,
+    private router: Router,
     @Inject(DOCUMENT) private document: Document
   ) {
     this.visibleImages = this.allGalleryImages.slice(0, this.galleryBatch);
@@ -284,9 +286,6 @@ export class BautizosComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   bookNow(): void {
-    const msg = encodeURIComponent(
-      'Hola, me gustaría reservar una sesión de fotografía de bautizo. ¿Podrían darme más información sobre los paquetes disponibles?'
-    );
-    window.open(`https://wa.me/525667704976?text=${msg}`, '_blank');
+    this.router.navigate(['/agendar']);
   }
 }
