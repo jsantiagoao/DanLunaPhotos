@@ -17,41 +17,28 @@ import { SESSION_TYPES, FIELD_LABELS, FIELD_TYPES } from './session-types.config
 })
 export class AgendarComponent {
   // State
+  step = signal<'type' | 'package' | 'calendar' | 'slots' | 'form' | 'success'>('type');
   currentMonth = signal(new Date().getMonth() + 1);
   currentYear = signal(new Date().getFullYear());
   busySlots = signal<BusySlot[]>([]);
   selectedDate = signal<string | null>(null);
   selectedTime = signal<string | null>(null);
-  step = signal<'calendar' | 'form' | 'success'>('calendar');
+  selectedTime2 = signal<string | null>(null);
   loading = signal(false);
   error = signal<string | null>(null);
 
-  // Form data
-  form: BookingRequest = { name: '', email: '', phone: '', type: 'bautizo', date: '', time: '', location: '' };
-  honeypot = ''; // Anti-bot
-  formPackage = '';
-  formDetails: Record<string, string> = {};
+  // Selection
+  selectedType = '';
+  selectedPackageId = '';
+  needsSecondSlot = false;
   sessionTypes = SESSION_TYPES;
-  currentPackages: any[] = SESSION_TYPES[0].packages;
+  currentPackages: any[] = [];
   currentFields: string[] = [];
 
-  onTypeChange() {
-    this.formPackage = '';
-    this.formDetails = {};
-    const t = SESSION_TYPES.find(st => st.id === this.form.type);
-    this.currentPackages = t?.packages || [];
-    this.currentFields = [];
-  }
-
-  onPackageChange() {
-    this.formDetails = {};
-    const t = SESSION_TYPES.find(st => st.id === this.form.type);
-    const pkg = t?.packages.find(p => p.id === this.formPackage);
-    this.currentFields = pkg?.fields || [];
-  }
-
-  getFieldLabel(key: string): string { return FIELD_LABELS[key] || key; }
-  getFieldType(key: string): string { return FIELD_TYPES[key] || 'text'; }
+  // Form
+  form: BookingRequest = { name: '', email: '', phone: '', type: '', date: '', time: '' };
+  formDetails: Record<string, string> = {};
+  honeypot = '';
 
   // Computed
   monthName = computed(() => {
@@ -63,17 +50,40 @@ export class AgendarComponent {
 
   firstDayOfMonth = computed(() => {
     const day = new Date(this.currentYear(), this.currentMonth() - 1, 1).getDay();
-    return day === 0 ? 6 : day - 1; // Lunes = 0
+    return day === 0 ? 6 : day - 1;
   });
 
   availableTimeSlots = computed(() => {
     return BookingLogic.getAvailableTimeSlots(this.selectedDate() || '', this.busySlots());
   });
 
-  constructor(private bookingSvc: BookingService) {
+  availableSecondSlots = computed(() => {
+    const all = BookingLogic.getAvailableTimeSlots(this.selectedDate() || '', this.busySlots());
+    return all.filter(t => t !== this.selectedTime());
+  });
+
+  constructor(private bookingSvc: BookingService) {}
+
+  // Step 1: Type
+  selectType(typeId: string) {
+    this.selectedType = typeId;
+    const t = SESSION_TYPES.find(st => st.id === typeId);
+    this.currentPackages = t?.packages || [];
+    this.step.set('package');
+  }
+
+  // Step 2: Package
+  selectPackage(pkgId: string) {
+    this.selectedPackageId = pkgId;
+    const t = SESSION_TYPES.find(st => st.id === this.selectedType);
+    const pkg = t?.packages.find(p => p.id === pkgId);
+    this.currentFields = pkg?.fields || [];
+    this.needsSecondSlot = this.currentFields.some(f => f.startsWith('horaFiesta') || f.startsWith('horaEvento'));
+    this.step.set('calendar');
     this.loadAvailability();
   }
 
+  // Step 3: Calendar
   loadAvailability(): void {
     this.loading.set(true);
     this.bookingSvc.getAvailability(this.currentMonth(), this.currentYear()).subscribe({
@@ -88,7 +98,6 @@ export class AgendarComponent {
     if (this.currentMonth() === 1) { this.currentMonth.set(12); this.currentYear.set(this.currentYear() - 1); }
     else { this.currentMonth.set(this.currentMonth() - 1); }
     this.selectedDate.set(null);
-    this.selectedTime.set(null);
     this.loadAvailability();
   }
 
@@ -96,49 +105,71 @@ export class AgendarComponent {
     if (this.currentMonth() === 12) { this.currentMonth.set(1); this.currentYear.set(this.currentYear() + 1); }
     else { this.currentMonth.set(this.currentMonth() + 1); }
     this.selectedDate.set(null);
-    this.selectedTime.set(null);
     this.loadAvailability();
   }
 
   selectDate(day: number): void {
     if (!this.isDayAvailable(day)) return;
+    this.selectedDate.set(this.buildDateStr(day));
+    this.selectedTime.set(null);
+    this.selectedTime2.set(null);
+    this.step.set('slots');
+  }
+
+  buildDateStr(day: number): string {
     const m = this.currentMonth().toString().padStart(2, '0');
     const d = day.toString().padStart(2, '0');
-    this.selectedDate.set(`${this.currentYear()}-${m}-${d}`);
-    this.selectedTime.set(null);
+    return `${this.currentYear()}-${m}-${d}`;
   }
 
-  selectTime(time: string): void {
-    this.selectedTime.set(time);
-  }
+  isDayPast(day: number): boolean { return BookingLogic.isDayPast(day, this.currentMonth(), this.currentYear()); }
+  isDayAvailable(day: number): boolean { return BookingLogic.isDayAvailable(day, this.currentMonth(), this.currentYear()); }
+  isDayFullyBooked(day: number): boolean { return BookingLogic.isDayFullyBooked(day, this.currentMonth(), this.currentYear(), this.busySlots()); }
 
+  // Step 4: Slots → Form
   goToForm(): void {
-    if (!this.selectedDate() || !this.selectedTime()) return;
+    this.form.type = this.selectedType;
     this.form.date = this.selectedDate()!;
     this.form.time = this.selectedTime()!;
+    // Pre-fill time fields in details
+    if (this.needsSecondSlot) {
+      const ceremoniaField = this.currentFields.find(f => f === 'horaCeremonia');
+      const fiestaField = this.currentFields.find(f => f.startsWith('horaFiesta') || f.startsWith('horaEvento'));
+      if (ceremoniaField) this.formDetails[ceremoniaField] = this.selectedTime()!;
+      if (fiestaField) this.formDetails[fiestaField] = this.selectedTime2()!;
+    }
     this.step.set('form');
   }
 
-  isDayPast(day: number): boolean {
-    return BookingLogic.isDayPast(day, this.currentMonth(), this.currentYear());
+  // Helpers
+  getTypeLabel(): string { return SESSION_TYPES.find(t => t.id === this.selectedType)?.label || ''; }
+  getPackageName(): string {
+    const t = SESSION_TYPES.find(st => st.id === this.selectedType);
+    return t?.packages.find(p => p.id === this.selectedPackageId)?.name || '';
   }
+  getFieldLabel(key: string): string { return FIELD_LABELS[key] || key; }
+  getFieldType(key: string): string { return FIELD_TYPES[key] || 'text'; }
 
-  isDayAvailable(day: number): boolean {
-    return BookingLogic.isDayAvailable(day, this.currentMonth(), this.currentYear());
-  }
-
-  isDayFullyBooked(day: number): boolean {
-    return BookingLogic.isDayFullyBooked(day, this.currentMonth(), this.currentYear(), this.busySlots());
+  nonTimeFields(): string[] {
+    return this.currentFields.filter(f => !f.startsWith('hora'));
   }
 
   // Validation
   isFormValid(): boolean {
-    return BookingLogic.isFormValid(this.form);
+    return (
+      this.form.name.trim().length >= 3 &&
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.form.email) &&
+      /^\d{10}$/.test(this.form.phone.replace(/\s/g, ''))
+    );
   }
 
-  // Sanitize (OWASP - client side defense in depth)
-  sanitize(value: string): string {
-    return BookingLogic.sanitize(value);
+  sanitize(value: string): string { return BookingLogic.sanitize(value); }
+  formatPhone(value: string): string { return BookingLogic.formatPhone(value); }
+
+  onPhoneInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.form.phone = this.formatPhone(input.value);
+    input.value = this.form.phone;
   }
 
   submitBooking(): void {
@@ -151,8 +182,7 @@ export class AgendarComponent {
       type: this.form.type,
       date: this.form.date,
       time: this.form.time,
-      location: this.form.location ? this.sanitize(this.form.location.trim()) : undefined,
-      package: this.formPackage,
+      package: this.selectedPackageId,
       details: this.formDetails,
     };
 
@@ -166,15 +196,5 @@ export class AgendarComponent {
         this.loading.set(false);
       },
     });
-  }
-
-  formatPhone(value: string): string {
-    return BookingLogic.formatPhone(value);
-  }
-
-  onPhoneInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    this.form.phone = this.formatPhone(input.value);
-    input.value = this.form.phone;
   }
 }

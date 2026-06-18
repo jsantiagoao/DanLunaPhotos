@@ -2,11 +2,45 @@
 <section class="booking-page">
   <div class="booking-container">
 
-    <!-- STEP 1: Calendar -->
-    @if (step() === 'calendar') {
+    <!-- STEP 1: Tipo de sesión -->
+    @if (step() === 'type') {
       <header class="booking-header">
         <h1>Agenda tu sesión</h1>
-        <p>Selecciona una fecha y horario disponible</p>
+        <p>¿Qué tipo de sesión te gustaría?</p>
+      </header>
+
+      <div class="type-grid">
+        @for (t of sessionTypes; track t.id) {
+          <button class="type-card" (click)="selectType(t.id)">
+            {{ t.label }}
+          </button>
+        }
+      </div>
+    }
+
+    <!-- STEP 2: Paquete -->
+    @if (step() === 'package') {
+      <header class="booking-header">
+        <h1>Elige tu paquete</h1>
+        <p>{{ getTypeLabel() }}</p>
+      </header>
+
+      <div class="package-grid">
+        @for (p of currentPackages; track p.id) {
+          <button class="package-card" (click)="selectPackage(p.id)">
+            <span class="pkg-name">{{ p.name }}</span>
+            <span class="pkg-price">{{ p.price | currency:'MXN':'symbol':'1.0-0' }}</span>
+          </button>
+        }
+      </div>
+      <button class="btn-back" (click)="step.set('type')">← Atrás</button>
+    }
+
+    <!-- STEP 3: Calendario -->
+    @if (step() === 'calendar') {
+      <header class="booking-header">
+        <h1>Selecciona una fecha</h1>
+        <p>{{ getTypeLabel() }} · {{ getPackageName() }}</p>
       </header>
 
       <div class="calendar">
@@ -27,50 +61,60 @@
               [class.past]="isDayPast($index + 1)"
               [class.unavailable]="!isDayAvailable($index + 1)"
               [class.fully-booked]="isDayFullyBooked($index + 1)"
-              [class.selected]="selectedDate() === currentYear() + '-' + (currentMonth() | number:'2.0-0') + '-' + (($index + 1) | number:'2.0-0')"
+              [class.selected]="selectedDate() === buildDateStr($index + 1)"
               [disabled]="!isDayAvailable($index + 1) || isDayFullyBooked($index + 1)"
               (click)="selectDate($index + 1)"
-              [attr.aria-label]="($index + 1) + ' de ' + monthName()"
             >
               {{ $index + 1 }}
             </button>
           }
         </div>
       </div>
+      <button class="btn-back" (click)="step.set('package')">← Atrás</button>
+    }
 
-      <!-- Time Slots -->
-      @if (selectedDate()) {
-        <div class="time-slots">
-          <h3>Horarios disponibles</h3>
-          @if (availableTimeSlots().length === 0) {
-            <p class="no-slots">No hay horarios disponibles para esta fecha</p>
-          } @else {
-            <div class="slots-grid">
-              @for (slot of availableTimeSlots(); track slot) {
-                <button
-                  class="slot"
-                  [class.selected]="selectedTime() === slot"
-                  (click)="selectTime(slot)"
-                  [attr.aria-label]="'Horario ' + slot"
-                >
-                  {{ slot }}
-                </button>
-              }
-            </div>
+    <!-- STEP 4: Horarios -->
+    @if (step() === 'slots') {
+      <header class="booking-header">
+        <h1>Selecciona horario{{ needsSecondSlot ? 's' : '' }}</h1>
+        <p>{{ selectedDate() | date:'EEEE d \'de\' MMMM, y':'UTC':'es-MX' }}</p>
+      </header>
+
+      <div class="slots-section">
+        <h3>{{ needsSecondSlot ? 'Hora de ceremonia' : 'Horario' }}</h3>
+        <div class="slots-grid">
+          @for (slot of availableTimeSlots(); track slot) {
+            <button class="slot" [class.selected]="selectedTime() === slot" (click)="selectedTime.set(slot)">
+              {{ slot }}
+            </button>
           }
+        </div>
+      </div>
+
+      @if (needsSecondSlot) {
+        <div class="slots-section">
+          <h3>Hora de fiesta/evento</h3>
+          <div class="slots-grid">
+            @for (slot of availableSecondSlots(); track slot) {
+              <button class="slot" [class.selected]="selectedTime2() === slot" (click)="selectedTime2.set(slot)">
+                {{ slot }}
+              </button>
+            }
+          </div>
         </div>
       }
 
-      @if (selectedDate() && selectedTime()) {
+      @if (selectedTime() && (!needsSecondSlot || selectedTime2())) {
         <button class="btn-primary" (click)="goToForm()">Continuar</button>
       }
+      <button class="btn-back" (click)="step.set('calendar'); selectedTime.set(null); selectedTime2.set(null)">← Atrás</button>
     }
 
-    <!-- STEP 2: Form -->
+    <!-- STEP 5: Formulario datos -->
     @if (step() === 'form') {
       <header class="booking-header">
         <h1>Completa tus datos</h1>
-        <p>{{ selectedDate() | date:'EEEE d \'de\' MMMM, y':'':'es-MX' }} a las {{ selectedTime() }}</p>
+        <p>{{ selectedDate() | date:'EEEE d \'de\' MMMM, y':'UTC':'es-MX' }}</p>
       </header>
 
       <form class="booking-form" (ngSubmit)="submitBooking()">
@@ -89,33 +133,15 @@
           <input id="phone" type="tel" [value]="form.phone" (input)="onPhoneInput($event)" name="phone" maxlength="12" required placeholder="442 123 4567" autocomplete="tel" />
         </div>
 
-        <div class="form-group">
-          <label for="type">Tipo de sesión</label>
-          <select id="type" [(ngModel)]="form.type" name="type" required (ngModelChange)="onTypeChange()">
-            @for (t of sessionTypes; track t.id) {
-              <option [value]="t.id">{{ t.label }}</option>
-            }
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="package">Paquete</label>
-          <select id="package" [(ngModel)]="formPackage" name="package" required (ngModelChange)="onPackageChange()">
-            <option value="">Seleccionar paquete...</option>
-            @for (p of currentPackages; track p.id) {
-              <option [value]="p.id">{{ p.name }} - {{ p.price | currency:'MXN':'symbol':'1.0-0' }}</option>
-            }
-          </select>
-        </div>
-
-        @for (f of currentFields; track f) {
+        <!-- Campos dinámicos del paquete (excepto horas, ya seleccionadas) -->
+        @for (f of nonTimeFields(); track f) {
           <div class="form-group">
             <label [for]="f">{{ getFieldLabel(f) }}</label>
             <input [id]="f" [type]="getFieldType(f)" [(ngModel)]="formDetails[f]" [name]="f" maxlength="200" [placeholder]="getFieldType(f) === 'url' ? 'https://maps.google.com/...' : ''" />
           </div>
         }
 
-        <!-- Honeypot anti-bot: hidden from users, bots fill it -->
+        <!-- Honeypot -->
         <div class="hp-field" aria-hidden="true">
           <label for="website">Website</label>
           <input id="website" type="text" [(ngModel)]="honeypot" name="website" tabindex="-1" autocomplete="off" />
@@ -126,7 +152,7 @@
         }
 
         <div class="form-actions">
-          <button type="button" class="btn-secondary" (click)="step.set('calendar')">Regresar</button>
+          <button type="button" class="btn-secondary" (click)="step.set('slots')">Regresar</button>
           <button type="submit" class="btn-primary" [disabled]="!isFormValid() || loading()">
             {{ loading() ? 'Reservando...' : 'Reservar' }}
           </button>
@@ -134,12 +160,12 @@
       </form>
     }
 
-    <!-- STEP 3: Success -->
+    <!-- STEP 6: Success -->
     @if (step() === 'success') {
       <div class="success">
         <div class="success-icon">✓</div>
         <h1>¡Sesión pre-agendada!</h1>
-        <p>Tu sesión de <strong>{{ form.type }}</strong> quedó apartada para el <strong>{{ form.date | date:'EEEE d \'de\' MMMM':'':'es-MX' }}</strong> a las <strong>{{ form.time }}</strong>.</p>
+        <p>Tu sesión de <strong>{{ getTypeLabel() }}</strong> quedó apartada para el <strong>{{ selectedDate() | date:'EEEE d \'de\' MMMM':'UTC':'es-MX' }}</strong>.</p>
         <hr>
         <h3>Para confirmar:</h3>
         <p>Envía tu comprobante de anticipo (50%) a nuestro WhatsApp y te confirmaremos por correo.</p>

@@ -40,6 +40,71 @@ $beige: #EAE7E1;
   }
 }
 
+// Type selection
+.type-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.type-card {
+  padding: 1.2rem;
+  border: 1px solid $beige;
+  border-radius: 12px;
+  background: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: $dark;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+
+  &:hover { border-color: $gold; background: rgba($gold, 0.05); }
+}
+
+// Package selection
+.package-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.package-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.2rem;
+  border: 1px solid $beige;
+  border-radius: 12px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover { border-color: $gold; background: rgba($gold, 0.05); }
+
+  .pkg-name { font-weight: 500; color: $dark; }
+  .pkg-price { font-weight: 700; color: $gold; }
+}
+
+.btn-back {
+  display: block;
+  margin-top: 1.5rem;
+  background: none;
+  border: none;
+  color: rgba($dark, 0.5);
+  cursor: pointer;
+  font-size: 0.85rem;
+
+  &:hover { color: $dark; }
+}
+
+.slots-section {
+  margin-bottom: 1.5rem;
+
+  h3 { font-size: 0.9rem; color: $dark; margin-bottom: 0.5rem; font-weight: 600; }
+}
+
 // Calendar
 .calendar-nav {
   display: flex;
