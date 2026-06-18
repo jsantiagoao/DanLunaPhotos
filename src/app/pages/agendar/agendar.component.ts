@@ -4,11 +4,14 @@ import { FormsModule } from '@angular/forms';
 import { BookingService } from './booking.service';
 import { BusySlot, BookingRequest } from './booking.models';
 import { BookingLogic } from './booking.logic';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { FooterComponent } from '../../components/footer/footer.component';
+import { SESSION_TYPES, FIELD_LABELS } from './session-types.config';
 
 @Component({
   selector: 'app-agendar',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NavbarComponent, FooterComponent],
   templateUrl: './agendar.component.html',
   styleUrl: './agendar.component.scss',
 })
@@ -26,6 +29,28 @@ export class AgendarComponent {
   // Form data
   form: BookingRequest = { name: '', email: '', phone: '', type: 'bautizo', date: '', time: '', location: '' };
   honeypot = ''; // Anti-bot
+  formPackage = '';
+  formDetails: Record<string, string> = {};
+  sessionTypes = SESSION_TYPES;
+  currentPackages: any[] = SESSION_TYPES[0].packages;
+  currentFields: string[] = [];
+
+  onTypeChange() {
+    this.formPackage = '';
+    this.formDetails = {};
+    const t = SESSION_TYPES.find(st => st.id === this.form.type);
+    this.currentPackages = t?.packages || [];
+    this.currentFields = [];
+  }
+
+  onPackageChange() {
+    this.formDetails = {};
+    const t = SESSION_TYPES.find(st => st.id === this.form.type);
+    const pkg = t?.packages.find(p => p.id === this.formPackage);
+    this.currentFields = pkg?.fields || [];
+  }
+
+  getFieldLabel(key: string): string { return FIELD_LABELS[key] || key; }
 
   // Computed
   monthName = computed(() => {
@@ -43,16 +68,6 @@ export class AgendarComponent {
   availableTimeSlots = computed(() => {
     return BookingLogic.getAvailableTimeSlots(this.selectedDate() || '', this.busySlots());
   });
-
-  sessionTypes = [
-    { value: 'bautizo', label: 'Bautizo' },
-    { value: 'boda', label: 'Boda' },
-    { value: 'embarazo', label: 'Embarazo' },
-    { value: 'newborn', label: 'Newborn' },
-    { value: 'familia', label: 'Familia' },
-    { value: 'xv', label: 'XV Años' },
-    { value: 'comunion', label: 'Primera Comunión' },
-  ];
 
   constructor(private bookingSvc: BookingService) {
     this.loadAvailability();
@@ -128,7 +143,7 @@ export class AgendarComponent {
   submitBooking(): void {
     if (!this.isFormValid() || this.loading() || this.honeypot) return;
 
-    const payload: BookingRequest = {
+    const payload: any = {
       name: this.sanitize(this.form.name.trim()),
       email: this.form.email.trim().toLowerCase(),
       phone: this.form.phone.replace(/\s/g, ''),
@@ -136,6 +151,8 @@ export class AgendarComponent {
       date: this.form.date,
       time: this.form.time,
       location: this.form.location ? this.sanitize(this.form.location.trim()) : undefined,
+      package: this.formPackage,
+      details: this.formDetails,
     };
 
     this.loading.set(true);
