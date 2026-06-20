@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { FooterComponent } from '../../components/footer/footer.component';
 
 interface BlogPost {
   _id: string;
@@ -20,8 +22,9 @@ interface BlogPost {
 @Component({
   selector: 'app-blog-post',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, NavbarComponent, FooterComponent],
   template: `
+    <app-navbar></app-navbar>
     @if (post) {
       <article class="blog-post">
         <div class="post-hero">
@@ -52,6 +55,7 @@ interface BlogPost {
         <a routerLink="/blog">← Volver al blog</a>
       </div>
     }
+    <app-footer></app-footer>
   `,
   styles: [`
     :host { display: block; background: #fff; }
@@ -81,8 +85,10 @@ interface BlogPost {
       p { font-family: 'Fraunces', serif; font-size: 1.2rem; color: #2D2420; margin-bottom: 1rem; }
     }
     .ig-btn {
-      display: inline-block; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-      color: #fff; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 600;
+      display: inline-block; background: #AD8A6A; color: #fff; padding: 12px 28px;
+      border-radius: 8px; text-decoration: none; font-weight: 600; font-family: 'DM Sans', sans-serif;
+      transition: background 0.2s;
+      &:hover { background: #2D2420; }
     }
     .post-meta {
       display: flex; justify-content: space-between; align-items: center;

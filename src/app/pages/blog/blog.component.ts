@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { FooterComponent } from '../../components/footer/footer.component';
 
 interface BlogPost {
   _id: string;
@@ -18,8 +20,9 @@ interface BlogPost {
 @Component({
   selector: 'app-blog',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, NavbarComponent, FooterComponent],
   template: `
+    <app-navbar></app-navbar>
     <section class="blog-hero">
       <h1>Blog</h1>
       <p>Tips, inspiración y detrás de cámaras</p>
@@ -53,6 +56,8 @@ interface BlogPost {
         Sígueme en Instagram &#64;danlunaphotos
       </a>
     </section>
+
+    <app-footer></app-footer>
   `,
   styles: [`
     :host { display: block; background: #fff; }
@@ -88,15 +93,15 @@ interface BlogPost {
     .card-date { display: block; margin-top: 0.8rem; font-size: 0.8rem; color: #bbb; }
     .empty { grid-column: 1/-1; text-align: center; padding: 3rem; color: #666; }
     .blog-footer-cta {
-      text-align: center; padding: 2rem 1rem 4rem; border-top: 1px solid #EAE7E1;
+      text-align: center; padding: 2.5rem 1rem 4rem; border-top: 1px solid #EAE7E1;
       max-width: 600px; margin: 0 auto;
-      p { color: #2D2420; font-family: 'Fraunces', serif; font-size: 1.2rem; margin-bottom: 1rem; }
+      p { color: #2D2420; font-family: 'Fraunces', serif; font-size: 1.3rem; margin-bottom: 1rem; }
     }
     .ig-btn {
-      display: inline-block; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
-      color: #fff; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-weight: 600;
-      transition: opacity 0.2s;
-      &:hover { opacity: 0.9; }
+      display: inline-block; background: #AD8A6A; color: #fff; padding: 12px 28px;
+      border-radius: 8px; text-decoration: none; font-weight: 600; font-family: 'DM Sans', sans-serif;
+      transition: background 0.2s;
+      &:hover { background: #2D2420; }
     }
     @media (max-width: 600px) {
       .blog-grid { grid-template-columns: 1fr; padding: 0 1rem 3rem; }
