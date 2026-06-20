@@ -14,6 +14,8 @@ export const routes: Routes = [
   { path: 'cotizacion-bodas', component: CotizacionBodasComponent },
   { path: 'agendar', component: AgendarComponent },
   { path: 'fotografa-en-queretaro', component: FotografaEnQueretaroComponent },
+  { path: 'blog', loadComponent: () => import('./pages/blog/blog.component').then(m => m.BlogComponent) },
+  { path: 'blog/:slug', loadComponent: () => import('./pages/blog-post/blog-post.component').then(m => m.BlogPostComponent) },
   // Oculta del menú pero accesible por URL directa (no eliminada)
   { path: 'dia-de-las-madres', component: MothersDayComponent },
   { path: '**', redirectTo: '' }
