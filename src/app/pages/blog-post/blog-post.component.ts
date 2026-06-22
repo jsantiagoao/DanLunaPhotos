@@ -43,6 +43,12 @@ interface BlogPost {
               Sígueme en Instagram &#64;danlunaphotos
             </a>
           </div>
+          <div class="share-bar">
+            <span>Compartir:</span>
+            <a [href]="'https://wa.me/?text=' + encodeShare()" target="_blank" class="share-btn whatsapp">WhatsApp</a>
+            <a [href]="'https://www.facebook.com/sharer/sharer.php?u=' + getPostUrl()" target="_blank" class="share-btn facebook">Facebook</a>
+            <button class="share-btn copy" (click)="copyLink()">{{ copied ? '✓ Copiado' : 'Copiar link' }}</button>
+          </div>
           <div class="post-meta">
             <span class="credit">Foto: {{ post.imageCredit }}</span>
             <a routerLink="/blog" class="back-link">← Volver al blog</a>
@@ -92,8 +98,19 @@ interface BlogPost {
     }
     .post-meta {
       display: flex; justify-content: space-between; align-items: center;
-      padding-top: 1rem; border-top: 1px solid #EAE7E1;
+      padding-top: 1rem; border-top: 1px solid #EAE7E1; margin-top: 1rem;
     }
+    .share-bar {
+      display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;
+      span { font-size: 0.85rem; color: #666; }
+    }
+    .share-btn {
+      padding: 8px 16px; border-radius: 6px; font-size: 0.85rem; font-weight: 500;
+      text-decoration: none; cursor: pointer; border: none; font-family: 'DM Sans', sans-serif;
+    }
+    .share-btn.whatsapp { background: #25D366; color: #fff; }
+    .share-btn.facebook { background: #1877F2; color: #fff; }
+    .share-btn.copy { background: #EAE7E1; color: #2D2420; }
     .credit { font-size: 0.8rem; color: #bbb; }
     .back-link { color: #AD8A6A; text-decoration: none; font-weight: 500; font-size: 0.9rem; }
     .not-found { text-align: center; padding: 4rem 1rem; a { color: #AD8A6A; } }
@@ -123,6 +140,22 @@ export class BlogPostComponent implements OnInit {
       },
       error: () => { this.loading = false; }
     });
+  }
+
+  copied = false;
+
+  getPostUrl(): string {
+    return encodeURIComponent(`https://danlunaphoto.com/blog/${this.post?.slug}`);
+  }
+
+  encodeShare(): string {
+    return encodeURIComponent(`${this.post?.title} 📸\nhttps://danlunaphoto.com/blog/${this.post?.slug}`);
+  }
+
+  copyLink() {
+    navigator.clipboard.writeText(`https://danlunaphoto.com/blog/${this.post?.slug}`);
+    this.copied = true;
+    setTimeout(() => this.copied = false, 2000);
   }
 
   private markdownToHtml(md: string): string {

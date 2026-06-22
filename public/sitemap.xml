@@ -2,43 +2,46 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 
-  <!-- Página de inicio -->
   <url>
     <loc>https://danlunaphoto.com/</loc>
-    <lastmod>2026-03-15</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
-    <image:image>
-      <image:loc>https://danlunaphoto.com/assets/images/og-default.jpg</image:loc>
-      <image:title>Dan Luna Photo · Fotografía Profesional en Querétaro</image:title>
-      <image:caption>Estudio de fotografía profesional en Querétaro — retratos, familias y sesiones especiales.</image:caption>
-    </image:image>
   </url>
 
-  <!-- Sobre mí / Fotógrafa en Querétaro -->
   <url>
     <loc>https://danlunaphoto.com/fotografa-en-queretaro</loc>
-    <lastmod>2026-03-15</lastmod>
+    <lastmod>2026-06-22</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://danlunaphoto.com/assets/images/Daniela_Luna_Fotografa-1024x776.jpg</image:loc>
-      <image:title>Daniela Luna — Fotógrafa Profesional en Querétaro</image:title>
-      <image:caption>Fotografía con arquitectura y alma. Daniela Luna, fotógrafa profesional en Querétaro.</image:caption>
-    </image:image>
   </url>
 
-  <!-- Landing Día de las Madres 2026 -->
   <url>
-    <loc>https://danlunaphoto.com/dia-de-las-madres</loc>
-    <lastmod>2026-03-15</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://danlunaphoto.com/fotografia-bautizo-queretaro</loc>
+    <lastmod>2026-06-22</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.9</priority>
-    <image:image>
-      <image:loc>https://danlunaphoto.com/assets/images/slider/Sesion-dia-de-las-madres-queretaro.jpeg</image:loc>
-      <image:title>Mini Sesiones Día de las Madres 2026 · Dan Luna Photo Querétaro</image:title>
-      <image:caption>Mini sesión fotográfica del Día de las Madres en Querétaro. 40 min · 25–30 fotos editadas · hasta 5 personas. Preventa $1,800 MXN.</image:caption>
-    </image:image>
+  </url>
+
+  <url>
+    <loc>https://danlunaphoto.com/fotografia-bodas-queretaro</loc>
+    <lastmod>2026-06-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://danlunaphoto.com/agendar</loc>
+    <lastmod>2026-06-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://danlunaphoto.com/blog</loc>
+    <lastmod>2026-06-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
 
 </urlset>
