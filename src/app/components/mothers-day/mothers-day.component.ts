@@ -124,7 +124,7 @@ export class MothersDayComponent implements OnInit, OnDestroy {
           name: 'Dan Luna Photo',
           description: 'Estudio de fotografía profesional en Querétaro especializado en retratos, familias y sesiones especiales.',
           url: 'https://danlunaphoto.com',
-          telephone: '+525667704976',
+          telephone: '+524424906891',
           address: {
             '@type': 'PostalAddress',
             addressLocality: 'Querétaro',

@@ -54,7 +54,7 @@ export class BookingStepsComponent {
       ],
       button: {
         text: 'Enviar comprobante',
-        url: 'https://wa.me/525667704976?text=Hola%20acabo%20de%20reservar%20una%20fecha%20para%20una%20sesi%C3%B3n%20del%20d%C3%ADa%20de%20las%20madres,%20quiero%20confirmar%20mi%20sesi%C3%B3n%20fotogr%C3%A1fica.'
+        url: 'https://wa.me/524424906891?text=Hola%20acabo%20de%20reservar%20una%20fecha%20para%20una%20sesi%C3%B3n%20del%20d%C3%ADa%20de%20las%20madres,%20quiero%20confirmar%20mi%20sesi%C3%B3n%20fotogr%C3%A1fica.'
       }
     }
   ];

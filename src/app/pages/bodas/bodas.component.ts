@@ -67,7 +67,7 @@ export class BodasComponent implements OnInit, OnDestroy {
           '@id': 'https://danlunaphoto.com/#business',
           name: 'Dan Luna Photo',
           url: 'https://danlunaphoto.com',
-          telephone: '+525667704976',
+          telephone: '+524424906891',
           address: { '@type': 'PostalAddress', addressLocality: 'Querétaro', addressRegion: 'Querétaro', addressCountry: 'MX' }
         },
         {
