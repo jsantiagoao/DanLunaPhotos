@@ -63,7 +63,21 @@ export const SESSION_TYPES: SessionTypeConfig[] = [
     label: 'Primera Comunión',
     packages: [
       { id: 'ceremonia', name: 'Ceremonia', price: 1850, fields: ['horaCeremonia', 'iglesia', 'iglesiaMaps'] },
-      { id: 'ceremonia_evento', name: 'Ceremonia + Evento', price: 3000, fields: ['horaCeremonia', 'iglesia', 'iglesiaMaps', 'horaEvento', 'lugarEvento', 'lugarEventoMaps'] },
+      { id: 'ceremonia_evento', name: 'Ceremonia + Fiesta 1hr', price: 2400, fields: ['horaCeremonia', 'iglesia', 'iglesiaMaps', 'horaEvento', 'lugarEvento', 'lugarEventoMaps'] },
+    ]
+  },
+  {
+    id: 'set_personalizada',
+    label: 'Sesión en Set Personalizada',
+    packages: [
+      { id: 'set_personalizada', name: 'Set Personalizada', price: 1800, fields: [] },
+    ]
+  },
+  {
+    id: 'sesion_exterior',
+    label: 'Sesión Exterior',
+    packages: [
+      { id: 'sesion_exterior', name: 'Sesión Exterior', price: 2000, fields: [] },
     ]
   },
 ];
