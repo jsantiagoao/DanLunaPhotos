@@ -1,12 +1,14 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 import { BookingService } from './booking.service';
 import { BusySlot, BookingRequest } from './booking.models';
 import { BookingLogic } from './booking.logic';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { SESSION_TYPES, FIELD_LABELS, FIELD_TYPES } from './session-types.config';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-agendar',
@@ -15,7 +17,9 @@ import { SESSION_TYPES, FIELD_LABELS, FIELD_TYPES } from './session-types.config
   templateUrl: './agendar.component.html',
   styleUrl: './agendar.component.scss',
 })
-export class AgendarComponent {
+export class AgendarComponent implements OnInit {
+  private http = inject(HttpClient);
+
   // State
   step = signal<'type' | 'package' | 'calendar' | 'slots' | 'form' | 'success'>('type');
   currentMonth = signal(new Date().getMonth() + 1);
@@ -31,13 +35,20 @@ export class AgendarComponent {
   selectedType = '';
   selectedPackageId = '';
   needsSecondSlot = false;
-  sessionTypes = SESSION_TYPES;
+  sessionTypes: any[] = SESSION_TYPES;
   currentPackages: any[] = [];
   currentFields: string[] = [];
 
   // Form
   form: BookingRequest = { name: '', email: '', phone: '', type: '', date: '', time: '' };
   formDetails: Record<string, string> = {};
+
+  ngOnInit() {
+    this.http.get<any[]>(`${environment.apiUrl}/packages`).subscribe({
+      next: (types) => { this.sessionTypes = types; },
+      error: () => {} // fallback to static
+    });
+  }
   honeypot = '';
 
   // Computed
@@ -67,7 +78,7 @@ export class AgendarComponent {
   // Step 1: Type
   selectType(typeId: string) {
     this.selectedType = typeId;
-    const t = SESSION_TYPES.find(st => st.id === typeId);
+    const t = this.sessionTypes.find((st: any) => st.id === typeId);
     this.currentPackages = t?.packages || [];
     this.step.set('package');
   }
@@ -75,8 +86,8 @@ export class AgendarComponent {
   // Step 2: Package
   selectPackage(pkgId: string) {
     this.selectedPackageId = pkgId;
-    const t = SESSION_TYPES.find(st => st.id === this.selectedType);
-    const pkg = t?.packages.find(p => p.id === pkgId);
+    const t = this.sessionTypes.find((st: any) => st.id === this.selectedType);
+    const pkg = t?.packages.find((p: any) => p.id === pkgId);
     this.currentFields = pkg?.fields || [];
     this.needsSecondSlot = this.currentFields.some(f => f.startsWith('horaFiesta') || f.startsWith('horaEvento'));
     this.step.set('calendar');
@@ -142,10 +153,10 @@ export class AgendarComponent {
   }
 
   // Helpers
-  getTypeLabel(): string { return SESSION_TYPES.find(t => t.id === this.selectedType)?.label || ''; }
+  getTypeLabel(): string { return this.sessionTypes.find(t => t.id === this.selectedType)?.label || ''; }
   getPackageName(): string {
-    const t = SESSION_TYPES.find(st => st.id === this.selectedType);
-    return t?.packages.find(p => p.id === this.selectedPackageId)?.name || '';
+    const t = this.sessionTypes.find((st: any) => st.id === this.selectedType);
+    return t?.packages.find((p: any) => p.id === this.selectedPackageId)?.name || '';
   }
   getFieldLabel(key: string): string { return FIELD_LABELS[key] || key; }
   getFieldType(key: string): string { return FIELD_TYPES[key] || 'text'; }
