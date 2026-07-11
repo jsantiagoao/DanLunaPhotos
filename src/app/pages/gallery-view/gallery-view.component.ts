@@ -61,7 +61,8 @@ import { environment } from '../../../environments/environment';
       @if (lightboxPhoto()) {
         <div class="lightbox" (click)="lightboxPhoto.set(null)">
           <div class="lb-content" (click)="$event.stopPropagation()">
-            <img [src]="lightboxPhoto().originalUrl || lightboxPhoto().thumbUrl" />
+            <img class="lb-thumb" [src]="lightboxPhoto().thumbUrl" [class.loaded]="lightboxWebLoaded" />
+            <img class="lb-web" [src]="lightboxPhoto().webUrl || lightboxPhoto().thumbUrl" (load)="lightboxWebLoaded = true" [class.loaded]="lightboxWebLoaded" />
             <div class="lb-actions">
               <button (click)="prevPhoto()">‹</button>
               <button class="fav-btn-lb" [class.active]="lightboxPhoto().isFavorite" (click)="toggleFav(lightboxPhoto())">♥</button>
@@ -150,7 +151,10 @@ import { environment } from '../../../environments/environment';
     /* Lightbox */
     .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.2s; }
     .lb-content { position: relative; max-width: 90vw; max-height: 90vh; }
-    .lb-content img { max-width: 90vw; max-height: 85vh; object-fit: contain; border-radius: 2px; }
+    .lb-content .lb-thumb { max-width: 90vw; max-height: 85vh; object-fit: contain; border-radius: 2px; position: absolute; inset: 0; filter: blur(8px); transition: opacity 0.3s; }
+    .lb-content .lb-thumb.loaded { opacity: 0; pointer-events: none; }
+    .lb-content .lb-web { max-width: 90vw; max-height: 85vh; object-fit: contain; border-radius: 2px; opacity: 0; transition: opacity 0.3s; }
+    .lb-content .lb-web.loaded { opacity: 1; }
     .lb-actions { position: absolute; bottom: -50px; left: 50%; transform: translateX(-50%); display: flex; gap: 1rem; align-items: center; }
     .lb-actions button, .lb-actions a { background: rgba(255,255,255,0.1); border: none; color: #fff; font-size: 1.5rem; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none; }
     .lb-actions button:hover, .lb-actions a:hover { background: rgba(255,255,255,0.2); }
@@ -201,6 +205,7 @@ export class GalleryViewComponent implements OnInit {
   slideshowActive = false;
   slideshowPhotos: any[] = [];
   slideshowIndex = 0;
+  lightboxWebLoaded = false;
   private slideshowInterval: any;
 
   ngOnInit() {
@@ -259,18 +264,18 @@ export class GalleryViewComponent implements OnInit {
     this.slideshowIndex = this.slideshowIndex === 0 ? this.slideshowPhotos.length - 1 : this.slideshowIndex - 1;
   }
 
-  openLightbox(photo: any) { this.lightboxPhoto.set(photo); }
+  openLightbox(photo: any) { this.lightboxWebLoaded = false; this.lightboxPhoto.set(photo); }
 
   prevPhoto() {
     const list = this.filteredPhotos();
     const idx = list.findIndex(p => p._id === this.lightboxPhoto()?._id);
-    if (idx > 0) this.lightboxPhoto.set(list[idx - 1]);
+    if (idx > 0) { this.lightboxWebLoaded = false; this.lightboxPhoto.set(list[idx - 1]); }
   }
 
   nextPhoto() {
     const list = this.filteredPhotos();
     const idx = list.findIndex(p => p._id === this.lightboxPhoto()?._id);
-    if (idx < list.length - 1) this.lightboxPhoto.set(list[idx + 1]);
+    if (idx < list.length - 1) { this.lightboxWebLoaded = false; this.lightboxPhoto.set(list[idx + 1]); }
   }
 
   toggleFav(photo: any) {
