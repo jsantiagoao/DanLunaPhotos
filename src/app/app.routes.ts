@@ -16,6 +16,8 @@ export const routes: Routes = [
   { path: 'fotografa-en-queretaro', component: FotografaEnQueretaroComponent },
   { path: 'blog', loadComponent: () => import('./pages/blog/blog.component').then(m => m.BlogComponent) },
   { path: 'blog/:slug', loadComponent: () => import('./pages/blog-post/blog-post.component').then(m => m.BlogPostComponent) },
+  { path: 'galeria/:slug', loadComponent: () => import('./pages/gallery-login/gallery-login.component').then(m => m.GalleryLoginComponent) },
+  { path: 'galeria/:slug/ver', loadComponent: () => import('./pages/gallery-view/gallery-view.component').then(m => m.GalleryViewComponent) },
   // Oculta del menú pero accesible por URL directa (no eliminada)
   { path: 'dia-de-las-madres', component: MothersDayComponent },
   { path: '**', redirectTo: '' }
