@@ -94,7 +94,7 @@ import { environment } from '../../../environments/environment';
     .gallery.dark { background: #1a1a1a; color: #f0f0f0; }
 
     /* Cover Full Screen */
-    .cover-fullscreen { height: 100vh; background-size: cover; position: relative; display: flex; align-items: center; justify-content: center; }
+    .cover-fullscreen { height: 100vh; background-size: cover; position: relative; display: flex; align-items: center; justify-content: center; background-color: #2D2420; transition: background-image 0.5s ease; }
     .cover-fullscreen::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.35); }
     .cover-fs-overlay { text-align: center; color: #fff; display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
     .cover-logo-icon { margin-bottom: 0.5rem; }
@@ -134,9 +134,11 @@ import { environment } from '../../../environments/environment';
     .spacing-normal { gap: 8px; column-gap: 8px; }
     .spacing-wide { gap: 16px; column-gap: 16px; }
 
-    .photo-item { position: relative; break-inside: avoid; margin-bottom: 8px; cursor: pointer; border-radius: 2px; overflow: hidden; }
-    .photo-item img { width: 100%; display: block; transition: transform 0.3s; }
+    .photo-item { position: relative; break-inside: avoid; margin-bottom: 8px; cursor: pointer; border-radius: 2px; overflow: hidden; background: linear-gradient(90deg, #f0ebe6 25%, #f9f5f2 50%, #f0ebe6 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; min-height: 120px; }
+    .photo-item img { width: 100%; display: block; transition: transform 0.3s; opacity: 0; animation: fadeIn 0.4s forwards; }
     .photo-item:hover img { transform: scale(1.02); }
+    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    @keyframes fadeIn { to { opacity: 1; } }
     .fav-btn { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.4); border: none; color: #fff; font-size: 1.2rem; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; opacity: 0; transition: opacity 0.2s; }
     .photo-item:hover .fav-btn { opacity: 1; }
     .fav-btn.active { opacity: 1; color: #e74c3c; background: rgba(255,255,255,0.9); }
