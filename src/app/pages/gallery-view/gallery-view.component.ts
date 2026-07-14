@@ -1,5 +1,6 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
@@ -7,11 +8,11 @@ import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-gallery-view',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   template: `
     <div class="gallery" [class.dark]="design.theme === 'dark'" (contextmenu)="$event.preventDefault()">
       <!-- Cover Full Screen -->
-      <div class="cover-fullscreen" [style.background-image]="'url(' + coverUrl + ')'" [style.background-position]="focalPoint">
+      <div class="cover-fullscreen" [class]="'cover-' + design.coverStyle" [style.background-image]="'url(' + coverUrl + ')'" [style.background-position]="focalPoint">
         <div class="cover-fs-overlay">
           <div class="cover-logo-icon">
             <img src="assets/images/logo-light.png" alt="Dan Luna" class="cover-logo-img" />
@@ -25,7 +26,10 @@ import { environment } from '../../../environments/environment';
 
       <!-- Sticky nav bar -->
       <div class="gallery-nav" id="gallery-nav">
-        <div class="nav-title">{{ gallery.title }}</div>
+        <div class="nav-title">
+          <span class="nav-name">{{ gallery.title }}</span>
+          <span class="nav-brand">DAN LUNA PHOTOS</span>
+        </div>
         <div class="nav-sets">
           @for (s of gallery.sets; track s) {
             <button [class.active]="activeSet === s" (click)="activeSet = s">{{ s }}</button>
@@ -33,10 +37,31 @@ import { environment } from '../../../environments/environment';
         </div>
         <div class="nav-actions">
           <button class="na-btn" [class.active]="showFavoritesOnly" (click)="showFavoritesOnly = !showFavoritesOnly" title="Favoritas">♥</button>
-          <button class="na-btn" (click)="downloadAll()" title="Descargar">⬇</button>
+          <button class="na-btn" (click)="showDownloadScreen = true" title="Descargar">⬇</button>
+          <button class="na-btn" (click)="shareGallery()" title="Compartir">↗</button>
           <button class="na-btn" (click)="startSlideshow()" title="Slideshow">▶</button>
         </div>
       </div>
+
+      <!-- Download screen -->
+      @if (showDownloadScreen) {
+        <div class="download-screen">
+          <div class="download-card">
+            <div class="download-header">
+              <span class="download-title">{{ gallery.title }}</span>
+              <span class="download-brand">DAN LUNA PHOTOS</span>
+            </div>
+            <div class="download-body">
+              <h2>Descargar fotografías</h2>
+              <p>Tu correo electrónico se utilizará para notificarte cuando los archivos estén listos para su descarga. Para descargar esta colección de fotos, introduce el PIN de descarga proporcionado por Dan Luna Photos.</p>
+              <input type="email" [(ngModel)]="downloadEmail" placeholder="Tu correo electrónico" />
+              <input type="text" [(ngModel)]="downloadPin" placeholder="Introduce el pin de descarga" maxlength="6" />
+              <button class="btn-download" (click)="confirmDownload()">SIGUIENTE</button>
+            </div>
+            <button class="download-close" (click)="showDownloadScreen = false">✕</button>
+          </div>
+        </div>
+      }
 
       <!-- Grid -->
       <div class="photo-grid" [class]="'layout-' + design.gridLayout + ' spacing-' + design.spacing">
@@ -97,12 +122,30 @@ import { environment } from '../../../environments/environment';
     .cover-fullscreen { height: 100vh; background-size: cover; position: relative; display: flex; align-items: center; justify-content: center; background-color: #2D2420; transition: background-image 0.5s ease; }
     .cover-fullscreen::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.35); }
     .cover-fs-overlay { text-align: center; color: #fff; display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
+    /* Cover styles */
+    .cover-izquierda .cover-fs-overlay { align-items: flex-start; text-align: left; padding-left: 4rem; }
+    .cover-novela::before { background: linear-gradient(90deg, rgba(255,255,255,0.92) 35%, transparent 55%); }
+    .cover-novela .cover-fs-overlay { color: #2D2420; align-items: flex-start; text-align: left; padding-left: 4rem; }
+    .cover-vintage::before { background: rgba(0,0,0,0.55); }
+    .cover-marco { padding: 1.5rem; }
+    .cover-marco::before { inset: 1.5rem; }
+    .cover-raya .cover-fs-overlay::after { content: ''; display: block; width: 200px; height: 1px; background: rgba(255,255,255,0.5); margin-top: 1.5rem; }
+    .cover-divisor .cover-fs-overlay { justify-content: flex-end; padding-bottom: 4rem; }
+    .cover-diario::before { background: linear-gradient(90deg, rgba(255,255,255,0.9) 30%, transparent 50%); }
+    .cover-diario .cover-fs-overlay { color: #2D2420; align-items: flex-start; text-align: left; padding-left: 4rem; }
+    .cover-sello::before { background: rgba(0,0,0,0.3); }
+    .cover-contorno::before { background: rgba(0,0,0,0.5); }
+    .cover-contorno .cover-fs-overlay::before { content: ''; position: absolute; inset: 2rem; border: 1px solid rgba(255,255,255,0.4); z-index: -1; }
     .cover-logo-icon { margin-bottom: 0.5rem; }
     .cover-logo-img { width: 50px; height: 50px; object-fit: contain; opacity: 0.9; }
     .cover-brand { font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; opacity: 0.85; margin-bottom: 3rem; font-weight: 300; }
     .cover-title { margin: 0; letter-spacing: 6px; text-transform: uppercase; text-shadow: 0 2px 20px rgba(0,0,0,0.3); }
     .cover-title.title-serif { font-family: 'Fraunces', serif; font-size: 3.5rem; font-weight: 300; }
-    .cover-title.title-sans { font-family: 'DM Sans', sans-serif; font-size: 3rem; font-weight: 200; }
+    .cover-title.title-sans { font-family: 'DM Sans', sans-serif; font-size: 3rem; font-weight: 700; letter-spacing: 6px; }
+    .cover-title.title-modern { font-family: 'DM Sans', sans-serif; font-size: 3rem; font-weight: 200; letter-spacing: 4px; }
+    .cover-title.title-timeless { font-family: Georgia, serif; font-size: 3rem; font-weight: 300; font-style: italic; letter-spacing: 3px; }
+    .cover-title.title-bold { font-family: 'DM Sans', sans-serif; font-size: 3.5rem; font-weight: 900; letter-spacing: 2px; }
+    .cover-title.title-subtle { font-family: 'DM Sans', sans-serif; font-size: 2rem; font-weight: 200; letter-spacing: 8px; }
     .cover-date { font-size: 0.75rem; letter-spacing: 3px; opacity: 0.7; margin-top: 1rem; text-transform: uppercase; }
     .cover-enter-btn { margin-top: 4rem; background: none; border: none; color: #fff; font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase; cursor: pointer; padding: 1rem 2rem; border-top: 1px solid rgba(255,255,255,0.3); transition: all 0.3s; }
     .cover-enter-btn:hover { border-top-color: #fff; letter-spacing: 5px; }
@@ -112,6 +155,8 @@ import { environment } from '../../../environments/environment';
     .dark .gallery-nav { background: #1a1a1a; border-color: #333; }
     .nav-title { font-family: 'Fraunces', serif; font-size: 0.9rem; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: #2D2420; min-width: 160px; white-space: nowrap; }
     .dark .nav-title { color: #f0f0f0; }
+    .nav-name { display: block; }
+    .nav-brand { display: block; font-size: 0.6rem; color: #999; letter-spacing: 1px; font-family: 'DM Sans', sans-serif; text-transform: uppercase; font-weight: 400; }
     .nav-sets { flex: 1; display: flex; gap: 1.5rem; justify-content: center; overflow-x: auto; }
     .nav-sets button { background: none; border: none; font-size: 0.8rem; color: #666; cursor: pointer; padding: 0.5rem 0; border-bottom: 2px solid transparent; transition: all 0.2s; white-space: nowrap; }
     .nav-sets button.active { color: #2D2420; border-bottom-color: #2D2420; font-weight: 500; }
@@ -124,7 +169,7 @@ import { environment } from '../../../environments/environment';
     .dark .na-btn { border-color: #444; color: #ccc; }
 
     /* Photo grid */
-    .photo-grid { padding: 2rem; }
+    .photo-grid { padding: 0; }
     .layout-masonry { column-count: 3; column-gap: 8px; }
     .layout-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 8px; }
     .layout-horizontal { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -170,6 +215,20 @@ import { environment } from '../../../environments/environment';
     .slideshow-controls button { background: rgba(255,255,255,0.1); border: none; color: #fff; font-size: 1.5rem; width: 48px; height: 48px; border-radius: 50%; cursor: pointer; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
+    /* Download screen */
+    .download-screen { position: fixed; inset: 0; background: #fff; z-index: 500; display: flex; align-items: center; justify-content: center; }
+    .download-card { width: 90%; max-width: 600px; text-align: center; position: relative; }
+    .download-header { text-align: left; margin-bottom: 4rem; }
+    .download-title { display: block; font-family: 'Fraunces', serif; font-size: 1.2rem; letter-spacing: 1px; text-transform: uppercase; }
+    .download-brand { display: block; font-size: 0.65rem; color: #999; letter-spacing: 1px; text-transform: uppercase; }
+    .download-body h2 { font-family: 'Fraunces', serif; font-size: 1.5rem; margin: 0 0 1rem; }
+    .download-body p { font-size: 0.85rem; color: #666; line-height: 1.7; margin-bottom: 2rem; max-width: 450px; margin-left: auto; margin-right: auto; }
+    .download-body input { display: block; width: 100%; max-width: 400px; margin: 0 auto 1rem; padding: 1rem; border: 1px solid #ddd; font-size: 0.9rem; box-sizing: border-box; }
+    .download-body input:focus { outline: none; border-color: #2D2420; }
+    .btn-download { display: block; width: 100%; max-width: 400px; margin: 1.5rem auto 0; background: #2D2420; color: #fff; border: none; padding: 1rem; font-size: 0.8rem; letter-spacing: 3px; cursor: pointer; }
+    .btn-download:hover { background: #AD8A6A; }
+    .download-close { position: absolute; top: -2rem; right: 0; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #999; }
+
     /* Mobile */
     @media (max-width: 768px) {
       .layout-masonry { column-count: 2; }
@@ -204,6 +263,9 @@ export class GalleryViewComponent implements OnInit {
   activeSet = '';
   selectedIds: string[] = [];
   showFavoritesOnly = false;
+  showDownloadScreen = false;
+  downloadEmail = '';
+  downloadPin = '';
   slideshowActive = false;
   slideshowPhotos: any[] = [];
   slideshowIndex = 0;
@@ -290,10 +352,30 @@ export class GalleryViewComponent implements OnInit {
   }
 
   downloadAll() {
-    this.http.post<any>(`${environment.apiUrl}/gallery/${this.slug}/download`, {}).subscribe({
-      next: (res) => { window.open(res.downloadUrl, '_blank'); },
+    this.showDownloadScreen = true;
+  }
+
+  confirmDownload() {
+    if (!this.downloadEmail) return;
+    const headers = new HttpHeaders({ 'X-Gallery-Token': this.token });
+    this.http.post<any>(`${environment.apiUrl}/gallery/${this.slug}/download`, { email: this.downloadEmail }, { headers }).subscribe({
+      next: (res) => {
+        this.showDownloadScreen = false;
+        if (res.downloadUrl) window.open(res.downloadUrl, '_blank');
+        else alert(res.message || 'Tu descarga se está preparando.');
+      },
       error: () => alert('Error al generar descarga')
     });
+  }
+
+  shareGallery() {
+    const url = `https://danlunaphoto.com/galeria/${this.slug}`;
+    if (navigator.share) {
+      navigator.share({ title: this.gallery.title, url });
+    } else {
+      navigator.clipboard.writeText(url);
+      alert('Link copiado');
+    }
   }
 
   trackView() {
