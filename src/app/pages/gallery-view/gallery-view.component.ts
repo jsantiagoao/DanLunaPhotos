@@ -12,7 +12,10 @@ import { environment } from '../../../environments/environment';
   template: `
     <div class="gallery" [class.dark]="design.theme === 'dark'" (contextmenu)="$event.preventDefault()">
       <!-- Cover Full Screen -->
-      <div class="cover-fullscreen" [class]="'cover-' + design.coverStyle" [style.background-image]="'url(' + coverUrl + ')'" [style.background-position]="focalPoint">
+      <div class="cover-fullscreen" [class]="'cover-' + design.coverStyle"
+           [style.background-image]="'url(' + coverUrl + ')'"
+           [style.background-position]="focalPoint"
+           [style.--cover-text-color]="design.highlightColor || '#FFFFFF'">
         <div class="cover-fs-overlay">
           <div class="cover-logo-icon">
             <img src="assets/images/logo-light.png" alt="Dan Luna" class="cover-logo-img" />
@@ -121,34 +124,34 @@ import { environment } from '../../../environments/environment';
     /* Cover Full Screen */
     .cover-fullscreen { height: 100vh; background-size: cover; position: relative; display: flex; align-items: center; justify-content: center; background-color: #2D2420; transition: background-image 0.5s ease; }
     .cover-fullscreen::before { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.35); }
-    .cover-fs-overlay { text-align: center; color: #fff; display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
+    .cover-fs-overlay { text-align: center; color: var(--cover-text-color, #fff); display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
     /* Cover styles */
     .cover-izquierda .cover-fs-overlay { align-items: flex-start; text-align: left; padding-left: 4rem; }
     .cover-novela::before { background: linear-gradient(90deg, rgba(255,255,255,0.92) 35%, transparent 55%); }
-    .cover-novela .cover-fs-overlay { color: #2D2420; align-items: flex-start; text-align: left; padding-left: 4rem; }
+    .cover-novela .cover-fs-overlay { color: var(--cover-text-color, #2D2420); align-items: flex-start; text-align: left; padding-left: 4rem; }
     .cover-vintage::before { background: rgba(0,0,0,0.55); }
     .cover-marco { padding: 1.5rem; }
     .cover-marco::before { inset: 1.5rem; }
-    .cover-raya .cover-fs-overlay::after { content: ''; display: block; width: 200px; height: 1px; background: rgba(255,255,255,0.5); margin-top: 1.5rem; }
+    .cover-raya .cover-fs-overlay::after { content: ''; display: block; width: 200px; height: 1px; background: currentColor; opacity: 0.5; margin-top: 1.5rem; }
     .cover-divisor .cover-fs-overlay { justify-content: flex-end; padding-bottom: 4rem; }
     .cover-diario::before { background: linear-gradient(90deg, rgba(255,255,255,0.9) 30%, transparent 50%); }
-    .cover-diario .cover-fs-overlay { color: #2D2420; align-items: flex-start; text-align: left; padding-left: 4rem; }
+    .cover-diario .cover-fs-overlay { color: var(--cover-text-color, #2D2420); align-items: flex-start; text-align: left; padding-left: 4rem; }
     .cover-sello::before { background: rgba(0,0,0,0.3); }
     .cover-contorno::before { background: rgba(0,0,0,0.5); }
-    .cover-contorno .cover-fs-overlay::before { content: ''; position: absolute; inset: 2rem; border: 1px solid rgba(255,255,255,0.4); z-index: -1; }
+    .cover-contorno .cover-fs-overlay::before { content: ''; position: absolute; inset: 2rem; border: 1px solid currentColor; opacity: 0.4; z-index: -1; }
     .cover-logo-icon { margin-bottom: 0.5rem; }
     .cover-logo-img { width: 50px; height: 50px; object-fit: contain; opacity: 0.9; }
-    .cover-brand { font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; opacity: 0.85; margin-bottom: 3rem; font-weight: 300; }
-    .cover-title { margin: 0; letter-spacing: 6px; text-transform: uppercase; text-shadow: 0 2px 20px rgba(0,0,0,0.3); }
-    .cover-title.title-serif { font-family: 'Fraunces', serif; font-size: 3.5rem; font-weight: 300; }
-    .cover-title.title-sans { font-family: 'DM Sans', sans-serif; font-size: 3rem; font-weight: 700; letter-spacing: 6px; }
-    .cover-title.title-modern { font-family: 'DM Sans', sans-serif; font-size: 3rem; font-weight: 200; letter-spacing: 4px; }
-    .cover-title.title-timeless { font-family: Georgia, serif; font-size: 3rem; font-weight: 300; font-style: italic; letter-spacing: 3px; }
-    .cover-title.title-bold { font-family: 'DM Sans', sans-serif; font-size: 3.5rem; font-weight: 900; letter-spacing: 2px; }
-    .cover-title.title-subtle { font-family: 'DM Sans', sans-serif; font-size: 2rem; font-weight: 200; letter-spacing: 8px; }
-    .cover-date { font-size: 0.75rem; letter-spacing: 3px; opacity: 0.7; margin-top: 1rem; text-transform: uppercase; }
-    .cover-enter-btn { margin-top: 4rem; background: none; border: none; color: #fff; font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase; cursor: pointer; padding: 1rem 2rem; border-top: 1px solid rgba(255,255,255,0.3); transition: all 0.3s; }
-    .cover-enter-btn:hover { border-top-color: #fff; letter-spacing: 5px; }
+    .cover-brand { font-size: clamp(0.55rem, 1vw, 0.75rem); letter-spacing: 3px; text-transform: uppercase; opacity: 0.85; margin-bottom: 3rem; font-weight: 300; color: inherit; }
+    .cover-title { margin: 0; letter-spacing: 6px; text-transform: uppercase; text-shadow: 0 2px 20px rgba(0,0,0,0.3); color: inherit; }
+    .cover-title.title-serif { font-family: 'Fraunces', serif; font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 300; }
+    .cover-title.title-sans { font-family: 'DM Sans', sans-serif; font-size: clamp(2rem, 5.5vw, 4.5rem); font-weight: 700; letter-spacing: 6px; }
+    .cover-title.title-modern { font-family: 'DM Sans', sans-serif; font-size: clamp(2rem, 5.5vw, 4.5rem); font-weight: 200; letter-spacing: 4px; }
+    .cover-title.title-timeless { font-family: Georgia, serif; font-size: clamp(2rem, 5.5vw, 4.5rem); font-weight: 300; font-style: italic; letter-spacing: 3px; }
+    .cover-title.title-bold { font-family: 'DM Sans', sans-serif; font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 900; letter-spacing: 2px; }
+    .cover-title.title-subtle { font-family: 'DM Sans', sans-serif; font-size: clamp(1.5rem, 3.5vw, 3rem); font-weight: 200; letter-spacing: 8px; }
+    .cover-date { font-size: clamp(0.65rem, 1vw, 0.8rem); letter-spacing: 3px; opacity: 0.7; margin-top: 1rem; text-transform: uppercase; color: inherit; }
+    .cover-enter-btn { margin-top: 4rem; background: none; border: none; color: inherit; font-size: clamp(0.6rem, 1vw, 0.75rem); letter-spacing: 4px; text-transform: uppercase; cursor: pointer; padding: 1rem 2rem; border-top: 1px solid currentColor; opacity: 0.8; transition: all 0.3s; }
+    .cover-enter-btn:hover { opacity: 1; letter-spacing: 5px; }
 
     /* Sticky nav bar */
     .gallery-nav { display: flex; align-items: center; padding: 1rem 2rem; border-bottom: 1px solid #EAE7E1; position: sticky; top: 0; background: #fff; z-index: 50; }
