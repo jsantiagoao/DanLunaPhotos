@@ -113,6 +113,9 @@ $wa-bubble-bg: #ffffff;
     border: none;
     cursor: pointer;
     padding: 4px;
+    min-width: 44px;
+    min-height: 44px;
+    margin: -10px -10px -10px 0; // compensa el área táctil sin agrandar el header
     display: flex;
     align-items: center;
     justify-content: center;
@@ -179,6 +182,8 @@ $wa-bubble-bg: #ffffff;
     gap: 8px;
     width: 100%;
     padding: 11px 16px;
+    min-height: 44px;
+    box-sizing: border-box;
     background-color: $wa-green;
     color: #ffffff;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;

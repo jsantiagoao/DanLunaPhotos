@@ -54,8 +54,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     background-color: transparent;
     border: 2px solid var(--color-dark);
@@ -101,6 +101,6 @@
     padding: 48px 24px;
     &__quote, &__phrase, &__caring { font-size: 15px; }
     &__logo img { height: 56px; }
-    &__social-btn { width: 36px; height: 36px; }
+    &__social-btn { width: 44px; height: 44px; }
   }
 }

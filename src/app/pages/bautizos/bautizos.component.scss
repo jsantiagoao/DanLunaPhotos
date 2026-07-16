@@ -89,6 +89,7 @@ $font-sans: 'DM Sans', system-ui, sans-serif;
     z-index: 3;
 
     button {
+      position: relative;
       width: 10px;
       height: 10px;
       border-radius: 50%;
@@ -97,6 +98,17 @@ $font-sans: 'DM Sans', system-ui, sans-serif;
       cursor: pointer;
       transition: all 0.3s;
       padding: 0;
+
+      // Área táctil 24px (WCAG 2.5.8) sin agrandar el punto visual
+      &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 24px;
+        height: 24px;
+      }
 
       &.active {
         background: $gold;

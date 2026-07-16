@@ -122,7 +122,11 @@
   }
 
   &__btn {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    box-sizing: border-box;
     padding: 12px 28px;
     background-color: var(--color-gold);
     color: #FFFFFF;
