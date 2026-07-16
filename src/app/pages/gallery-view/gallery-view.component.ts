@@ -247,6 +247,17 @@ import { environment } from '../../../environments/environment';
       .photo-grid { padding: 0.5rem; }
       .lb-content img { max-width: 95vw; max-height: 75vh; }
       .selection-bar { bottom: 1rem; padding: 0.6rem 1rem; font-size: 0.8rem; }
+      .download-card { width: 95%; padding: 2rem 1.5rem; }
+      .cover-izquierda .cover-fs-overlay, .cover-novela .cover-fs-overlay, .cover-diario .cover-fs-overlay { padding-left: 2rem; }
+    }
+    @media (max-width: 480px) {
+      .layout-masonry { columns: 1; }
+      .layout-grid { grid-template-columns: 1fr; }
+      .layout-horizontal { grid-template-columns: 1fr; }
+      .nav-sets { gap: 0.5rem; }
+      .nav-sets button { font-size: 0.7rem; padding: 0.3rem 0; }
+      .cover-brand { margin-bottom: 1.5rem; }
+      .cover-enter-btn { margin-top: 2rem; }
     }
   `]
 })
