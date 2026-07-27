@@ -163,9 +163,12 @@
             @if (currentStep() < visibleQuestions.length - 1) {
               <button class="btn-gold" [disabled]="!canNext" (click)="next()">Siguiente →</button>
             } @else {
-              <button class="btn-gold" [disabled]="!canNext" (click)="submit()">Enviar cotización</button>
+              <button class="btn-gold" [disabled]="!canNext || sending()" (click)="submit()">{{ sending() ? 'Enviando…' : 'Enviar cotización' }}</button>
             }
           </div>
+          @if (sendError()) {
+            <p class="send-error" role="alert">No pudimos enviar tu solicitud. Revisa tu conexión e inténtalo de nuevo, o escríbenos por WhatsApp al +52 442 490 6891.</p>
+          }
         </div>
       } @else {
         <!-- Finish -->

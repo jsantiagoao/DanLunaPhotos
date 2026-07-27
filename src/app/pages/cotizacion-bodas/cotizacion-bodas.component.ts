@@ -27,6 +27,7 @@ export class CotizacionBodasComponent {
   currentStep = signal(0);
   submitted = signal(false);
   sending = signal(false);
+  sendError = signal(false);
 
   answers: Record<string, string> = {};
 
@@ -170,6 +171,7 @@ export class CotizacionBodasComponent {
   submit(): void {
     if (!this.canNext) return;
     this.sending.set(true);
+    this.sendError.set(false);
 
     this.http.post('https://iv28brdvae.execute-api.us-east-1.amazonaws.com/prod/cotizacion', {
       type: 'boda',
@@ -177,7 +179,7 @@ export class CotizacionBodasComponent {
       timestamp: new Date().toISOString()
     }).subscribe({
       next: () => { this.submitted.set(true); this.sending.set(false); },
-      error: () => { this.submitted.set(true); this.sending.set(false); }
+      error: () => { this.sendError.set(true); this.sending.set(false); }
     });
   }
 

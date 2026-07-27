@@ -291,6 +291,17 @@ $cream: #F9F5F2;
   margin-top: 2rem;
 }
 
+.send-error {
+  margin: 0.75rem 0 0;
+  padding: 0.75rem 1rem;
+  background: #FDECEA;
+  border-left: 3px solid #D64545;
+  border-radius: 0.4rem;
+  color: #8A2B2B;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
 .btn-gold {
   background: $gold;
   color: black;
