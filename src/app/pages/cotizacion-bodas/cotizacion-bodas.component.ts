@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Title, Meta } from '@angular/platform-browser';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { environment } from '../../../environments/environment';
 import { FooterComponent } from '../../components/footer/footer.component';
 
 interface Question {
@@ -173,7 +174,7 @@ export class CotizacionBodasComponent {
     this.sending.set(true);
     this.sendError.set(false);
 
-    this.http.post('https://iv28brdvae.execute-api.us-east-1.amazonaws.com/prod/cotizacion', {
+    this.http.post(`${environment.apiUrl}/cotizacion`, {
       type: 'boda',
       answers: this.answers,
       timestamp: new Date().toISOString()

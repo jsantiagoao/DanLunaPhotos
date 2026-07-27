@@ -2,6 +2,7 @@ import { Component, signal, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 interface ChatMessage {
   role: 'user' | 'bot';
@@ -25,7 +26,7 @@ export class ChatbotComponent {
   inputText = '';
   loading = signal(false);
   private sessionId = crypto.randomUUID();
-  private apiUrl = 'https://iv28brdvae.execute-api.us-east-1.amazonaws.com/prod/chat';
+  private apiUrl = `${environment.apiUrl}/chat`;
   private shouldScroll = false;
 
   constructor(private http: HttpClient) {}

@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-contact',
@@ -62,7 +63,7 @@ export class ContactComponent {
         return;
       }
       console.log('Form submitted:', this.form.value);
-      this.http.post('https://iv28brdvae.execute-api.us-east-1.amazonaws.com/prod/contacto', this.form.value).subscribe({
+      this.http.post(`${environment.apiUrl}/contacto`, this.form.value).subscribe({
         next: () => { this.sent = true; this.form.reset(); this.generateCaptcha(); },
         error: () => { this.sent = true; this.form.reset(); this.generateCaptcha(); }
       });
