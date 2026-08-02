@@ -52,6 +52,32 @@ aws cloudfront create-invalidation --distribution-id EJO49OMBXOJUI --paths "/*" 
 
 ---
 
+## Imágenes
+
+Es un sitio de fotografía: el peso de las imágenes **es** el rendimiento. En
+agosto de 2026 el sitio servía 215 MB, con un hero de 25 MB en PNG que bloqueaba
+la primera pantalla. Tras optimizarlo son 18 MB, y la primera pantalla ~857 KB.
+
+Antes de subir imágenes nuevas al repo, pasarlas por el script:
+
+```bash
+python3 scripts/optimize-images.py          # simulacro, no escribe
+python3 scripts/optimize-images.py --apply  # aplica
+```
+
+Redimensiona a 1920px, reencoda a JPEG y genera un hermano `.webp` para las
+grandes. No toca nada por debajo de 120 KB —logos e iconos— ni reescribe un
+archivo cuando el resultado no mejora.
+
+Reglas al añadir imágenes:
+
+- **Fotografías → JPG o WebP, nunca PNG.** PNG solo para logos e iconos con
+  transparencia.
+- El hero se sirve con `<picture>` y `fetchpriority="high"`; el resto de
+  imágenes de contenido llevan `loading="lazy"`.
+
+---
+
 ## Estructura del sitio
 
 | Ruta | Página |
@@ -61,6 +87,10 @@ aws cloudfront create-invalidation --distribution-id EJO49OMBXOJUI --paths "/*" 
 | `/cotizacion-bodas` | Cotizador interactivo de bodas |
 | `/fotografia-bautizo-queretaro` | Landing de bautizos |
 | `/fotografa-en-queretaro` | Sobre la fotógrafa |
+| `/agendar` | Agendado de sesión |
+| `/dia-de-las-madres` | Campaña estacional |
+| `/blog` · `/blog/:slug` | Blog |
+| `/galeria/:slug` · `/galeria/:slug/ver` | Galería de entrega al cliente |
 
 ---
 
