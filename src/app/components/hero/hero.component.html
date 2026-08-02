@@ -1,4 +1,15 @@
 <section class="hero">
+  <!--
+    Antes era un background-image de CSS: el navegador no puede priorizarlo ni
+    servir WebP, y bloqueaba el LCP. Como <picture> se descarga con prioridad
+    alta y cada navegador elige el formato que soporta.
+  -->
+  <picture class="hero__media">
+    <source srcset="assets/images/bg/hero-bg.webp" type="image/webp">
+    <img src="assets/images/bg/hero-bg.jpg" alt="" aria-hidden="true"
+         fetchpriority="high" decoding="async" width="1920" height="1280">
+  </picture>
+
   <div class="hero__overlay"></div>
 
   <div class="hero__inner">
