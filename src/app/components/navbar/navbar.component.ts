@@ -33,7 +33,7 @@ export class NavbarComponent {
       label: 'Estudio Fotográfico',
       submenu: [
         { label: 'Día de las Madres', href: '/dia-de-las-madres' },
-        { label: 'Navidad', href: '#navidad' },
+        { label: 'Navidad', href: '/sesiones-navidad' },
         { label: 'Personalizadas', href: '#personalizadas' }
       ]
     },
