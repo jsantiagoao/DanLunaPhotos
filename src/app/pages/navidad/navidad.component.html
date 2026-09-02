@@ -1,0 +1,258 @@
+<app-navbar />
+
+<main class="xmas">
+  <!-- Hero ------------------------------------------------------------- -->
+  <section class="hero">
+    <div class="hero__inner">
+      <p class="hero__eyebrow">{{ campaignSubtitle }}</p>
+      <h1 class="hero__title">{{ campaignName }}</h1>
+      <p class="hero__sub">Mini sesiones navideñas · {{ location }}</p>
+      <p class="hero__meta">
+        <span class="pill">{{ sessionMinutes }} minutos</span>
+        <span class="pill">45 fotografías editadas</span>
+        <span class="pill">Pet friendly</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- Pasos ------------------------------------------------------------ -->
+  <nav class="steps" aria-label="Progreso de la reserva">
+    <span class="steps__item" [class.is-active]="step() === 'detalle'" [attr.aria-current]="step() === 'detalle' ? 'step' : null">1 · Qué incluye</span>
+    <span class="steps__item" [class.is-active]="step() === 'agenda'" [attr.aria-current]="step() === 'agenda' ? 'step' : null">2 · Día y horario</span>
+    <span class="steps__item" [class.is-active]="step() === 'datos' || step() === 'listo'" [attr.aria-current]="step() === 'datos' ? 'step' : null">3 · Tus datos</span>
+  </nav>
+
+  @if (error()) {
+    <p class="alert" role="alert">{{ error() }}</p>
+  }
+
+  <!-- Paso 1: qué incluye ---------------------------------------------- -->
+  @if (step() === 'detalle') {
+    <section class="section">
+      <h2 class="section__title">Qué incluye tu sesión</h2>
+      <p class="section__lead">
+        Un rato corto y bien aprovechado: llegas, te acomodamos en el set y salimos con
+        las fotos de esta Navidad.
+      </p>
+
+      <ul class="includes">
+        @for (item of includes; track item.title) {
+          <li class="include">
+            <span class="include__icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                @switch (item.icon) {
+                  @case ('clock') { <circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/> }
+                  @case ('users') { <path d="M17 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/> }
+                  @case ('paw') { <circle cx="6" cy="10" r="2"/><circle cx="10" cy="6" r="2"/><circle cx="14" cy="6" r="2"/><circle cx="18" cy="10" r="2"/><path d="M8 16c0-2.2 1.8-4 4-4s4 1.8 4 4-1.8 5-4 5-4-2.8-4-5z"/> }
+                  @case ('palette') { <circle cx="12" cy="12" r="9"/><circle cx="8.5" cy="10" r="1"/><circle cx="12" cy="8" r="1"/><circle cx="15.5" cy="10" r="1"/><path d="M12 21a3 3 0 0 1 0-6h1a2 2 0 0 0 0-4"/> }
+                  @case ('camera') { <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/> }
+                  @case ('gallery') { <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/> }
+                }
+              </svg>
+            </span>
+            <span class="include__text">
+              <strong>{{ item.title }}</strong>
+              <span>{{ item.detail }}</span>
+            </span>
+          </li>
+        }
+      </ul>
+
+      @if (campaign(); as c) {
+        <div class="precio" [class.precio--preventa]="c.preventaActive">
+          @if (c.preventaActive) {
+            <p class="precio__badge">Preventa</p>
+            <p class="precio__monto">
+              <span class="precio__ahora">${{ c.price | number }}</span>
+              <s class="precio__antes">${{ c.regularPrice | number }}</s>
+            </p>
+            <p class="precio__meta">
+              Hasta el {{ preventaHasta() }} · quedan
+              <strong>{{ c.spotsLeft }}</strong> {{ c.spotsLeft === 1 ? 'lugar' : 'lugares' }}
+            </p>
+          } @else {
+            <p class="precio__monto"><span class="precio__ahora">${{ c.price | number }}</span></p>
+            <p class="precio__meta">Precio por sesión</p>
+          }
+        </div>
+      }
+
+      <p class="note">
+        Apartas tu lugar con <strong>${{ apartado() }}</strong>, que se descuenta del total.
+        Tu sesión se confirma al recibir tu comprobante.
+      </p>
+
+      <button type="button" class="btn btn--primary" (click)="irAAgenda()">Elegir mi horario</button>
+    </section>
+  }
+
+  <!-- Paso 2: día y horario -------------------------------------------- -->
+  @if (step() === 'agenda') {
+    <section class="section">
+      <h2 class="section__title">Elige tu día y horario</h2>
+      <p class="section__lead">Cada sesión dura {{ sessionMinutes }} minutos. Los horarios ocupados no aparecen.</p>
+
+      <app-christmas-calendar
+        [intervals]="intervals()"
+        [currentMonth]="month()"
+        [currentYear]="year()"
+        [selectedDate]="form.date"
+        [selectedTime]="form.time"
+        [loading]="loading()"
+        (monthChange)="cambiarMes($event)"
+        (dateSelect)="elegirDia($event)"
+        (timeSelect)="elegirHora($event)" />
+
+      <div class="actions">
+        <button type="button" class="btn btn--ghost" (click)="volver('detalle')">Regresar</button>
+        <button type="button" class="btn btn--primary" [disabled]="!puedeContinuar" (click)="irADatos()">
+          Continuar
+        </button>
+      </div>
+    </section>
+  }
+
+  <!-- Paso 3: datos ----------------------------------------------------- -->
+  @if (step() === 'datos') {
+    <section class="section">
+      <h2 class="section__title">Tus datos</h2>
+      <p class="section__lead">
+        Apartas el {{ resumen().fecha }} de {{ resumen().horario }}
+      </p>
+
+      <form class="form" (ngSubmit)="reservar()" novalidate>
+        <div class="field">
+          <label for="x-name">Nombre completo</label>
+          <input id="x-name" name="name" type="text" maxlength="100" required
+                 autocomplete="name" [(ngModel)]="form.name" />
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="x-phone">Teléfono</label>
+            <input id="x-phone" name="phone" type="tel" inputmode="numeric" maxlength="14" required
+                   autocomplete="tel" placeholder="442 123 4567" [(ngModel)]="form.phone" />
+          </div>
+          <div class="field">
+            <label for="x-email">Correo electrónico</label>
+            <input id="x-email" name="email" type="email" maxlength="100" required
+                   autocomplete="email" [(ngModel)]="form.email" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="x-personas">¿Cuántas personas asisten?</label>
+          <select id="x-personas" name="personas" [(ngModel)]="form.personas">
+            @for (n of personasOptions; track n) {
+              <option [value]="n">{{ n }} {{ n === 1 ? 'persona' : 'personas' }}</option>
+            }
+          </select>
+          <p class="field__help">Hasta 5 personas incluidas en tu sesión</p>
+        </div>
+
+        <div class="field">
+          <label for="x-extra">¿Van personas extra?</label>
+          <select id="x-extra" name="personasExtra" [(ngModel)]="form.personasExtra">
+            @for (n of extraOptions; track n) {
+              <option [value]="n">
+                {{ n === 0 ? 'No, somos ' + form.personas : n + (n === 1 ? ' persona extra' : ' personas extra') + ' · $' + (n * extraPrice) }}
+              </option>
+            }
+          </select>
+          <p class="field__help">
+            ${{ extraPrice }} por persona adicional, hasta 3 · en el set caben {{ aforo }} personas
+          </p>
+        </div>
+
+        @if (campaign(); as c) {
+          <p class="total">
+            Total de tu sesión: <strong>${{ totalEstimado | number }}</strong>
+            <span>&nbsp;· apartas con ${{ apartado() }}</span>
+          </p>
+        }
+
+        <fieldset class="fieldset">
+          <legend>¿Llevarás mascota?</legend>
+          <div class="yes-no">
+            <button type="button" [class.is-active]="form.mascota" [attr.aria-pressed]="form.mascota"
+                    (click)="responderMascota(true)">Sí</button>
+            <button type="button" [class.is-active]="!form.mascota" [attr.aria-pressed]="!form.mascota"
+                    (click)="responderMascota(false)">No</button>
+          </div>
+
+          @if (form.mascota) {
+            <div class="field-row field-row--nested">
+              <div class="field">
+                <label for="x-pet-size">Tamaño</label>
+                <select id="x-pet-size" name="mascotaTamano" [(ngModel)]="form.mascotaTamano">
+                  <option value="">Elige una opción</option>
+                  @for (size of petSizes; track size) { <option [value]="size">{{ size }}</option> }
+                </select>
+              </div>
+              <div class="field">
+                <label for="x-pet-name">¿Cómo se llama?</label>
+                <input id="x-pet-name" name="mascotaNombre" type="text" maxlength="50"
+                       [(ngModel)]="form.mascotaNombre" />
+              </div>
+            </div>
+          }
+        </fieldset>
+
+        <div class="field">
+          <label for="x-peticion">Petición especial <span class="field__optional">(opcional)</span></label>
+          <textarea id="x-peticion" name="peticionEspecial" rows="3" maxlength="500"
+                    placeholder="¿Algo que debamos preparar para tu sesión?"
+                    [(ngModel)]="form.peticionEspecial"></textarea>
+        </div>
+
+        <!-- Trampa para robots: oculta a la vista y al lector de pantalla -->
+        <input class="honeypot" type="text" name="website" tabindex="-1" autocomplete="off"
+               aria-hidden="true" [(ngModel)]="honeypot" />
+
+        <div class="actions">
+          <button type="button" class="btn btn--ghost" (click)="volver('agenda')">Regresar</button>
+          <button type="submit" class="btn btn--primary" [disabled]="sending()">
+            {{ sending() ? 'Apartando…' : 'Apartar mi lugar' }}
+          </button>
+        </div>
+      </form>
+    </section>
+  }
+
+  <!-- Confirmación ------------------------------------------------------ -->
+  @if (step() === 'listo') {
+    <section class="section section--done">
+      <span class="done__mark" aria-hidden="true">
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+      </span>
+
+      <h2 class="section__title">¡Tu lugar está apartado!</h2>
+
+      <dl class="resumen">
+        <div><dt>Día</dt><dd>{{ resumen().fecha }}</dd></div>
+        <div><dt>Horario</dt><dd>{{ resumen().horario }}</dd></div>
+        <div><dt>Personas</dt><dd>{{ form.personas }}@if (form.personasExtra > 0) { + {{ form.personasExtra }} extra }</dd></div>
+        @if (form.mascota) {
+          <div><dt>Mascota</dt><dd>{{ form.mascotaNombre }} ({{ form.mascotaTamano }})</dd></div>
+        }
+      </dl>
+
+      <p class="done__lead">
+        Falta un paso: envíanos por WhatsApp tu comprobante del apartado de
+        <strong>${{ apartado() }}</strong> para confirmar tu sesión.
+      </p>
+
+      <a class="btn btn--whatsapp" [href]="whatsappUrl" target="_blank" rel="noopener">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.7 1-.9 1.2-.2.2-.3.2-.6.1-1.7-.9-2.9-1.6-4-3.5-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5s-.7-1.6-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.5 1.9.8 2.6.9 3.5.7.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4-.1-.1-.3-.2-.5-.3zM12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2z"/></svg>
+        Enviar mi comprobante
+      </a>
+
+      <p class="note">
+        También te llegó un correo con los datos de tu sesión. Si no lo ves, revisa
+        tu carpeta de correo no deseado.
+      </p>
+    </section>
+  }
+</main>
+
+<app-footer />
