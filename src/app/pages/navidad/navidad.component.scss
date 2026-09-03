@@ -3,9 +3,14 @@
  * esta pagina: los tokens globales de `styles.scss` no se tocan, para que la campaña
  * no se filtre al resto del sitio cuando termine la temporada.
  */
+/**
+ * La pagina usa la paleta de marca (tierra/dorado/crema) como el resto del sitio.
+ * Se conservan los alias --xmas-* apuntando a los tokens globales para no reescribir
+ * cada regla; el acento es el dorado de marca, no un color de campaña aparte.
+ */
 .xmas {
-  --xmas-wine: #7B2E33;   /* rojo vino del lettering "Christmas Dreams" */
-  --xmas-pine: #4A5E3A;   /* verde olivo de marca */
+  --xmas-wine: var(--color-gold);       /* acento principal = dorado de marca */
+  --xmas-pine: var(--color-warm-gray);  /* acento secundario = gris calido de marca */
   --xmas-gold: var(--color-gold);
 
   display: block;
@@ -19,8 +24,8 @@
   padding: calc(var(--nav-height) + 72px) 24px 72px;
   text-align: center;
   background:
-    radial-gradient(circle at 20% 20%, rgba(123, 46, 51, 0.06), transparent 45%),
-    radial-gradient(circle at 80% 30%, rgba(74, 94, 58, 0.06), transparent 45%),
+    radial-gradient(circle at 20% 20%, rgba(173, 138, 106, 0.08), transparent 45%),
+    radial-gradient(circle at 80% 30%, rgba(134, 129, 108, 0.06), transparent 45%),
     var(--color-beige);
 }
 
@@ -40,7 +45,7 @@
   font-size: clamp(2.2rem, 6vw, 3.6rem);
   font-weight: 400;
   line-height: 1.1;
-  color: var(--xmas-wine);
+  color: var(--color-dark);
   margin: 0 0 12px;
 }
 
@@ -58,9 +63,9 @@
   font-size: 0.78rem;
   letter-spacing: 0.04em;
   padding: 7px 16px;
-  border: 1px solid rgba(123, 46, 51, 0.25);
+  border: 1px solid rgba(173, 138, 106, 0.35);
   border-radius: 999px;
-  color: var(--xmas-wine);
+  color: var(--color-gold);
   background: rgba(255, 255, 255, 0.55);
 }
 
@@ -138,8 +143,8 @@
   place-items: center;
   width: 44px; height: 44px;
   border-radius: 12px;
-  background: rgba(74, 94, 58, 0.08);
-  color: var(--xmas-pine);
+  background: rgba(173, 138, 106, 0.12);
+  color: var(--color-gold);
 }
 
 .include__text { display: flex; flex-direction: column; gap: 3px; font-family: var(--font-sans); }
@@ -169,15 +174,15 @@
   border: 1px solid var(--color-beige);
 }
 
-.precio--preventa { border-color: rgba(123, 46, 51, 0.3); }
+.precio--preventa { border-color: rgba(173, 138, 106, 0.4); }
 
 .precio__badge {
   display: inline-block;
   margin: 0 0 12px;
   padding: 5px 14px;
   border-radius: 999px;
-  background: var(--xmas-wine);
-  color: var(--color-white);
+  background: var(--color-dark);
+  color: var(--color-cream);
   font-family: var(--font-sans);
   font-size: 0.68rem;
   font-weight: 700;
@@ -260,8 +265,8 @@
 .field select:focus,
 .field textarea:focus {
   outline: none;
-  border-color: var(--xmas-wine);
-  box-shadow: 0 0 0 3px rgba(123, 46, 51, 0.1);
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px rgba(173, 138, 106, 0.18);
 }
 
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
@@ -290,9 +295,9 @@
 }
 
 .yes-no button.is-active {
-  background: var(--xmas-wine);
-  border-color: var(--xmas-wine);
-  color: var(--color-white);
+  background: var(--color-dark);
+  border-color: var(--color-dark);
+  color: var(--color-cream);
   font-weight: 600;
 }
 
@@ -336,12 +341,12 @@
   transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
 }
 
-.btn--primary { background: var(--xmas-wine); color: var(--color-white); }
-.btn--primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(123, 46, 51, 0.28); }
+.btn--primary { background: var(--color-dark); color: var(--color-cream); }
+.btn--primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(45, 36, 32, 0.28); }
 .btn--primary:disabled { opacity: 0.45; cursor: not-allowed; }
 
 .btn--ghost { background: transparent; border-color: var(--color-beige); color: var(--color-warm-gray); }
-.btn--ghost:hover { border-color: var(--xmas-wine); color: var(--xmas-wine); }
+.btn--ghost:hover { border-color: var(--color-gold); color: var(--color-gold); }
 
 .btn--whatsapp { background: #25D366; color: #fff; }
 .btn--whatsapp:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(37, 211, 102, 0.3); }
@@ -353,9 +358,9 @@
   margin: 24px auto 0;
   padding: 13px 18px;
   border-radius: 10px;
-  background: rgba(123, 46, 51, 0.08);
-  border: 1px solid rgba(123, 46, 51, 0.2);
-  color: var(--xmas-wine);
+  background: rgba(45, 36, 32, 0.06);
+  border: 1px solid rgba(45, 36, 32, 0.18);
+  color: var(--color-dark);
   font-family: var(--font-sans);
   font-size: 0.88rem;
   text-align: center;
@@ -370,8 +375,8 @@
   width: 68px; height: 68px;
   margin: 0 auto 22px;
   border-radius: 50%;
-  background: rgba(74, 94, 58, 0.1);
-  color: var(--xmas-pine);
+  background: rgba(173, 138, 106, 0.15);
+  color: var(--color-gold);
 }
 
 .resumen {
