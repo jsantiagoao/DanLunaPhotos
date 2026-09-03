@@ -1,4 +1,4 @@
-import { availableSlots, dateKeyOf, isDayClosed, type BusyInterval } from './christmas-slots';
+import { availableSlots, dateKeyOf, isDayClosed, type BusyInterval, type CampaignConfig } from './christmas-slots';
 
 /**
  * La cuadricula del calendario navideño, como dato.
@@ -54,6 +54,7 @@ export function buildChristmasMonth(
   year: number,
   intervals: readonly BusyInterval[],
   today: Date = new Date(),
+  config?: CampaignConfig,
 ): ChristmasMonth {
   const daysInMonth = new Date(year, month, 0).getDate();
   const cells: DayCell[] = [];
@@ -66,11 +67,11 @@ export function buildChristmasMonth(
     const dateKey = dateKeyOf(day, month, year);
     const past = isPast(day, month, year, today);
     // El regimen (preventa/regular) y la ventana dependen de hoy: se propaga `today`.
-    const closed = isDayClosed(dateKey, today);
+    const closed = isDayClosed(dateKey, today, config);
     // Lleno solo se sabe mirando los huecos: caben varias sesiones al dia, asi que
     // "tiene sesiones" no significa "ya no cabe nadie". Y cerrado no es lleno: a la
     // clienta no se le dice "sin lugares" un dia en que el estudio no abre.
-    const full = !past && !closed && availableSlots(dateKey, intervals, today).length === 0;
+    const full = !past && !closed && availableSlots(dateKey, intervals, today, config).length === 0;
     cells.push({ day, dateKey, past, closed, full, selectable: !past && !closed && !full });
   }
 

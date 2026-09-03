@@ -164,3 +164,40 @@ describe('ventana de fechas', () => {
     expect(slotsForDate('2026-12-07', HOY_REGULAR)).toEqual([]);        // lunes
   });
 });
+
+
+import { DEFAULT_CAMPAIGN_CONFIG, isPreventaActive, type CampaignConfig } from './christmas-slots';
+
+describe('config inyectada', () => {
+  const HOY_REGULAR = new Date(2026, 9, 15);   // 15 oct
+
+  function conConfig(over: Partial<CampaignConfig>): CampaignConfig {
+    return {
+      dates: { ...DEFAULT_CAMPAIGN_CONFIG.dates, ...(over.dates || {}) },
+      agenda: { ...DEFAULT_CAMPAIGN_CONFIG.agenda, ...(over.agenda || {}) },
+    };
+  }
+
+  it('sin config usa los valores por defecto', () => {
+    expect(slotsForDate('2026-12-02', HOY_REGULAR)).toEqual(['16:00', '16:50', '17:40', '18:30']); // miercoles
+  });
+
+  it('respeta la ventana de fechas de la config', () => {
+    const c = conConfig({ dates: { ...DEFAULT_CAMPAIGN_CONFIG.dates, seasonStart: '2026-12-01', seasonEndRegular: '2026-12-31' } });
+    expect(slotsForDate('2026-11-15', HOY_REGULAR, c)).toEqual([]);            // fuera
+    expect(slotsForDate('2026-12-05', HOY_REGULAR, c).length).toBeGreaterThan(0); // dentro (sabado)
+  });
+
+  it('respeta la agenda de la config', () => {
+    // Miercoles (backend weekday 2) con una sola sesion a las 10:00.
+    const weekly = { ...DEFAULT_CAMPAIGN_CONFIG.agenda.weekly, '2': [['10:00', 1] as [string, number]] };
+    const c = conConfig({ agenda: { ...DEFAULT_CAMPAIGN_CONFIG.agenda, weekly } });
+    expect(slotsForDate('2026-12-02', HOY_REGULAR, c)).toEqual(['10:00']);
+  });
+
+  it('respeta las fechas de preventa de la config', () => {
+    const c = conConfig({ dates: { ...DEFAULT_CAMPAIGN_CONFIG.dates, preventaStart: '2026-10-01', preventaEnd: '2026-10-31' } });
+    expect(isPreventaActive(new Date(2026, 9, 15), c)).toBe(true);   // 15 oct dentro
+    expect(isPreventaActive(new Date(2026, 8, 20), c)).toBe(false);  // 20 sep fuera
+  });
+});
