@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { buildChristmasMonth } from './christmas-calendar.model';
-import { availableSlots, type BusyInterval } from './christmas-slots';
+import { availableSlots, type BusyInterval, type CampaignConfig } from './christmas-slots';
 
 /**
  * Organismo: elegir dia y horario de la sesion navideña.
@@ -78,6 +78,7 @@ import { availableSlots, type BusyInterval } from './christmas-slots';
 })
 export class ChristmasCalendarComponent {
   readonly intervals = input<BusyInterval[]>([]);
+  readonly config = input<CampaignConfig | null>(null);
   readonly currentMonth = input.required<number>();
   readonly currentYear = input.required<number>();
   readonly selectedDate = input<string>('');
@@ -92,10 +93,12 @@ export class ChristmasCalendarComponent {
   protected readonly weekdays = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
 
   protected readonly month = computed(() =>
-    buildChristmasMonth(this.currentMonth(), this.currentYear(), this.intervals()),
+    buildChristmasMonth(this.currentMonth(), this.currentYear(), this.intervals(), new Date(), this.config() ?? undefined),
   );
 
-  protected readonly slots = computed(() => availableSlots(this.selectedDate(), this.intervals()));
+  protected readonly slots = computed(() =>
+    availableSlots(this.selectedDate(), this.intervals(), new Date(), this.config() ?? undefined),
+  );
 
   protected readonly prettyDate = computed(() => {
     const [, month, day] = (this.selectedDate() || '').split('-');

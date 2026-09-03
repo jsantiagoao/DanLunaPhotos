@@ -29,18 +29,61 @@ export const BREAK_MINUTES = 10;
 export const SLOT_MINUTES = SESSION_MINUTES + BREAK_MINUTES;
 
 /**
- * Ventana de fechas de sesion. Espeja shared/navidad.py: la temporada arranca igual
- * (31-oct) pero termina antes en preventa (6-dic) que en regular (14-dic), y en preventa
- * solo se abren fines de semana. Las fechas se comparan como texto 'YYYY-MM-DD', que
- * ordena cronologicamente y evita `new Date(texto)` (que corre el dia por UTC).
+ * Config de campaña que la landing consume del backend (`GET /availability` -> `config`).
+ * Es un subconjunto: solo lo que la landing necesita para pintar el calendario. `weekly`
+ * viene indexado como en el backend (lunes = 0) y se convierte al leer.
  */
-export const SESSION_WINDOW_START = '2026-10-31';
-export const SESSION_WINDOW_END_PREVENTA = '2026-12-06';
-export const SESSION_WINDOW_END_REGULAR = '2026-12-14';
+export interface CampaignConfig {
+  dates: {
+    preventaStart: string;
+    preventaEnd: string;
+    seasonStart: string;
+    seasonEndPreventa: string;
+    seasonEndRegular: string;
+  };
+  agenda: {
+    sessionMinutes: number;
+    breakMinutes: number;
+    presaleWeekendOnly: boolean;
+    /** Clave: dia de la semana con lunes = 0 (como el backend). */
+    weekly: Record<string, ReadonlyArray<readonly [string, number]>>;
+  };
+}
 
-/** Preventa: 18 al 25 de septiembre de 2026 (inclusive). */
-export const PREVENTA_START = '2026-09-18';
-export const PREVENTA_END = '2026-09-25';
+/**
+ * Respaldo si el backend aun no publica config: los valores actuales de la campaña.
+ * `weekly` va con lunes = 0 (mie/jue 4 desde 16:00, vie 5, sab/dom 4+4).
+ */
+export const DEFAULT_CAMPAIGN_CONFIG: CampaignConfig = {
+  dates: {
+    preventaStart: '2026-09-18',
+    preventaEnd: '2026-09-25',
+    seasonStart: '2026-10-31',
+    seasonEndPreventa: '2026-12-06',
+    seasonEndRegular: '2026-12-14',
+  },
+  agenda: {
+    sessionMinutes: 40,
+    breakMinutes: 10,
+    presaleWeekendOnly: true,
+    weekly: {
+      '0': [], '1': [],
+      '2': [['16:00', 4]], '3': [['16:00', 4]], '4': [['16:00', 5]],
+      '5': [['09:00', 4], ['14:30', 4]], '6': [['09:00', 4], ['14:30', 4]],
+    },
+  },
+};
+
+function cfg(config?: CampaignConfig): CampaignConfig {
+  return config ?? DEFAULT_CAMPAIGN_CONFIG;
+}
+
+// Constantes de compatibilidad (defaults). Las funciones ahora leen de `config`.
+export const SESSION_WINDOW_START = DEFAULT_CAMPAIGN_CONFIG.dates.seasonStart;
+export const SESSION_WINDOW_END_PREVENTA = DEFAULT_CAMPAIGN_CONFIG.dates.seasonEndPreventa;
+export const SESSION_WINDOW_END_REGULAR = DEFAULT_CAMPAIGN_CONFIG.dates.seasonEndRegular;
+export const PREVENTA_START = DEFAULT_CAMPAIGN_CONFIG.dates.preventaStart;
+export const PREVENTA_END = DEFAULT_CAMPAIGN_CONFIG.dates.preventaEnd;
 
 /** 'YYYY-MM-DD' de una fecha local, sin pasar por Date (que interpreta UTC). */
 function dateKeyOfDate(d: Date): string {
@@ -48,20 +91,27 @@ function dateKeyOfDate(d: Date): string {
 }
 
 /** Si la campaña esta en preventa hoy. Solo mira la fecha; el cupo lo cierra el backend. */
-export function isPreventaActive(today: Date = new Date()): boolean {
+export function isPreventaActive(today: Date = new Date(), config?: CampaignConfig): boolean {
   const key = dateKeyOfDate(today);
-  return key >= PREVENTA_START && key <= PREVENTA_END;
+  const d = cfg(config).dates;
+  return key >= d.preventaStart && key <= d.preventaEnd;
 }
 
 /** Fin de la temporada segun el regimen vigente hoy. */
-function sessionWindowEnd(today: Date): string {
-  return isPreventaActive(today) ? SESSION_WINDOW_END_PREVENTA : SESSION_WINDOW_END_REGULAR;
+function sessionWindowEnd(today: Date, config?: CampaignConfig): string {
+  const d = cfg(config).dates;
+  return isPreventaActive(today, config) ? d.seasonEndPreventa : d.seasonEndRegular;
 }
 
 /** Si la fecha cae dentro de la temporada de sesiones vigente. */
-export function isWithinSessionWindow(dateKey: string, today: Date = new Date()): boolean {
+export function isWithinSessionWindow(dateKey: string, today: Date = new Date(), config?: CampaignConfig): boolean {
   if (!dateKey) return false;
-  return dateKey >= SESSION_WINDOW_START && dateKey <= sessionWindowEnd(today);
+  return dateKey >= cfg(config).dates.seasonStart && dateKey <= sessionWindowEnd(today, config);
+}
+
+/** `getDay()` (domingo=0) -> índice del backend (lunes=0). */
+function toBackendWeekday(getDayIndex: number): number {
+  return getDayIndex === 0 ? 6 : getDayIndex - 1;
 }
 
 /**
@@ -102,12 +152,15 @@ export function weekdayOf(dateKey: string): number | null {
   return new Date(year, month - 1, day).getDay();
 }
 
-export function slotsForWeekday(weekday: number): string[] {
+export function slotsForWeekday(weekday: number, config?: CampaignConfig): string[] {
+  const agenda = cfg(config).agenda;
+  const slotMin = agenda.sessionMinutes + agenda.breakMinutes;
+  const blocks = agenda.weekly[String(toBackendWeekday(weekday))] ?? [];
   const slots: string[] = [];
-  for (const [start, count] of WEEKLY_SCHEDULE[weekday] ?? []) {
+  for (const [start, count] of blocks) {
     const startMin = toMinutes(start);
     if (startMin === null) continue;
-    for (let i = 0; i < count; i++) slots.push(toTime(startMin + i * SLOT_MINUTES));
+    for (let i = 0; i < count; i++) slots.push(toTime(startMin + i * slotMin));
   }
   return slots.sort();
 }
@@ -117,25 +170,25 @@ function isWeekend(weekday: number): boolean {
   return weekday === 0 || weekday === 6;
 }
 
-export function slotsForDate(dateKey: string, today: Date = new Date()): string[] {
+export function slotsForDate(dateKey: string, today: Date = new Date(), config?: CampaignConfig): string[] {
   const weekday = weekdayOf(dateKey);
   if (weekday === null) return [];
   // Fuera de la temporada no hay sesiones.
-  if (!isWithinSessionWindow(dateKey, today)) return [];
-  // En preventa la campaña solo abre fin de semana.
-  if (isPreventaActive(today) && !isWeekend(weekday)) return [];
-  return slotsForWeekday(weekday);
+  if (!isWithinSessionWindow(dateKey, today, config)) return [];
+  // En preventa la campaña solo abre fin de semana (si la config lo pide).
+  if (cfg(config).agenda.presaleWeekendOnly && isPreventaActive(today, config) && !isWeekend(weekday)) return [];
+  return slotsForWeekday(weekday, config);
 }
 
 /** Un dia sin agenda: fuera de temporada, dia cerrado o restringido por preventa. */
-export function isDayClosed(dateKey: string, today: Date = new Date()): boolean {
-  return slotsForDate(dateKey, today).length === 0;
+export function isDayClosed(dateKey: string, today: Date = new Date(), config?: CampaignConfig): boolean {
+  return slotsForDate(dateKey, today, config).length === 0;
 }
 
 /** Fin de la sesion que empieza a esa hora: es lo que se le muestra a la clienta. */
-export function slotEnd(time: string): string {
+export function slotEnd(time: string, config?: CampaignConfig): string {
   const start = toMinutes(time);
-  return start === null ? '' : toTime(start + SESSION_MINUTES);
+  return start === null ? '' : toTime(start + cfg(config).agenda.sessionMinutes);
 }
 
 function overlaps(start: number, end: number, busy: BusyInterval): boolean {
@@ -146,19 +199,22 @@ export function availableSlots(
   dateKey: string,
   intervals: readonly BusyInterval[],
   today: Date = new Date(),
+  config?: CampaignConfig,
 ): string[] {
   if (!dateKey) return [];
   const delDia = (intervals || []).filter((i) => i.date === dateKey);
+  const agenda = cfg(config).agenda;
+  const slotMin = agenda.sessionMinutes + agenda.breakMinutes;
 
-  return slotsForDate(dateKey, today).filter((slot) => {
+  return slotsForDate(dateKey, today, config).filter((slot) => {
     const start = toMinutes(slot)!;
     // El hueco ocupa la sesion mas su cambio: si no cabe completo, no se ofrece.
-    return !delDia.some((busy) => overlaps(start, start + SLOT_MINUTES, busy));
+    return !delDia.some((busy) => overlaps(start, start + slotMin, busy));
   });
 }
 
-export function isDayFull(dateKey: string, intervals: readonly BusyInterval[], today: Date = new Date()): boolean {
-  return availableSlots(dateKey, intervals, today).length === 0;
+export function isDayFull(dateKey: string, intervals: readonly BusyInterval[], today: Date = new Date(), config?: CampaignConfig): boolean {
+  return availableSlots(dateKey, intervals, today, config).length === 0;
 }
 
 /** 'YYYY-MM-DD' de un dia del calendario, sin pasar por Date (que interpreta UTC). */

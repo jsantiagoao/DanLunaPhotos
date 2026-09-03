@@ -18,6 +18,8 @@ export interface CampaignStatus {
   sessionMinutes: number;
 }
 
+import type { CampaignConfig } from '../navidad/christmas-slots';
+
 export interface AvailabilityResponse {
   month: number;
   year: number;
@@ -30,6 +32,8 @@ export interface AvailabilityResponse {
   intervals?: { date: string; start: number; end: number }[];
   /** Solo lo consume la pagina navideña; `/agendar` lo ignora. */
   campaign?: CampaignStatus;
+  /** Config de campaña editable; la landing la usa para reglas y contenido. */
+  config?: CampaignConfig;
 }
 
 export interface BookingRequest {

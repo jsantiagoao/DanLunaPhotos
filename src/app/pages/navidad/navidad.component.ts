@@ -14,7 +14,7 @@ import {
   emptyChristmasForm, humanDate, humanSlot, priceChangeNotice, sessionTotal, toBookingRequest,
   validateChristmasForm, whatsappConfirmUrl, type ChristmasForm,
 } from './christmas-booking.logic';
-import { SESSION_MINUTES, type BusyInterval } from './christmas-slots';
+import { SESSION_MINUTES, type BusyInterval, type CampaignConfig } from './christmas-slots';
 import type { CampaignStatus } from '../agendar/booking.models';
 
 /**
@@ -47,6 +47,8 @@ export class NavidadComponent implements OnInit {
   protected readonly intervals = signal<BusyInterval[]>([]);
   /** Precio vigente y lugares de preventa; lo publica el backend con la agenda. */
   protected readonly campaign = signal<CampaignStatus | null>(null);
+  /** Reglas editables de la campaña (fechas, agenda); el backend las publica. */
+  protected readonly config = signal<CampaignConfig | null>(null);
 
   protected readonly month = signal(new Date().getMonth() + 1);
   protected readonly year = signal(new Date().getFullYear());
@@ -104,6 +106,7 @@ export class NavidadComponent implements OnInit {
       next: (res) => {
         this.intervals.set(res.intervals ?? []);
         if (res.campaign) this.campaign.set(res.campaign);
+        if (res.config) this.config.set(res.config);
         this.loading.set(false);
       },
       error: () => {
@@ -167,6 +170,7 @@ export class NavidadComponent implements OnInit {
     this.booking.getAvailability(this.month(), this.year()).subscribe({
       next: (res) => {
         if (res.campaign) this.campaign.set(res.campaign);
+        if (res.config) this.config.set(res.config);
         this.intervals.set(res.intervals ?? []);
         const aviso = priceChangeNotice(precioVisto, res.campaign ?? null);
         if (aviso) {
