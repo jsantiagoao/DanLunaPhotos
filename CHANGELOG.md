@@ -6,6 +6,16 @@ Versionado semántico según [SemVer](https://semver.org/lang/es/).
 
 ---
 
+## [1.1.0] - 2026-09-03
+
+### Added
+- Campaña navideña "NOËL TALE": la landing consume la configuración (fechas, precios,
+  agenda, aforo, contenido) desde el backend, con valores por defecto de respaldo.
+
+### Changed
+- El calendario y los horarios de la sesión navideña se calculan a partir de la
+  configuración de campaña editable, en lugar de constantes fijas en el frontend.
+
 ## [1.0.0] - 2026-06-16
 
 ### Added
