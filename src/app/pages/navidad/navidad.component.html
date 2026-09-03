@@ -5,7 +5,7 @@
   <section class="hero">
     <div class="hero__scrim"></div>
     <div class="hero__inner">
-      <h1 class="hero__title">{{ campaignName }}</h1>
+      <h1 class="hero__title">{{ campaignName() }}</h1>
       <p class="hero__by">by Dan Luna Photos</p>
     </div>
   </section>
@@ -26,7 +26,7 @@
       <h2 class="section__title">Qué incluye</h2>
 
       <ul class="includes">
-        @for (item of includes; track item.title) {
+        @for (item of includes(); track item.title) {
           <li class="include">
             <span class="include__icon" aria-hidden="true">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">

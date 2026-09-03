@@ -57,10 +57,17 @@ export class NavidadComponent implements OnInit {
   /** Trampa para robots: una persona no llena un campo que no ve. */
   protected honeypot = '';
 
-  protected readonly includes = CHRISTMAS_INCLUDES;
-  protected readonly campaignName = CAMPAIGN_NAME;
-  protected readonly campaignSubtitle = CAMPAIGN_SUBTITLE;
-  protected readonly location = LOCATION;
+  /**
+   * "Que incluye" y textos de campaña: mandan los del backend (editables por Daniela desde
+   * Studio); las constantes locales son el respaldo si la config no llego o viene vacia.
+   */
+  protected readonly includes = computed(() => {
+    const fromConfig = this.config()?.content?.includes;
+    return fromConfig && fromConfig.length ? fromConfig : CHRISTMAS_INCLUDES;
+  });
+  protected readonly campaignName = computed(() => this.config()?.content?.name || CAMPAIGN_NAME);
+  protected readonly campaignSubtitle = computed(() => this.config()?.content?.subtitle || CAMPAIGN_SUBTITLE);
+  protected readonly location = computed(() => this.config()?.content?.location || LOCATION);
   protected readonly sessionMinutes = SESSION_MINUTES;
   /** El del backend manda; el local es el respaldo si la llamada falla. */
   protected readonly apartado = computed(() => this.campaign()?.apartado ?? APARTADO_AMOUNT);

@@ -48,6 +48,14 @@ export interface CampaignConfig {
     /** Clave: dia de la semana con lunes = 0 (como el backend). */
     weekly: Record<string, ReadonlyArray<readonly [string, number]>>;
   };
+  /** Contenido editable de la landing: nombre, textos, imagen de fondo e items de "que incluye". */
+  content?: {
+    name: string;
+    subtitle: string;
+    location: string;
+    heroImage: string;
+    includes: ReadonlyArray<{ icon: string; title: string; detail: string }>;
+  };
 }
 
 /**
