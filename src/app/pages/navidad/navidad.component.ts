@@ -68,6 +68,12 @@ export class NavidadComponent implements OnInit {
   protected readonly campaignName = computed(() => this.config()?.content?.name || CAMPAIGN_NAME);
   protected readonly campaignSubtitle = computed(() => this.config()?.content?.subtitle || CAMPAIGN_SUBTITLE);
   protected readonly location = computed(() => this.config()?.content?.location || LOCATION);
+  /**
+   * Imagen de fondo del hero: la que Daniela sube desde Studio (config.content.heroImage);
+   * si no hay, la acuarela local de respaldo. Se aplica como background-image inline.
+   */
+  protected readonly heroImageUrl = computed(() =>
+    this.config()?.content?.heroImage || '/assets/images/navidad/fondo_navidad.jpeg');
   protected readonly sessionMinutes = SESSION_MINUTES;
   /** El del backend manda; el local es el respaldo si la llamada falla. */
   protected readonly apartado = computed(() => this.campaign()?.apartado ?? APARTADO_AMOUNT);

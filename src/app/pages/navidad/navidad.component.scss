@@ -32,7 +32,8 @@
   align-items: center;
   justify-content: center;
   padding: calc(var(--nav-height) + 32px) 24px 48px;
-  background-image: url('/assets/images/navidad/fondo_navidad.jpeg');
+  /* La imagen de fondo se inyecta inline desde la config (heroImageUrl); el fallback local
+     vive en el componente. Aqui solo el encuadre. */
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
