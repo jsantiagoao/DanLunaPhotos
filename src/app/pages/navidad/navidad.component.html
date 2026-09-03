@@ -3,23 +3,17 @@
 <main class="xmas">
   <!-- Hero ------------------------------------------------------------- -->
   <section class="hero">
+    <div class="hero__scrim"></div>
     <div class="hero__inner">
-      <p class="hero__eyebrow">{{ campaignSubtitle }}</p>
       <h1 class="hero__title">{{ campaignName }}</h1>
-      <p class="hero__sub">Mini sesiones navideñas · {{ location }}</p>
-      <p class="hero__meta">
-        <span class="pill">{{ sessionMinutes }} minutos</span>
-        <span class="pill">45 fotografías editadas</span>
-        <span class="pill">Pet friendly</span>
-      </p>
+      <p class="hero__by">by Dan Luna Photos</p>
     </div>
   </section>
 
   <!-- Pasos ------------------------------------------------------------ -->
   <nav class="steps" aria-label="Progreso de la reserva">
-    <span class="steps__item" [class.is-active]="step() === 'detalle'" [attr.aria-current]="step() === 'detalle' ? 'step' : null">1 · Qué incluye</span>
-    <span class="steps__item" [class.is-active]="step() === 'agenda'" [attr.aria-current]="step() === 'agenda' ? 'step' : null">2 · Día y horario</span>
-    <span class="steps__item" [class.is-active]="step() === 'datos' || step() === 'listo'" [attr.aria-current]="step() === 'datos' ? 'step' : null">3 · Tus datos</span>
+    <span class="steps__item" [class.is-active]="step() === 'detalle'" [attr.aria-current]="step() === 'detalle' ? 'step' : null">1 · Tu sesión</span>
+    <span class="steps__item" [class.is-active]="step() === 'datos' || step() === 'listo'" [attr.aria-current]="step() === 'datos' ? 'step' : null">2 · Tus datos</span>
   </nav>
 
   @if (error()) {
@@ -29,11 +23,7 @@
   <!-- Paso 1: qué incluye ---------------------------------------------- -->
   @if (step() === 'detalle') {
     <section class="section">
-      <h2 class="section__title">Qué incluye tu sesión</h2>
-      <p class="section__lead">
-        Un rato corto y bien aprovechado: llegas, te acomodamos en el set y salimos con
-        las fotos de esta Navidad.
-      </p>
+      <h2 class="section__title">Qué incluye</h2>
 
       <ul class="includes">
         @for (item of includes; track item.title) {
@@ -52,7 +42,7 @@
             </span>
             <span class="include__text">
               <strong>{{ item.title }}</strong>
-              <span>{{ item.detail }}</span>
+              @if (item.detail) { <span>{{ item.detail }}</span> }
             </span>
           </li>
         }
@@ -82,15 +72,7 @@
         Tu sesión se confirma al recibir tu comprobante.
       </p>
 
-      <button type="button" class="btn btn--primary" (click)="irAAgenda()">Elegir mi horario</button>
-    </section>
-  }
-
-  <!-- Paso 2: día y horario -------------------------------------------- -->
-  @if (step() === 'agenda') {
-    <section class="section">
       <h2 class="section__title">Elige tu día y horario</h2>
-      <p class="section__lead">Cada sesión dura {{ sessionMinutes }} minutos. Los horarios ocupados no aparecen.</p>
 
       <app-christmas-calendar
         [intervals]="intervals()"
@@ -104,7 +86,6 @@
         (timeSelect)="elegirHora($event)" />
 
       <div class="actions">
-        <button type="button" class="btn btn--ghost" (click)="volver('detalle')">Regresar</button>
         <button type="button" class="btn btn--primary" [disabled]="!puedeContinuar" (click)="irADatos()">
           Continuar
         </button>
@@ -210,7 +191,7 @@
                aria-hidden="true" [(ngModel)]="honeypot" />
 
         <div class="actions">
-          <button type="button" class="btn btn--ghost" (click)="volver('agenda')">Regresar</button>
+          <button type="button" class="btn btn--ghost" (click)="volver('detalle')">Regresar</button>
           <button type="submit" class="btn btn--primary" [disabled]="sending()">
             {{ sending() ? 'Apartando…' : 'Apartar mi lugar' }}
           </button>

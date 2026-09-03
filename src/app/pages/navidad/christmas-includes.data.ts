@@ -20,10 +20,10 @@ export interface IncludeItem {
 }
 
 export const CHRISTMAS_INCLUDES: readonly IncludeItem[] = [
-  { icon: 'clock', title: '40 minutos de sesión', detail: 'En nuestro set navideño, con mini set editorial incluido' },
-  { icon: 'camera', title: '45 fotografías digitales', detail: 'En alta calidad y con edición' },
-  { icon: 'users', title: 'Hasta 5 personas', detail: `Persona extra $${EXTRA_PERSON_PRICE} c/u · hasta 3 más, aforo máximo 8` },
-  { icon: 'palette', title: 'Guía de outfit', detail: 'Con la paleta de colores recomendada para la familia' },
-  { icon: 'gallery', title: 'Entrega en 10 a 15 días hábiles', detail: 'En tu galería digital privada' },
+  { icon: 'clock', title: '40 minutos en nuestro set navideño', detail: 'Con mini set editorial incluido' },
+  { icon: 'camera', title: '+30 fotografías digitales', detail: 'En alta calidad y con edición editorial' },
+  { icon: 'users', title: '5 personas por sesión', detail: `Persona extra $${EXTRA_PERSON_PRICE} c/u · máximo 3 personas extra` },
+  { icon: 'palette', title: 'Guía de outfits', detail: '' },
+  { icon: 'gallery', title: 'Entrega entre 8 a 10 días', detail: '' },
   { icon: 'paw', title: 'Pet friendly', detail: 'Tu mascota es parte de la familia' },
 ];

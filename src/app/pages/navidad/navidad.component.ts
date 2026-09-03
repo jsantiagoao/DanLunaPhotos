@@ -40,7 +40,7 @@ export class NavidadComponent implements OnInit {
   private readonly title = inject(Title);
   private readonly meta = inject(Meta);
 
-  protected readonly step = signal<'detalle' | 'agenda' | 'datos' | 'listo'>('detalle');
+  protected readonly step = signal<'detalle' | 'datos' | 'listo'>('detalle');
   protected readonly loading = signal(false);
   protected readonly sending = signal(false);
   protected readonly error = signal<string | null>(null);
@@ -96,11 +96,6 @@ export class NavidadComponent implements OnInit {
         'editadas, hasta 5 personas y pet friendly. Aparta tu lugar con $500.',
     });
     this.loadAvailability();
-  }
-
-  // ── Paso 1 → 2 ──────────────────────────────────────────────
-  protected irAAgenda(): void {
-    this.step.set('agenda');
   }
 
   private loadAvailability(): void {
@@ -192,8 +187,8 @@ export class NavidadComponent implements OnInit {
       error: (e) => {
         this.sending.set(false);
         this.error.set(e?.error?.message || 'No pudimos apartar tu lugar. Intenta de nuevo.');
-        // Un 409 significa que alguien mas se adelanto: hay que volver a la agenda.
-        if (e?.status === 409) { this.step.set('agenda'); this.loadAvailability(); }
+        // Un 409 significa que alguien mas se adelanto: hay que volver a elegir horario.
+        if (e?.status === 409) { this.step.set('detalle'); this.loadAvailability(); }
       },
     });
   }
@@ -203,7 +198,7 @@ export class NavidadComponent implements OnInit {
     return whatsappConfirmUrl(this.form);
   }
 
-  protected volver(paso: 'detalle' | 'agenda'): void {
+  protected volver(paso: 'detalle'): void {
     this.error.set(null);
     this.step.set(paso);
   }

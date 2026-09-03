@@ -20,53 +20,64 @@
 }
 
 /* ── Hero ───────────────────────────────────────────────────── */
+/**
+ * La acuarela navideña es el fondo (cover). El contenido se ancla abajo, sobre un
+ * degradado de marca que garantiza legibilidad sin tapar el lettering "NOËL TALE" que
+ * la imagen ya trae arriba. En movil el foco del fondo sube para no perder ese lettering.
+ */
 .hero {
-  padding: calc(var(--nav-height) + 72px) 24px 72px;
-  text-align: center;
-  background:
-    radial-gradient(circle at 20% 20%, rgba(173, 138, 106, 0.08), transparent 45%),
-    radial-gradient(circle at 80% 30%, rgba(134, 129, 108, 0.06), transparent 45%),
-    var(--color-beige);
+  position: relative;
+  min-height: clamp(560px, 82vh, 860px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--nav-height) + 32px) 24px 48px;
+  background-image: url('/assets/images/navidad/fondo_navidad.jpeg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  overflow: hidden;
 }
 
-.hero__inner { max-width: 720px; margin: 0 auto; }
+/* Velo centrado: mas denso al medio para que el texto centrado se lea sobre la acuarela,
+   difuminandose hacia los bordes para no apagar la imagen. */
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 80% 62% at 50% 50%,
+    rgba(249, 245, 242, 0.82) 0%,
+    rgba(249, 245, 242, 0.55) 45%,
+    rgba(249, 245, 242, 0.12) 78%,
+    rgba(249, 245, 242, 0) 100%
+  );
+}
 
-.hero__eyebrow {
-  font-family: var(--font-sans);
-  font-size: 0.72rem;
-  letter-spacing: 0.28em;
-  text-transform: uppercase;
-  color: var(--xmas-pine);
-  margin: 0 0 16px;
+.hero__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .hero__title {
   font-family: var(--font-serif);
-  font-size: clamp(2.2rem, 6vw, 3.6rem);
+  font-size: clamp(2.8rem, 9vw, 5.4rem);
   font-weight: 400;
-  line-height: 1.1;
+  line-height: 1.0;
+  letter-spacing: 0.02em;
+  color: #7B2E33;   /* rojo vino navideño, decisión de marca de Daniela para el título */
+  margin: 0;
+}
+
+.hero__by {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1rem, 2.8vw, 1.4rem);
   color: var(--color-dark);
-  margin: 0 0 12px;
-}
-
-.hero__sub {
-  font-family: var(--font-sans);
-  font-size: 1rem;
-  color: var(--color-warm-gray);
-  margin: 0 0 28px;
-}
-
-.hero__meta { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin: 0; }
-
-.pill {
-  font-family: var(--font-sans);
-  font-size: 0.78rem;
-  letter-spacing: 0.04em;
-  padding: 7px 16px;
-  border: 1px solid rgba(173, 138, 106, 0.35);
-  border-radius: 999px;
-  color: var(--color-gold);
-  background: rgba(255, 255, 255, 0.55);
+  margin: 6px 0 0;
 }
 
 /* ── Pasos ──────────────────────────────────────────────────── */
@@ -415,6 +426,22 @@
   .form { padding: 22px; }
   .actions { flex-direction: column-reverse; }
   .btn { width: 100%; }
+
+  /* En movil el texto sigue centrado; el velo se refuerza un poco para asegurar contraste. */
+  .hero {
+    min-height: 80vh;
+    background-position: center center;
+  }
+  .hero__scrim {
+    background: radial-gradient(
+      ellipse 110% 58% at 50% 50%,
+      rgba(249, 245, 242, 0.9) 0%,
+      rgba(249, 245, 242, 0.62) 48%,
+      rgba(249, 245, 242, 0.15) 82%,
+      rgba(249, 245, 242, 0) 100%
+    );
+  }
+  .pill { font-size: 0.72rem; padding: 7px 14px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

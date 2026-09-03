@@ -129,3 +129,38 @@ describe('isDayFull', () => {
     expect(isDayFull(SABADO, [ocupado(590, 640)])).toBe(false);
   });
 });
+
+describe('ventana de fechas', () => {
+  // Mismas reglas que shared/navidad.py: la temporada va del 31-oct al 14-dic (regular)
+  // o al 6-dic (preventa, solo findes). `today` decide el regimen.
+  const HOY_PREVENTA = new Date(2026, 8, 20);   // 20 sep, dentro de 18-25
+  const HOY_REGULAR = new Date(2026, 9, 15);    // 15 oct, despues del 25
+
+  it('antes del 31 de octubre no hay sesiones', () => {
+    expect(slotsForDate('2026-10-24', HOY_REGULAR)).toEqual([]);
+  });
+
+  it('el 31 de octubre abre', () => {
+    expect(slotsForDate('2026-10-31', HOY_REGULAR).length).toBeGreaterThan(0);
+  });
+
+  it('en preventa solo abren sabados y domingos', () => {
+    expect(slotsForDate('2026-12-02', HOY_PREVENTA)).toEqual([]);        // miercoles: cerrado
+    expect(slotsForDate('2026-11-07', HOY_PREVENTA).length).toBeGreaterThan(0);  // sabado
+  });
+
+  it('la preventa no pasa del 6 de diciembre', () => {
+    expect(slotsForDate('2026-12-12', HOY_PREVENTA)).toEqual([]);        // sabado fuera de ventana
+    expect(slotsForDate('2026-12-06', HOY_PREVENTA).length).toBeGreaterThan(0);  // domingo, ultimo dia
+  });
+
+  it('en regular abre entre semana y llega hasta el 14 de diciembre', () => {
+    expect(slotsForDate('2026-12-02', HOY_REGULAR).length).toBeGreaterThan(0);   // miercoles
+    expect(slotsForDate('2026-12-12', HOY_REGULAR).length).toBeGreaterThan(0);   // sabado
+    expect(slotsForDate('2026-12-19', HOY_REGULAR)).toEqual([]);        // fuera de ventana
+  });
+
+  it('lunes y martes cerrados tambien en regular', () => {
+    expect(slotsForDate('2026-12-07', HOY_REGULAR)).toEqual([]);        // lunes
+  });
+});

@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { buildChristmasMonth } from './christmas-calendar.model';
 import { availableSlots, type BusyInterval } from './christmas-slots';
-import { humanSlot } from './christmas-booking.logic';
 
 /**
  * Organismo: elegir dia y horario de la sesion navideña.
@@ -54,14 +53,13 @@ import { humanSlot } from './christmas-booking.logic';
       <div class="slots">
         @if (!selectedDate()) {
           <p class="slots__hint">Elige un día para ver los horarios disponibles.</p>
-          <p class="slots__legend">Abrimos miércoles y jueves por la tarde, viernes, sábados y domingos.</p>
+          <p class="slots__legend">Los días disponibles aparecen resaltados en el calendario.</p>
         } @else if (loading()) {
           <p class="slots__hint">Buscando horarios…</p>
         } @else if (slots().length === 0) {
           <p class="slots__hint">Ese día ya no tiene lugares. Elige otro.</p>
         } @else {
           <h3 class="slots__title">Horarios del {{ prettyDate() }}</h3>
-          <p class="slots__meta">Cada sesión dura 20 minutos</p>
           <div class="slots__grid">
             @for (slot of slots(); track slot) {
               <button type="button" class="slot"
@@ -69,7 +67,6 @@ import { humanSlot } from './christmas-booking.logic';
                       [attr.aria-pressed]="slot === selectedTime()"
                       (click)="timeSelect.emit(slot)">
                 <span class="slot__start">{{ slot }}</span>
-                <span class="slot__range">{{ range(slot) }}</span>
               </button>
             }
           </div>
@@ -106,8 +103,6 @@ export class ChristmasCalendarComponent {
     const nombres = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
     return `${Number(day)} de ${nombres[Number(month) - 1]}`;
   });
-
-  protected range(slot: string): string { return humanSlot(slot); }
 
   /**
    * Lo que oye quien navega con lector de pantalla.

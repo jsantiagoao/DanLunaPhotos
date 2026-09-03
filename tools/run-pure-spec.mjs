@@ -40,6 +40,8 @@ globalThis.expect = (actual) => ({
   toBeFalsy: () => { if (actual) throw new Error(`esperaba falsy, obtuvo ${JSON.stringify(actual)}`); },
   toContain: (e) => { if (!String(actual).includes(e)) throw new Error(`"${actual}" no contiene "${e}"`); },
   toHaveLength: (n) => { if (actual?.length !== n) throw new Error(`esperaba longitud ${n}, obtuvo ${actual?.length}`); },
+  toBeGreaterThan: (n) => { if (!(actual > n)) throw new Error(`esperaba > ${n}, obtuvo ${actual}`); },
+  toBeLessThan: (n) => { if (!(actual < n)) throw new Error(`esperaba < ${n}, obtuvo ${actual}`); },
   not: {
     toBeNull: () => { if (actual === null) throw new Error('esperaba no-null'); },
     toBe: (e) => { if (actual === e) throw new Error(`no esperaba ${JSON.stringify(e)}`); },

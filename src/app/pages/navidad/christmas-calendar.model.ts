@@ -65,11 +65,12 @@ export function buildChristmasMonth(
   for (let day = 1; day <= daysInMonth; day++) {
     const dateKey = dateKeyOf(day, month, year);
     const past = isPast(day, month, year, today);
-    const closed = isDayClosed(dateKey);
+    // El regimen (preventa/regular) y la ventana dependen de hoy: se propaga `today`.
+    const closed = isDayClosed(dateKey, today);
     // Lleno solo se sabe mirando los huecos: caben varias sesiones al dia, asi que
     // "tiene sesiones" no significa "ya no cabe nadie". Y cerrado no es lleno: a la
     // clienta no se le dice "sin lugares" un dia en que el estudio no abre.
-    const full = !past && !closed && availableSlots(dateKey, intervals).length === 0;
+    const full = !past && !closed && availableSlots(dateKey, intervals, today).length === 0;
     cells.push({ day, dateKey, past, closed, full, selectable: !past && !closed && !full });
   }
 
