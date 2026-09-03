@@ -2,7 +2,7 @@
 
 <main class="xmas">
   <!-- Hero ------------------------------------------------------------- -->
-  <section class="hero">
+  <section class="hero" [style.background-image]="'url(' + heroImageUrl() + ')'">
     <div class="hero__scrim"></div>
     <div class="hero__inner">
       <h1 class="hero__title">{{ campaignName() }}</h1>
