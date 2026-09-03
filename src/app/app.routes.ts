@@ -13,6 +13,9 @@ export const routes: Routes = [
   { path: 'fotografia-bodas-queretaro', component: BodasComponent },
   { path: 'cotizacion-bodas', component: CotizacionBodasComponent },
   { path: 'agendar', component: AgendarComponent },
+  // Campaña navideña: reserva de mini sesiones (ADR-001).
+  { path: 'sesiones-navidad', loadComponent: () => import('./pages/navidad/navidad.component').then(m => m.NavidadComponent) },
+  { path: 'navidad', redirectTo: 'sesiones-navidad' },
   { path: 'fotografa-en-queretaro', component: FotografaEnQueretaroComponent },
   { path: 'blog', loadComponent: () => import('./pages/blog/blog.component').then(m => m.BlogComponent) },
   { path: 'blog/:slug', loadComponent: () => import('./pages/blog-post/blog-post.component').then(m => m.BlogPostComponent) },

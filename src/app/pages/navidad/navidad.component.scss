@@ -1,0 +1,450 @@
+/**
+ * Look navideño sobre los tokens de la marca. El acento estacional vive acotado a
+ * esta pagina: los tokens globales de `styles.scss` no se tocan, para que la campaña
+ * no se filtre al resto del sitio cuando termine la temporada.
+ */
+/**
+ * La pagina usa la paleta de marca (tierra/dorado/crema) como el resto del sitio.
+ * Se conservan los alias --xmas-* apuntando a los tokens globales para no reescribir
+ * cada regla; el acento es el dorado de marca, no un color de campaña aparte.
+ */
+.xmas {
+  --xmas-wine: var(--color-gold);       /* acento principal = dorado de marca */
+  --xmas-pine: var(--color-warm-gray);  /* acento secundario = gris calido de marca */
+  --xmas-gold: var(--color-gold);
+
+  display: block;
+  background: var(--color-cream);
+  padding-bottom: 96px;
+  color: var(--color-dark);
+}
+
+/* ── Hero ───────────────────────────────────────────────────── */
+/**
+ * La acuarela navideña es el fondo (cover). El contenido se ancla abajo, sobre un
+ * degradado de marca que garantiza legibilidad sin tapar el lettering "NOËL TALE" que
+ * la imagen ya trae arriba. En movil el foco del fondo sube para no perder ese lettering.
+ */
+.hero {
+  position: relative;
+  min-height: clamp(560px, 82vh, 860px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--nav-height) + 32px) 24px 48px;
+  background-image: url('/assets/images/navidad/fondo_navidad.jpeg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+/* Velo centrado: mas denso al medio para que el texto centrado se lea sobre la acuarela,
+   difuminandose hacia los bordes para no apagar la imagen. */
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 80% 62% at 50% 50%,
+    rgba(249, 245, 242, 0.82) 0%,
+    rgba(249, 245, 242, 0.55) 45%,
+    rgba(249, 245, 242, 0.12) 78%,
+    rgba(249, 245, 242, 0) 100%
+  );
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.hero__title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.8rem, 9vw, 5.4rem);
+  font-weight: 400;
+  line-height: 1.0;
+  letter-spacing: 0.02em;
+  color: #7B2E33;   /* rojo vino navideño, decisión de marca de Daniela para el título */
+  margin: 0;
+}
+
+.hero__by {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1rem, 2.8vw, 1.4rem);
+  color: var(--color-dark);
+  margin: 6px 0 0;
+}
+
+/* ── Pasos ──────────────────────────────────────────────────── */
+.steps {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+  padding: 28px 24px 0;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-warm-gray);
+}
+
+.steps__item { position: relative; padding-bottom: 8px; }
+
+.steps__item.is-active {
+  color: var(--xmas-wine);
+  font-weight: 600;
+  border-bottom: 2px solid var(--xmas-wine);
+}
+
+/* ── Secciones ──────────────────────────────────────────────── */
+.section {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 48px 24px 0;
+}
+
+.section__title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3.4vw, 2.1rem);
+  font-weight: 400;
+  color: var(--color-dark);
+  margin: 0 0 10px;
+  text-align: center;
+}
+
+.section__lead {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--color-warm-gray);
+  max-width: 560px;
+  margin: 0 auto 36px;
+  text-align: center;
+}
+
+/* ── Qué incluye ────────────────────────────────────────────── */
+.includes {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 32px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.include {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 22px;
+  background: var(--color-white);
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(45, 36, 32, 0.05);
+}
+
+.include__icon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  background: rgba(173, 138, 106, 0.12);
+  color: var(--color-gold);
+}
+
+.include__text { display: flex; flex-direction: column; gap: 3px; font-family: var(--font-sans); }
+.include__text strong { font-size: 0.95rem; font-weight: 600; color: var(--color-dark); }
+.include__text span { font-size: 0.85rem; color: var(--color-warm-gray); line-height: 1.5; }
+
+.note {
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--color-warm-gray);
+  text-align: center;
+  max-width: 520px;
+  margin: 0 auto 32px;
+}
+
+.note strong { color: var(--xmas-wine); }
+
+/* ── Precio de campaña ──────────────────────────────────────── */
+.precio {
+  max-width: 420px;
+  margin: 0 auto 28px;
+  padding: 24px;
+  text-align: center;
+  background: var(--color-white);
+  border-radius: 16px;
+  border: 1px solid var(--color-beige);
+}
+
+.precio--preventa { border-color: rgba(173, 138, 106, 0.4); }
+
+.precio__badge {
+  display: inline-block;
+  margin: 0 0 12px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  background: var(--color-dark);
+  color: var(--color-cream);
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.precio__monto {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 12px;
+  margin: 0 0 8px;
+}
+
+.precio__ahora {
+  font-family: var(--font-serif);
+  font-size: 2.4rem;
+  color: var(--xmas-wine);
+  line-height: 1;
+}
+
+.precio__antes {
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  color: var(--color-warm-gray);
+  text-decoration-thickness: 2px;
+}
+
+.precio__meta {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  color: var(--color-warm-gray);
+  margin: 0;
+}
+
+.precio__meta strong { color: var(--xmas-wine); }
+
+/* ── Formulario ─────────────────────────────────────────────── */
+.form {
+  max-width: 640px;
+  margin: 0 auto;
+  background: var(--color-white);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 12px 40px rgba(45, 36, 32, 0.07);
+}
+
+.field { display: flex; flex-direction: column; gap: 7px; margin-bottom: 20px; }
+
+.field label,
+.fieldset legend {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--color-dark);
+}
+
+.field__optional { font-weight: 400; color: var(--color-warm-gray); }
+.field__help { font-family: var(--font-sans); font-size: 0.75rem; color: var(--color-warm-gray); margin: 0; }
+
+.field input,
+.field select,
+.field textarea {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  color: var(--color-dark);
+  min-height: 44px;
+  padding: 11px 14px;
+  border: 1px solid var(--color-beige);
+  border-radius: 10px;
+  background: var(--color-white);
+  transition: border-color 180ms ease;
+}
+
+.field textarea { resize: vertical; }
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px rgba(173, 138, 106, 0.18);
+}
+
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.field-row--nested { margin-top: 16px; }
+
+.fieldset {
+  border: 1px solid var(--color-beige);
+  border-radius: 12px;
+  padding: 18px;
+  margin: 0 0 20px;
+}
+
+.yes-no { display: flex; gap: 10px; margin-top: 10px; }
+
+.yes-no button {
+  flex: 1;
+  min-height: 44px;
+  border: 1px solid var(--color-beige);
+  border-radius: 10px;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--color-warm-gray);
+  cursor: pointer;
+  transition: background 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+
+.yes-no button.is-active {
+  background: var(--color-dark);
+  border-color: var(--color-dark);
+  color: var(--color-cream);
+  font-weight: 600;
+}
+
+.yes-no button:focus-visible { outline: 2px solid var(--xmas-wine); outline-offset: 2px; }
+
+.total {
+  margin: 0 0 20px;
+  padding: 14px 18px;
+  border-radius: 10px;
+  background: var(--color-cream);
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  color: var(--color-dark);
+  text-align: center;
+}
+
+.total strong { font-size: 1.15rem; color: var(--xmas-wine); }
+.total span { color: var(--color-warm-gray); font-size: 0.85rem; }
+
+/* Fuera de la vista pero enviable: los robots la llenan, las personas no la ven. */
+.honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+
+/* ── Botones ────────────────────────────────────────────────── */
+.actions { display: flex; gap: 12px; justify-content: center; margin-top: 28px; }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 48px;
+  padding: 13px 30px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
+}
+
+.btn--primary { background: var(--color-dark); color: var(--color-cream); }
+.btn--primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(45, 36, 32, 0.28); }
+.btn--primary:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.btn--ghost { background: transparent; border-color: var(--color-beige); color: var(--color-warm-gray); }
+.btn--ghost:hover { border-color: var(--color-gold); color: var(--color-gold); }
+
+.btn--whatsapp { background: #25D366; color: #fff; }
+.btn--whatsapp:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(37, 211, 102, 0.3); }
+
+.btn:focus-visible { outline: 2px solid var(--color-dark); outline-offset: 3px; }
+
+.alert {
+  max-width: 640px;
+  margin: 24px auto 0;
+  padding: 13px 18px;
+  border-radius: 10px;
+  background: rgba(45, 36, 32, 0.06);
+  border: 1px solid rgba(45, 36, 32, 0.18);
+  color: var(--color-dark);
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+/* ── Confirmación ───────────────────────────────────────────── */
+.section--done { max-width: 640px; text-align: center; }
+
+.done__mark {
+  display: grid;
+  place-items: center;
+  width: 68px; height: 68px;
+  margin: 0 auto 22px;
+  border-radius: 50%;
+  background: rgba(173, 138, 106, 0.15);
+  color: var(--color-gold);
+}
+
+.resumen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  margin: 28px 0;
+  padding: 22px;
+  background: var(--color-white);
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(45, 36, 32, 0.05);
+  font-family: var(--font-sans);
+}
+
+.resumen dt {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-warm-gray);
+  margin-bottom: 5px;
+}
+
+.resumen dd { margin: 0; font-size: 0.98rem; font-weight: 600; color: var(--color-dark); }
+.resumen dd::first-letter { text-transform: uppercase; }
+
+.done__lead {
+  font-family: var(--font-sans);
+  font-size: 0.98rem;
+  line-height: 1.65;
+  color: var(--color-dark);
+  margin: 0 0 24px;
+}
+
+@media (max-width: 640px) {
+  .field-row { grid-template-columns: 1fr; }
+  .form { padding: 22px; }
+  .actions { flex-direction: column-reverse; }
+  .btn { width: 100%; }
+
+  /* En movil el texto sigue centrado; el velo se refuerza un poco para asegurar contraste. */
+  .hero {
+    min-height: 80vh;
+    background-position: center center;
+  }
+  .hero__scrim {
+    background: radial-gradient(
+      ellipse 110% 58% at 50% 50%,
+      rgba(249, 245, 242, 0.9) 0%,
+      rgba(249, 245, 242, 0.62) 48%,
+      rgba(249, 245, 242, 0.15) 82%,
+      rgba(249, 245, 242, 0) 100%
+    );
+  }
+  .pill { font-size: 0.72rem; padding: 7px 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn, .yes-no button, .field input, .field select, .field textarea { transition: none; }
+  .btn:hover { transform: none; }
+}

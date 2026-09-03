@@ -1,0 +1,180 @@
+:host { display: block; }
+
+.xmas-calendar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+  gap: 40px;
+  background: var(--color-white);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: 0 12px 40px rgba(45, 36, 32, 0.07);
+}
+
+/* ── Calendario ─────────────────────────────────────────────── */
+.cal__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.cal__month {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 500;
+  color: var(--xmas-wine);
+  margin: 0;
+}
+
+.cal__nav {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;                 /* objetivo tactil minimo */
+  border: 1px solid var(--color-beige);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-dark);
+  cursor: pointer;
+  transition: border-color 200ms ease, color 200ms ease;
+}
+
+.cal__nav:hover:not(:disabled) { border-color: var(--xmas-wine); color: var(--xmas-wine); }
+.cal__nav:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.cal__grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+
+.cal__weekday {
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-warm-gray);
+  padding-bottom: 8px;
+}
+
+.cal__blank { aspect-ratio: 1; }
+
+.cal__day {
+  aspect-ratio: 1;
+  min-height: 44px;
+  display: grid;
+  place-items: center;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  color: var(--color-dark);
+  cursor: pointer;
+  transition: background 180ms ease, color 180ms ease, border-color 180ms ease;
+}
+
+.cal__day:hover:not(:disabled) { border-color: var(--color-gold); }
+.cal__day:focus-visible { outline: 2px solid var(--xmas-wine); outline-offset: 2px; }
+
+.cal__day:disabled {
+  color: var(--color-gray-light, #CCCCCC);
+  cursor: not-allowed;
+}
+
+/* Un dia lleno se distingue del pasado y del cerrado: no basta el color, lleva
+   tachado. Un dia cerrado simplemente no se ofrece. */
+.cal__day.is-full { text-decoration: line-through; }
+.cal__day.is-closed { opacity: 0.45; }
+
+.cal__day.is-selected {
+  background: var(--xmas-wine);
+  border-color: var(--xmas-wine);
+  color: var(--color-white);
+  font-weight: 600;
+}
+
+/* ── Horarios ───────────────────────────────────────────────── */
+.slots { border-left: 1px solid var(--color-beige); padding-left: 40px; }
+
+.slots__title {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--color-dark);
+  margin: 0 0 4px;
+}
+
+/* Solo la inicial de la frase: `capitalize` subiria tambien "Del" y "De". */
+.slots__title::first-letter { text-transform: uppercase; }
+
+.slots__meta {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--color-warm-gray);
+  margin: 0 0 20px;
+}
+
+.slots__legend {
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  color: var(--color-warm-gray);
+  margin: 12px 0 0;
+  line-height: 1.6;
+}
+
+.slots__hint {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--color-warm-gray);
+  margin: 0;
+}
+
+.slots__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+}
+
+.slot {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--color-beige);
+  border-radius: 10px;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 180ms ease, background 180ms ease;
+}
+
+.slot:hover { border-color: var(--color-gold); }
+.slot:focus-visible { outline: 2px solid var(--xmas-wine); outline-offset: 2px; }
+
+.slot__start {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-dark);
+}
+
+.slot__range { font-family: var(--font-sans); font-size: 0.72rem; color: var(--color-warm-gray); }
+
+.slot.is-selected {
+  background: var(--xmas-wine);
+  border-color: var(--xmas-wine);
+}
+.slot.is-selected .slot__start,
+.slot.is-selected .slot__range { color: var(--color-white); }
+
+@media (max-width: 860px) {
+  .xmas-calendar { grid-template-columns: 1fr; gap: 28px; padding: 20px; }
+  .slots { border-left: none; border-top: 1px solid var(--color-beige); padding-left: 0; padding-top: 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cal__day, .cal__nav, .slot { transition: none; }
+}
