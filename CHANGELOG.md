@@ -6,6 +6,25 @@ Versionado semántico según [SemVer](https://semver.org/lang/es/).
 
 ---
 
+## [1.2.0] - 2026-09-03
+
+### Changed
+- Rediseño de la página de sesiones navideñas (`/sesiones-navidad`): fondo blanco con
+  orbes dorados flotantes, estrellas y arbolitos titilando, y nevada de polvo dorado
+  que recorre toda la página.
+- Layout de reserva en dos columnas (resumen fijo + calendario/formulario); al continuar
+  solo cambia la columna derecha de calendario a formulario, manteniendo el resumen.
+- Calendario reacomodado (días circulares con glow, horarios como pills con gradiente),
+  precio con shimmer dorado, botones con destello y transiciones fadeUp entre pasos.
+- Formulario reorganizado en dos columnas para aprovechar el espacio, selects con flecha
+  personalizada y total redundante eliminado del formulario.
+
+### Fixed
+- Responsive del calendario en móvil: la columna del domingo ya no se corta; los 7 días
+  caben completos en pantallas pequeñas.
+- Formulario adaptado a móvil (campos a una columna, chip de resumen que envuelve, inputs
+  a 16px para evitar el zoom automático en iOS).
+
 ## [1.1.0] - 2026-09-03
 
 ### Added
