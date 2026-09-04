@@ -1,0 +1,147 @@
+/* Formulario de reserva: campos, selects con chevron propio, fieldset, yes/no y total. */
+
+/* En desktop ocupa el ancho de su columna (donde antes estaba el calendario), para
+   aprovechar el espacio; los campos se reparten en dos columnas cuando conviene. */
+.form {
+  width: 100%;
+  margin: 0;
+  background: var(--xmas-surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 24px;
+  padding: 36px 40px;
+  box-shadow: var(--xmas-shadow);
+}
+
+/* Los campos entran escalonados para dar un toque vivo al formulario. */
+.field, .field-row, .fieldset, .total { animation: fadeUp 520ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+.field:nth-child(1)  { animation-delay: 40ms; }
+.field:nth-child(2)  { animation-delay: 80ms; }
+.field-row           { animation-delay: 80ms; }
+.field:nth-child(3)  { animation-delay: 120ms; }
+.field:nth-child(4)  { animation-delay: 160ms; }
+
+.field { display: flex; flex-direction: column; gap: 7px; margin-bottom: 20px; }
+
+.field label,
+.fieldset legend {
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--xmas-ink-faint);
+}
+
+.field__optional { font-weight: 400; text-transform: none; letter-spacing: 0; }
+.field__help { font-family: var(--font-sans); font-size: 0.76rem; color: var(--xmas-ink-soft); margin: 2px 0 0; }
+
+.field input,
+.field select,
+.field textarea {
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  color: var(--xmas-ink);
+  min-height: 48px;
+  padding: 12px 14px;
+  border: 1px solid var(--xmas-line);
+  border-radius: 12px;
+  background: var(--color-cream);
+  transition: box-shadow 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+/* Select con formato propio: sin la apariencia nativa, con un chevron dorado dibujado
+   en el fondo y espacio a la derecha para que no se encime con el texto. */
+.field select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  padding-right: 42px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23AD8A6A' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 16px;
+}
+.field select::-ms-expand { display: none; }  /* oculta la flecha nativa en Edge/IE */
+.field select option { color: var(--color-dark); background: var(--color-white); }
+
+.field input::placeholder, .field textarea::placeholder { color: var(--xmas-ink-faint); }
+.field textarea { resize: vertical; min-height: 90px; }
+
+.field input:hover,
+.field select:hover,
+.field textarea:hover { border-color: rgba(45, 36, 32, 0.22); }
+
+/* Foco con anillo dorado y ligero levantamiento: efecto moderno y claro. */
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--xmas-gold);
+  box-shadow: 0 0 0 4px rgba(173, 138, 106, 0.15);
+  transform: translateY(-1px);
+}
+
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+.field-row--nested { margin-top: 16px; margin-bottom: 0; }
+.field-row .field { margin-bottom: 0; }
+
+.fieldset {
+  border: 1px solid var(--xmas-line);
+  border-radius: 12px;
+  padding: 22px;
+  margin: 0 0 20px;
+}
+
+.yes-no { display: flex; gap: 8px; margin-top: 12px; }
+.yes-no button {
+  flex: 1;
+  min-height: 46px;
+  padding: 12px;
+  border: 1px solid var(--xmas-line);
+  border-radius: 12px;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  color: var(--xmas-ink-soft);
+  cursor: pointer;
+  transition: background 180ms ease, color 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+.yes-no button:hover { border-color: rgba(45, 36, 32, 0.28); color: var(--xmas-ink); }
+.yes-no button.is-active {
+  background: var(--color-dark);
+  border-color: var(--color-dark);
+  color: var(--color-cream);
+  font-weight: 600;
+  transform: translateY(-1px);
+}
+.yes-no button:focus-visible { outline: 2px solid var(--xmas-gold); outline-offset: 2px; }
+
+/* Total con degradado dorado suave, tipo prototipo. */
+.total {
+  margin: 22px 0;
+  padding: 20px;
+  border-radius: 16px;
+  background: linear-gradient(120deg, rgba(173, 138, 106, 0.12), rgba(217, 184, 143, 0.12));
+  border: 1px solid var(--xmas-gold-light);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--xmas-ink-soft);
+  text-align: center;
+}
+.total strong {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--font-serif);
+  font-size: 1.9rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--xmas-wine);
+}
+.total span { color: var(--xmas-ink-soft); font-size: 0.72rem; text-transform: none; letter-spacing: 0.04em; }
+
+.honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }

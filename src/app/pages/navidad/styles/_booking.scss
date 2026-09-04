@@ -1,0 +1,216 @@
+/* Layout de reserva a dos columnas, resumen sticky (precio + qué incluye + ubicación)
+   y el chip de resumen del paso 2. */
+
+.booking {
+  display: grid;
+  grid-template-columns: minmax(300px, 380px) minmax(0, 1fr);
+  gap: 46px;
+  align-items: start;
+  margin-top: 32px;
+}
+.booking__reserve { min-width: 0; }
+
+/* La columna derecha (calendario ↔ formulario) entra con un fadeUp al cambiar de
+   paso, para que la transición se sienta fluida y no un salto brusco. */
+.booking__reserve > * {
+  animation: fadeUp 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.reserve__head { text-align: left; margin: 0 0 18px; }
+.reserve__head .section__title { text-align: left; font-size: 1.4rem; }
+
+/* Columna resumen: sticky en desktop, tarjeta de cristal. */
+.summary {
+  position: sticky;
+  top: calc(var(--nav-height) + 20px);
+  display: flex;
+  flex-direction: column;
+}
+
+.summary__price {
+  position: relative;
+  background: var(--xmas-surface);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: var(--xmas-radius);
+  padding: 30px 28px;
+  box-shadow: var(--xmas-shadow);
+}
+
+.summary__badge {
+  display: inline-block;
+  margin: 0 0 14px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: var(--xmas-tint);
+  color: var(--xmas-gold);
+  font-family: var(--font-sans);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.summary__amount {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 12px;
+  margin: 0 0 8px;
+}
+
+/* Shimmer: brillo dorado que recorre el precio en bucle. */
+.summary__now {
+  font-family: var(--font-serif);
+  font-size: 3.1rem;
+  font-weight: 400;
+  line-height: 1;
+  background: linear-gradient(100deg,
+    var(--xmas-gold) 0%, var(--xmas-gold-light) 22%, var(--xmas-wine) 42%,
+    var(--xmas-gold-light) 62%, var(--xmas-gold) 82%, var(--xmas-gold-light) 100%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 4.5s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.summary__was {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  color: var(--xmas-ink-faint);
+  text-decoration-thickness: 1.5px;
+}
+
+.summary__meta {
+  font-family: var(--font-sans);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--xmas-ink-soft);
+  text-align: center;
+  margin: 0 0 14px;
+}
+.summary__meta strong { color: var(--xmas-wine); font-weight: 700; }
+
+.summary__apartado {
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: var(--xmas-ink-soft);
+  text-align: center;
+  margin: 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--xmas-line);
+}
+.summary__apartado strong { color: var(--xmas-ink); font-weight: 600; }
+
+/* Qué incluye: checklist con tick dorado en degradado. */
+.summary__block {
+  margin-top: 20px;
+  padding: 24px 26px;
+  background: var(--xmas-surface);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: var(--xmas-radius);
+  box-shadow: 0 18px 46px -24px rgba(45, 36, 32, 0.22);
+}
+.summary__block .eyebrow { margin-bottom: 16px; }
+
+.checklist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 13px; }
+.checklist__item { display: flex; align-items: flex-start; gap: 11px; font-family: var(--font-sans); }
+
+.checklist__tick {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 20px; height: 20px;
+  margin-top: 1px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--xmas-gold-light), var(--xmas-gold));
+  color: #fff;
+}
+.checklist__tick svg { width: 11px; height: 11px; }
+
+.checklist__text { display: flex; flex-direction: column; gap: 2px; }
+.checklist__text strong { font-size: 0.84rem; font-weight: 600; line-height: 1.4; color: var(--xmas-ink); }
+.checklist__text span { font-size: 0.8rem; color: var(--xmas-ink-soft); line-height: 1.5; }
+
+/* Ubicación como cita/quote editorial. */
+.summary__location {
+  margin-top: 20px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: rgba(173, 138, 106, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.summary__location-icon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--xmas-gold-light), var(--xmas-gold));
+  color: #fff;
+}
+.summary__location-text { display: flex; flex-direction: column; gap: 1px; font-family: var(--font-sans); }
+.summary__location-text strong {
+  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--xmas-ink-faint);
+}
+.summary__location-text span { font-size: 0.88rem; color: var(--xmas-ink); line-height: 1.4; }
+
+/* ── Chip de resumen (paso 2) ───────────────────────────────── */
+.booking-chip {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  margin: 0 0 24px;
+  padding: 15px 16px 15px 20px;
+  background: var(--xmas-surface-strong);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 999px;
+  box-shadow: 0 14px 30px -16px rgba(45, 36, 32, 0.3);
+}
+.booking-chip__icon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--xmas-gold-light), var(--xmas-gold));
+  color: #fff;
+}
+.booking-chip__text { flex: 1; display: flex; flex-direction: column; gap: 1px; font-family: var(--font-sans); min-width: 0; }
+.booking-chip__text strong { font-size: 0.9rem; font-weight: 600; color: var(--xmas-ink); }
+.booking-chip__text strong::first-letter { text-transform: uppercase; }
+.booking-chip__text span { font-size: 0.78rem; color: var(--xmas-ink-soft); }
+
+.booking-chip__edit {
+  flex-shrink: 0;
+  margin-left: auto;
+  padding: 9px 16px;
+  border: 1px solid var(--xmas-line);
+  border-radius: 999px;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--xmas-ink-soft);
+  cursor: pointer;
+  transition: border-color 180ms ease, color 180ms ease;
+}
+.booking-chip__edit:hover { border-color: var(--xmas-gold); color: var(--xmas-wine); }
+.booking-chip__edit:focus-visible { outline: 2px solid var(--xmas-gold); outline-offset: 2px; }
