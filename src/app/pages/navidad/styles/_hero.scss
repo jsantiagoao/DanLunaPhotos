@@ -1,0 +1,62 @@
+/* Hero (banner) — conservado del diseño original, no se modifica. */
+.hero {
+  position: relative;
+  min-height: clamp(560px, 82vh, 860px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--nav-height) + 32px) 24px 48px;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 80% 62% at 50% 50%,
+    rgba(249, 245, 242, 0.82) 0%,
+    rgba(249, 245, 242, 0.55) 45%,
+    rgba(249, 245, 242, 0.12) 78%,
+    rgba(249, 245, 242, 0) 100%
+  );
+}
+
+.hero__inner {
+  position: relative;
+  z-index: 1;
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.hero__title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.8rem, 9vw, 5.4rem);
+  font-weight: 400;
+  line-height: 1.0;
+  letter-spacing: 0.02em;
+  color: #7B2E33;
+  margin: 0;
+}
+
+.hero__subtitle {
+  font-family: var(--font-serif);
+  font-size: clamp(1.2rem, 3.6vw, 2rem);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  color: var(--color-dark);
+  margin: 10px 0 0;
+}
+
+.hero__by {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1rem, 2.8vw, 1.4rem);
+  color: var(--color-dark);
+  margin: 6px 0 0;
+}

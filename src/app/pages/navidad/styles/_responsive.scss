@@ -1,0 +1,80 @@
+/* Adaptaciones responsive y respeto por prefers-reduced-motion. */
+
+@media (max-width: 960px) {
+  .booking { grid-template-columns: 1fr; gap: 28px; }
+  .summary { position: static; }
+  .booking__reserve .actions { justify-content: center; }
+}
+
+@media (max-width: 640px) {
+  .field-row { grid-template-columns: 1fr; gap: 0; }
+  .field-row .field { margin-bottom: 18px; }
+  .form { padding: 26px 20px; border-radius: 20px; }
+  .field { margin-bottom: 18px; }
+  .fieldset { padding: 18px; }
+  .actions { flex-direction: column-reverse; }
+  .btn { width: 100%; }
+  .booking__reserve .actions { justify-content: stretch; }
+
+  /* El chip pasa a envolver: fecha/hora arriba, botón "Cambiar" abajo a lo ancho. */
+  .booking-chip {
+    flex-wrap: wrap;
+    padding: 14px 16px;
+    border-radius: 18px;
+    gap: 10px 12px;
+  }
+  .booking-chip__text { flex: 1 1 auto; }
+  .booking-chip__edit { margin-left: 0; width: 100%; }
+
+  .hero { min-height: 80vh; background-position: center center; }
+  .hero__scrim {
+    background: radial-gradient(
+      ellipse 110% 58% at 50% 50%,
+      rgba(249, 245, 242, 0.9) 0%,
+      rgba(249, 245, 242, 0.62) 48%,
+      rgba(249, 245, 242, 0.15) 82%,
+      rgba(249, 245, 242, 0) 100%
+    );
+  }
+  .orb { filter: blur(70px); opacity: 0.2; }
+}
+
+@media (max-width: 560px) {
+  .resumen { grid-template-columns: 1fr 1fr; }
+  .resumen > div:nth-child(2n) { border-right: none; }
+  .resumen > div { border-bottom: 1px solid var(--xmas-line); }
+}
+
+/* Móviles pequeños: aprieta títulos, aire y superficies para aprovechar el ancho. */
+@media (max-width: 480px) {
+  .xmas > .section__head { padding: 40px 18px 0; }
+  .section { padding: 44px 18px 0; }
+  .section.booking { padding-top: 4px; }
+
+  .section__title { font-size: clamp(1.7rem, 8vw, 2.2rem); }
+  .section__lead { font-size: 0.95rem; }
+
+  .form { padding: 22px 16px; }
+  .field label, .fieldset legend { font-size: 0.66rem; }
+  .field input, .field select, .field textarea { font-size: 16px; } /* evita zoom en iOS */
+
+  .summary__price { padding: 26px 22px; }
+  .summary__now { font-size: 2.6rem; }
+  .summary__block { padding: 22px 20px; }
+
+  .booking-chip__text strong { font-size: 0.86rem; }
+  .booking-chip__text span { font-size: 0.74rem; }
+}
+
+/* Accesibilidad: sin animaciones para quien lo prefiera. */
+@media (prefers-reduced-motion: reduce) {
+  .orb, .spk, .dust, .summary__now, .section__title, .badge__dot, .done__mark,
+  .section, .booking__reserve > *, .field, .field-row, .fieldset, .total,
+  .steps__item, .steps__item::after {
+    animation: none !important;
+  }
+  /* Sin animación, el título debe recuperar su color sólido (el clip-path lo deja transparente). */
+  .section__title { -webkit-text-fill-color: var(--xmas-ink); color: var(--xmas-ink); }
+  .btn, .yes-no button, .field input, .field select, .field textarea { transition: none; }
+  .btn:hover, .yes-no button.is-active, .field input:focus { transform: none; }
+}

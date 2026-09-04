@@ -1,0 +1,137 @@
+/* Stepper, encabezados de sección, badge, eyebrow y títulos con shimmer. */
+
+/* ── Pasos (stepper) ────────────────────────────────────────── */
+.steps {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px 26px;
+  padding: 48px 24px 0;
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(45, 36, 32, 0.35);
+}
+
+.steps__item {
+  position: relative;
+  padding-bottom: 10px;
+  transition: color 220ms ease;
+}
+.steps__item::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  background: linear-gradient(120deg, var(--xmas-gold), var(--xmas-gold-light));
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.steps__item.is-active { color: var(--xmas-gold); }
+.steps__item.is-active::after { transform: scaleX(1); }
+
+/* ── Secciones ──────────────────────────────────────────────── */
+/* Cada paso entra con un fadeUp, dando la transición entre pasos. */
+.section {
+  position: relative;
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 56px 24px 0;
+  animation: fadeUp 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.section.booking { max-width: 1160px; padding-top: 8px; }
+
+.section__head { text-align: center; margin: 0 auto 12px; max-width: 560px; }
+
+/* Header del paso 1 (fuera de .section): le damos aire y la misma entrada fadeUp. */
+.xmas > .section__head {
+  padding: 56px 24px 0;
+  animation: fadeUp 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Badge con dot pulsante estilo prototipo. */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px 7px 12px;
+  border-radius: 999px;
+  background: var(--color-white);
+  border: 1px solid var(--xmas-gold-light);
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--xmas-wine);
+  margin-bottom: 18px;
+  box-shadow: 0 6px 18px rgba(173, 138, 106, 0.18);
+}
+.badge__dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #E0574C;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1;   transform: scale(1); }
+  50%      { opacity: 0.4; transform: scale(1.4); }
+}
+
+.eyebrow {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--xmas-gold);
+  margin-bottom: 12px;
+}
+
+.section__title {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 4.6vw, 3rem);
+  font-weight: 300;                 /* más fino */
+  line-height: 1.1;
+  letter-spacing: 0.015em;
+  /* Shimmer dorado sutil recorriendo el título, mismo efecto que el precio. */
+  background: linear-gradient(100deg,
+    var(--xmas-ink) 0%, var(--xmas-ink) 30%, var(--xmas-gold) 46%,
+    var(--xmas-gold-light) 54%, var(--xmas-ink) 70%, var(--xmas-ink) 100%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: titleShimmer 6s ease-in-out infinite;
+  margin: 0;
+}
+
+@keyframes titleShimmer {
+  0%   { background-position: 100% 50%; }
+  50%  { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+.section__lead {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--xmas-ink-soft);
+  max-width: 480px;
+  margin: 8px auto 0;
+}
+
+.note {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  line-height: 1.65;
+  color: var(--xmas-ink-soft);
+  text-align: center;
+  max-width: 460px;
+  margin: 0 auto 8px;
+}
+.note strong { color: var(--xmas-ink); font-weight: 600; }

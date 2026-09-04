@@ -1,0 +1,44 @@
+/**
+ * Tokens de la campaña navideña, acotados a la página (no tocan los tokens globales
+ * de styles.scss para que el acento estacional no se filtre al resto del sitio).
+ * También el keyframe base de entrada de secciones.
+ */
+.xmas {
+  /* Paleta navideña de marca ampliada (del prototipo v3). */
+  --xmas-gold: var(--color-gold);            /* #AD8A6A */
+  --xmas-gold-light: #D9B88F;
+  --xmas-wine: #7B2E33;                        /* rojo vino navideño */
+  --xmas-pine: #3D5245;                        /* verde pino de los arbolitos */
+
+  /* Fondo blanco. Sobre él flotan orbes dorados, estrellas/arbolitos y polvo dorado. */
+  --xmas-bg-0: var(--color-white);
+  --xmas-ink: var(--color-dark);               /* texto principal oscuro */
+  --xmas-ink-soft: var(--color-warm-gray);     /* texto secundario */
+  --xmas-ink-faint: rgba(45, 36, 32, 0.55);    /* labels, metadatos */
+
+  /* Superficies de cristal (glassmorphism del prototipo). */
+  --xmas-surface: rgba(255, 255, 255, 0.82);
+  --xmas-surface-strong: rgba(255, 255, 255, 0.85);
+  --xmas-line: var(--color-beige);
+  --xmas-line-soft: var(--color-beige);
+  --xmas-tint: rgba(173, 138, 106, 0.10);
+  --xmas-glow: rgba(173, 138, 106, 0.45);
+  --xmas-sparkle: var(--color-gold);
+  --xmas-radius: 22px;
+  --xmas-radius-sm: 14px;
+  --xmas-shadow: 0 24px 60px -24px rgba(45, 36, 32, 0.28);
+
+  position: relative;
+  display: block;
+  isolation: isolate;
+  background: var(--color-white);
+  padding-bottom: 120px;
+  color: var(--xmas-ink);
+  overflow: hidden;
+}
+
+/* Entrada suave de secciones y transición entre pasos. */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
