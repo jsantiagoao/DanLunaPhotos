@@ -73,6 +73,17 @@
   margin: 0;
 }
 
+/* Subtítulo de campaña: mismo tono/serif que el título pero notablemente más chico. */
+.hero__subtitle {
+  font-family: var(--font-serif);
+  font-size: clamp(1.2rem, 3.6vw, 2rem);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  color: var(--color-dark);
+  margin: 10px 0 0;
+}
+
 .hero__by {
   font-family: var(--font-serif);
   font-style: italic;
