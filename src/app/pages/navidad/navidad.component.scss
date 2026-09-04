@@ -2,39 +2,221 @@
  * Look navideño sobre los tokens de la marca. El acento estacional vive acotado a
  * esta pagina: los tokens globales de `styles.scss` no se tocan, para que la campaña
  * no se filtre al resto del sitio cuando termine la temporada.
- */
-/**
- * La pagina usa la paleta de marca (tierra/dorado/crema) como el resto del sitio.
- * Se conservan los alias --xmas-* apuntando a los tokens globales para no reescribir
- * cada regla; el acento es el dorado de marca, no un color de campaña aparte.
+ *
+ * Rediseño 2026 (basado en el prototipo v3 aprobado): fondo blanco con orbes dorados
+ * flotantes, estrellas y arbolitos titilando, polvo dorado cayendo; superficies en
+ * cristal (glassmorphism), precio con shimmer, calendario con glow, botones con
+ * destello y transiciones entre pasos. El hero (banner) se conserva intacto.
  */
 .xmas {
-  --xmas-wine: var(--color-gold);       /* acento principal = dorado de marca */
-  --xmas-pine: var(--color-warm-gray);  /* acento secundario = gris calido de marca */
-  --xmas-gold: var(--color-gold);
+  /* Paleta navideña de marca ampliada (del prototipo v3). */
+  --xmas-gold: var(--color-gold);            /* #AD8A6A */
+  --xmas-gold-light: #D9B88F;
+  --xmas-wine: #7B2E33;                        /* rojo vino navideño */
+  --xmas-pine: #3D5245;                        /* verde pino de los arbolitos */
 
-  /* Tokens locales de la campaña (atomic): superficie, línea sutil y radios/espaciado.
-     Estética editorial minimalista: casi sin sombras, hairlines finas, mucho aire. */
-  --xmas-surface: var(--color-white);
-  --xmas-line: rgba(45, 36, 32, 0.10);
-  --xmas-line-soft: rgba(45, 36, 32, 0.06);
-  --xmas-tint: rgba(173, 138, 106, 0.09);   /* dorado muy diluido para fondos de icono */
-  --xmas-radius: 16px;
-  --xmas-radius-sm: 12px;
-  --xmas-shadow: 0 1px 2px rgba(45, 36, 32, 0.04);
+  /* Fondo blanco. Sobre él flotan orbes dorados, estrellas/arbolitos y polvo dorado. */
+  --xmas-bg-0: var(--color-white);
+  --xmas-ink: var(--color-dark);               /* texto principal oscuro */
+  --xmas-ink-soft: var(--color-warm-gray);     /* texto secundario */
+  --xmas-ink-faint: rgba(45, 36, 32, 0.55);    /* labels, metadatos */
 
+  /* Superficies de cristal (glassmorphism del prototipo). */
+  --xmas-surface: rgba(255, 255, 255, 0.82);
+  --xmas-surface-strong: rgba(255, 255, 255, 0.85);
+  --xmas-line: var(--color-beige);
+  --xmas-line-soft: var(--color-beige);
+  --xmas-tint: rgba(173, 138, 106, 0.10);
+  --xmas-glow: rgba(173, 138, 106, 0.45);
+  --xmas-sparkle: var(--color-gold);
+  --xmas-radius: 22px;
+  --xmas-radius-sm: 14px;
+  --xmas-shadow: 0 24px 60px -24px rgba(45, 36, 32, 0.28);
+
+  position: relative;
   display: block;
-  background: var(--color-cream);
-  padding-bottom: 112px;
-  color: var(--color-dark);
+  isolation: isolate;
+  background: var(--color-white);
+  padding-bottom: 120px;
+  color: var(--xmas-ink);
+  overflow: hidden;
 }
 
-/* ── Hero ───────────────────────────────────────────────────── */
-/**
- * La acuarela navideña es el fondo (cover). El contenido se ancla abajo, sobre un
- * degradado de marca que garantiza legibilidad sin tapar el lettering "NOËL TALE" que
- * la imagen ya trae arriba. En movil el foco del fondo sube para no perder ese lettering.
- */
+/* Entrada suave de secciones y transición entre pasos. */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Fondo animado: orbes + estrellas/arbolitos + polvo dorado ─ */
+.xmas-bg {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Orbes dorados difusos que flotan y dan profundidad cálida. */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.28;
+  will-change: transform;
+}
+.orb--1 {
+  top: -6%; left: -8%;
+  width: 38vw; height: 38vw; max-width: 480px; max-height: 480px;
+  background: var(--xmas-gold-light);
+  animation: orbFloat 9s ease-in-out infinite;
+}
+.orb--2 {
+  bottom: -10%; right: -6%;
+  width: 44vw; height: 44vw; max-width: 560px; max-height: 560px;
+  background: var(--xmas-gold);
+  animation: orbFloat 9s ease-in-out infinite 2s reverse;
+}
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50%      { transform: translate(16px, -14px) scale(1.06); }
+}
+
+/* Estrellas doradas de 4 puntas + arbolitos (silueta real de pino) titilando. */
+.sparkles { position: absolute; inset: 0; }
+
+.spk {
+  position: absolute;
+  opacity: 0;
+  animation: spkTwinkle 4.4s ease-in-out infinite;
+}
+
+.spk--star {
+  width: 12px; height: 12px;
+  background: var(--xmas-gold);
+  clip-path: polygon(50% 0%, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0% 50%, 39% 39%);
+  filter: drop-shadow(0 0 3px rgba(173, 138, 106, 0.5));
+}
+.spk--star.spk--sm { width: 7px;  height: 7px;  }
+.spk--star.spk--lg { width: 18px; height: 18px; }
+
+/* Arbolito: silueta de 3 niveles + tronco en un solo clip-path (no un triángulo). */
+.spk--tree {
+  width: 15px; height: 19px;
+  background: var(--xmas-pine);
+  filter: drop-shadow(0 0 2px rgba(61, 82, 69, 0.35));
+  clip-path: polygon(50% 0%, 61% 30%, 53% 30%, 71% 55%, 60% 55%, 82% 80%, 58% 80%, 58% 100%, 42% 100%, 42% 80%, 18% 80%, 40% 55%, 29% 55%, 47% 30%, 39% 30%);
+}
+.spk--tree.spk--sm { width: 10px; height: 13px; }
+.spk--tree.spk--lg { width: 21px; height: 27px; }
+
+@keyframes spkTwinkle {
+  0%, 100% { opacity: 0;    transform: scale(0.4) rotate(-14deg); }
+  50%      { opacity: 0.95; transform: scale(1)   rotate(0deg);   }
+}
+
+/* Posiciones y ritmos distintos para que el titileo se vea vivo, nunca sincronizado. */
+.spk:nth-child(1)  { top: 5%;  left: 8%;  animation-delay: 0s;   }
+.spk:nth-child(2)  { top: 7%;  left: 44%; animation-delay: 0.6s; }
+.spk:nth-child(3)  { top: 5%;  left: 82%; animation-delay: 1.2s; }
+.spk:nth-child(4)  { top: 10%; left: 26%; animation-delay: 1.8s; }
+.spk:nth-child(5)  { top: 12%; left: 64%; animation-delay: 2.4s; }
+.spk:nth-child(6)  { top: 11%; left: 94%; animation-delay: 0.9s; }
+.spk:nth-child(7)  { top: 15%; left: 14%; animation-delay: 1.5s; }
+.spk:nth-child(8)  { top: 16%; left: 54%; animation-delay: 3s;   }
+.spk:nth-child(9)  { top: 18%; left: 36%; animation-delay: 2.1s; }
+.spk:nth-child(10) { top: 19%; left: 74%; animation-delay: 0.3s; }
+.spk:nth-child(11) { top: 21%; left: 4%;  animation-delay: 3.4s; }
+.spk:nth-child(12) { top: 23%; left: 88%; animation-delay: 2.7s; }
+.spk:nth-child(13) { top: 25%; left: 30%; animation-delay: 0.4s; }
+.spk:nth-child(14) { top: 26%; left: 62%; animation-delay: 1.1s; }
+.spk:nth-child(15) { top: 28%; left: 48%; animation-delay: 2.9s; }
+.spk:nth-child(16) { top: 30%; left: 18%; animation-delay: 1.7s; }
+.spk:nth-child(17) { top: 31%; left: 84%; animation-delay: 3.2s; }
+.spk:nth-child(18) { top: 33%; left: 70%; animation-delay: 0.8s; }
+.spk:nth-child(19) { top: 35%; left: 10%; animation-delay: 2.3s; }
+.spk:nth-child(20) { top: 36%; left: 42%; animation-delay: 1.4s; }
+.spk:nth-child(21) { top: 38%; left: 92%; animation-delay: 3.6s; }
+.spk:nth-child(22) { top: 40%; left: 24%; animation-delay: 0.2s; }
+.spk:nth-child(23) { top: 42%; left: 58%; animation-delay: 2.6s; }
+.spk:nth-child(24) { top: 43%; left: 78%; animation-delay: 1.9s; }
+.spk:nth-child(25) { top: 45%; left: 6%;  animation-delay: 0.5s; }
+.spk:nth-child(26) { top: 47%; left: 36%; animation-delay: 3.1s; }
+.spk:nth-child(27) { top: 48%; left: 66%; animation-delay: 1.3s; }
+.spk:nth-child(28) { top: 50%; left: 50%; animation-delay: 2.8s; }
+.spk:nth-child(29) { top: 52%; left: 88%; animation-delay: 0.7s; }
+.spk:nth-child(30) { top: 54%; left: 16%; animation-delay: 2.2s; }
+.spk:nth-child(31) { top: 55%; left: 72%; animation-delay: 1.6s; }
+.spk:nth-child(32) { top: 57%; left: 44%; animation-delay: 3.5s; }
+.spk:nth-child(33) { top: 59%; left: 4%;  animation-delay: 0.1s; }
+.spk:nth-child(34) { top: 61%; left: 82%; animation-delay: 2.5s; }
+.spk:nth-child(35) { top: 62%; left: 30%; animation-delay: 1s;   }
+.spk:nth-child(36) { top: 64%; left: 60%; animation-delay: 3.3s; }
+.spk:nth-child(37) { top: 66%; left: 94%; animation-delay: 0.9s; }
+.spk:nth-child(38) { top: 68%; left: 20%; animation-delay: 2s;   }
+.spk:nth-child(39) { top: 69%; left: 52%; animation-delay: 1.2s; }
+.spk:nth-child(40) { top: 71%; left: 76%; animation-delay: 3.7s; }
+.spk:nth-child(41) { top: 73%; left: 10%; animation-delay: 0.4s; }
+.spk:nth-child(42) { top: 75%; left: 40%; animation-delay: 2.4s; }
+.spk:nth-child(43) { top: 76%; left: 66%; animation-delay: 1.5s; }
+.spk:nth-child(44) { top: 78%; left: 88%; animation-delay: 3s;   }
+.spk:nth-child(45) { top: 80%; left: 26%; animation-delay: 0.6s; }
+.spk:nth-child(46) { top: 82%; left: 56%; animation-delay: 2.7s; }
+.spk:nth-child(47) { top: 83%; left: 6%;  animation-delay: 1.8s; }
+.spk:nth-child(48) { top: 85%; left: 78%; animation-delay: 3.4s; }
+
+/* Polvo dorado cayendo: efecto "wow" continuo, sutil, detrás de todo. */
+.dust-field { position: absolute; inset: 0; overflow: hidden; }
+
+.dust {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0;
+  background: radial-gradient(circle, rgba(217, 184, 143, 0.9) 0%, rgba(217, 184, 143, 0) 72%);
+  animation: dustFall linear infinite;
+}
+/* El recorrido anima `top` en % relativo a .dust-field (que cubre TODA la página:
+   hero + secciones + form), para que los copos caigan por todo el alto del contenido
+   y no desaparezcan al terminar la primera pantalla. El translateX solo da la deriva
+   lateral suave. */
+@keyframes dustFall {
+  0%   { top: -4%;  opacity: 0;   transform: translateX(0); }
+  6%   {            opacity: 0.8; }
+  94%  {            opacity: 0.7; }
+  100% { top: 104%; opacity: 0;   transform: translateX(-12px); }
+}
+.dust:nth-child(1)  { left: 6%;  width: 11px; height: 11px; animation-duration: 11s;  animation-delay: 0s;   }
+.dust:nth-child(2)  { left: 14%; width: 7px;  height: 7px;  animation-duration: 14s;  animation-delay: 3s;   }
+.dust:nth-child(3)  { left: 22%; width: 13px; height: 13px; animation-duration: 9s;   animation-delay: 1.5s; }
+.dust:nth-child(4)  { left: 30%; width: 9px;  height: 9px;  animation-duration: 13s;  animation-delay: 5s;   }
+.dust:nth-child(5)  { left: 38%; width: 11px; height: 11px; animation-duration: 10s;  animation-delay: 2s;   }
+.dust:nth-child(6)  { left: 46%; width: 7px;  height: 7px;  animation-duration: 15s;  animation-delay: 6s;   }
+.dust:nth-child(7)  { left: 54%; width: 14px; height: 14px; animation-duration: 12s;  animation-delay: 0.8s; }
+.dust:nth-child(8)  { left: 62%; width: 9px;  height: 9px;  animation-duration: 9.5s; animation-delay: 4s;   }
+.dust:nth-child(9)  { left: 70%; width: 12px; height: 12px; animation-duration: 13s;  animation-delay: 1s;   }
+.dust:nth-child(10) { left: 78%; width: 7px;  height: 7px;  animation-duration: 11s;  animation-delay: 7s;   }
+.dust:nth-child(11) { left: 86%; width: 13px; height: 13px; animation-duration: 10s;  animation-delay: 2.5s; }
+.dust:nth-child(12) { left: 94%; width: 9px;  height: 9px;  animation-duration: 14s;  animation-delay: 5.5s; }
+.dust:nth-child(13) { left: 10%; width: 9px;  height: 9px;  animation-duration: 12s;  animation-delay: 8s;   }
+.dust:nth-child(14) { left: 34%; width: 11px; height: 11px; animation-duration: 10.5s;animation-delay: 3.5s; }
+.dust:nth-child(15) { left: 50%; width: 7px;  height: 7px;  animation-duration: 15s;  animation-delay: 1.2s; }
+.dust:nth-child(16) { left: 66%; width: 13px; height: 13px; animation-duration: 11.5s;animation-delay: 6.5s; }
+.dust:nth-child(17) { left: 82%; width: 9px;  height: 9px;  animation-duration: 13.5s;animation-delay: 2.8s; }
+.dust:nth-child(18) { left: 90%; width: 11px; height: 11px; animation-duration: 9s;   animation-delay: 4.5s; }
+.dust:nth-child(19) { left: 2%;  width: 12px; height: 12px; animation-duration: 12.5s;animation-delay: 1.8s; }
+.dust:nth-child(20) { left: 18%; width: 8px;  height: 8px;  animation-duration: 10s;  animation-delay: 4.2s; }
+.dust:nth-child(21) { left: 26%; width: 14px; height: 14px; animation-duration: 13.5s;animation-delay: 0.5s; }
+.dust:nth-child(22) { left: 42%; width: 8px;  height: 8px;  animation-duration: 11s;  animation-delay: 6.8s; }
+.dust:nth-child(23) { left: 58%; width: 12px; height: 12px; animation-duration: 9.5s; animation-delay: 2.2s; }
+.dust:nth-child(24) { left: 74%; width: 8px;  height: 8px;  animation-duration: 14.5s;animation-delay: 5.2s; }
+.dust:nth-child(25) { left: 90%; width: 13px; height: 13px; animation-duration: 10.5s;animation-delay: 0.9s; }
+.dust:nth-child(26) { left: 12%; width: 10px; height: 10px; animation-duration: 13s;  animation-delay: 7.5s; }
+.dust:nth-child(27) { left: 38%; width: 14px; height: 14px; animation-duration: 12s;  animation-delay: 3s;   }
+.dust:nth-child(28) { left: 64%; width: 9px;  height: 9px;  animation-duration: 15s;  animation-delay: 1.5s; }
+.dust:nth-child(29) { left: 80%; width: 12px; height: 12px; animation-duration: 11.5s;animation-delay: 5.8s; }
+.dust:nth-child(30) { left: 96%; width: 10px; height: 10px; animation-duration: 10s;  animation-delay: 3.8s; }
+
+/* ── Hero (banner conservado del diseño original) ───────────── */
 .hero {
   position: relative;
   min-height: clamp(560px, 82vh, 860px);
@@ -42,16 +224,12 @@
   align-items: center;
   justify-content: center;
   padding: calc(var(--nav-height) + 32px) 24px 48px;
-  /* La imagen de fondo se inyecta inline desde la config (heroImageUrl); el fallback local
-     vive en el componente. Aqui solo el encuadre. */
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
   overflow: hidden;
 }
 
-/* Velo centrado: mas denso al medio para que el texto centrado se lea sobre la acuarela,
-   difuminandose hacia los bordes para no apagar la imagen. */
 .hero__scrim {
   position: absolute;
   inset: 0;
@@ -79,11 +257,10 @@
   font-weight: 400;
   line-height: 1.0;
   letter-spacing: 0.02em;
-  color: #7B2E33;   /* rojo vino navideño, decisión de marca de Daniela para el título */
+  color: #7B2E33;
   margin: 0;
 }
 
-/* Subtítulo de campaña: mismo tono/serif que el título pero notablemente más chico. */
 .hero__subtitle {
   font-family: var(--font-serif);
   font-size: clamp(1.2rem, 3.6vw, 2rem);
@@ -102,199 +279,176 @@
   margin: 6px 0 0;
 }
 
-/* ── Pasos (stepper minimal) ────────────────────────────────── */
+/* ── Pasos (stepper) ────────────────────────────────────────── */
 .steps {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 10px 20px;
-  padding: 40px 24px 0;
+  gap: 10px 26px;
+  padding: 48px 24px 0;
   font-family: var(--font-sans);
-  font-size: 0.72rem;
+  font-size: 0.68rem;
+  font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--color-warm-gray);
+  color: rgba(45, 36, 32, 0.35);
 }
 
 .steps__item {
   position: relative;
   padding-bottom: 10px;
-  opacity: 0.55;
-  transition: opacity 200ms ease, color 200ms ease;
+  transition: color 220ms ease;
 }
-
 .steps__item::after {
   content: '';
   position: absolute;
   left: 0; right: 0; bottom: 0;
-  height: 1.5px;
-  background: currentColor;
+  height: 2px;
+  background: linear-gradient(120deg, var(--xmas-gold), var(--xmas-gold-light));
   transform: scaleX(0);
   transform-origin: center;
-  transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
 }
-
-.steps__item.is-active {
-  color: var(--xmas-wine);
-  font-weight: 600;
-  opacity: 1;
-}
+.steps__item.is-active { color: var(--xmas-gold); }
 .steps__item.is-active::after { transform: scaleX(1); }
 
 /* ── Secciones ──────────────────────────────────────────────── */
+/* Cada paso entra con un fadeUp, dando la transición entre pasos. */
 .section {
+  position: relative;
   max-width: 940px;
   margin: 0 auto;
-  padding: 72px 24px 0;
+  padding: 56px 24px 0;
+  animation: fadeUp 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.section__head {
-  text-align: center;
-  margin: 0 auto 44px;
+.section.booking { max-width: 1160px; padding-top: 8px; }
+
+.section__head { text-align: center; margin: 0 auto 12px; max-width: 560px; }
+
+/* Header del paso 1 (fuera de .section): le damos aire y la misma entrada fadeUp. */
+.xmas > .section__head {
+  padding: 56px 24px 0;
+  animation: fadeUp 620ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* Divisoria fina sobre el título, para separar bloques sin cajas. */
-.section__head--divider {
-  margin-top: 24px;
-  padding-top: 56px;
-  border-top: 1px solid var(--xmas-line-soft);
+/* Badge con dot pulsante estilo prototipo. */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px 7px 12px;
+  border-radius: 999px;
+  background: var(--color-white);
+  border: 1px solid var(--xmas-gold-light);
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--xmas-wine);
+  margin-bottom: 18px;
+  box-shadow: 0 6px 18px rgba(173, 138, 106, 0.18);
+}
+.badge__dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #E0574C;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1;   transform: scale(1); }
+  50%      { opacity: 0.4; transform: scale(1.4); }
 }
 
-/* Eyebrow: etiqueta pequeña que da jerarquía editorial al título. */
 .eyebrow {
   display: inline-block;
   font-family: var(--font-sans);
   font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.22em;
+  font-weight: 700;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--xmas-wine);
-  margin-bottom: 14px;
+  color: var(--xmas-gold);
+  margin-bottom: 12px;
 }
 
 .section__title {
   font-family: var(--font-serif);
-  font-size: clamp(1.7rem, 3.8vw, 2.4rem);
-  font-weight: 400;
+  font-size: clamp(2rem, 4.6vw, 3rem);
+  font-weight: 300;                 /* más fino */
   line-height: 1.1;
-  letter-spacing: 0.01em;
-  color: var(--color-dark);
+  letter-spacing: 0.015em;
+  /* Shimmer dorado sutil recorriendo el título, mismo efecto que el precio. */
+  background: linear-gradient(100deg,
+    var(--xmas-ink) 0%, var(--xmas-ink) 30%, var(--xmas-gold) 46%,
+    var(--xmas-gold-light) 54%, var(--xmas-ink) 70%, var(--xmas-ink) 100%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: titleShimmer 6s ease-in-out infinite;
   margin: 0;
 }
 
+@keyframes titleShimmer {
+  0%   { background-position: 100% 50%; }
+  50%  { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
 .section__lead {
-  font-family: var(--font-sans);
-  font-size: 0.95rem;
-  line-height: 1.7;
-  color: var(--color-warm-gray);
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--xmas-ink-soft);
   max-width: 480px;
-  margin: 14px auto 0;
+  margin: 8px auto 0;
 }
 
-/* ── Qué incluye ────────────────────────────────────────────── */
-.includes {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 20px;
+/* ── Paso 1: layout detalle + reserva ───────────────────────── */
+.booking {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(248px, 1fr));
-  gap: 14px;
+  grid-template-columns: minmax(300px, 380px) minmax(0, 1fr);
+  gap: 46px;
+  align-items: start;
+  margin-top: 32px;
+}
+.booking__reserve { min-width: 0; }
+
+/* La columna derecha (calendario ↔ formulario) entra con un fadeUp al cambiar de
+   paso, para que la transición se sienta fluida y no un salto brusco. */
+.booking__reserve > * {
+  animation: fadeUp 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.include {
+.reserve__head { text-align: left; margin: 0 0 18px; }
+.reserve__head .section__title { text-align: left; font-size: 1.4rem; }
+
+/* Columna resumen: sticky en desktop, tarjeta de cristal. */
+.summary {
+  position: sticky;
+  top: calc(var(--nav-height) + 20px);
   display: flex;
-  align-items: flex-start;
-  gap: 15px;
-  padding: 24px 22px;
+  flex-direction: column;
+}
+
+.summary__price {
+  position: relative;
   background: var(--xmas-surface);
-  border: 1px solid var(--xmas-line-soft);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
   border-radius: var(--xmas-radius);
-  box-shadow: var(--xmas-shadow);
-  transition: border-color 220ms ease, transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.include:hover {
-  border-color: var(--xmas-line);
-  transform: translateY(-2px);
-}
-
-.include__icon {
-  flex-shrink: 0;
-  display: grid;
-  place-items: center;
-  width: 40px; height: 40px;
-  border-radius: 50%;
-  background: var(--xmas-tint);
-  color: var(--color-gold);
-}
-
-.include__text { display: flex; flex-direction: column; gap: 4px; font-family: var(--font-sans); }
-.include__text strong { font-size: 0.92rem; font-weight: 600; line-height: 1.35; color: var(--color-dark); }
-.include__text span { font-size: 0.82rem; color: var(--color-warm-gray); line-height: 1.55; }
-
-/* Ubicación del set: fila discreta, sin caja — se lee como una línea de detalle. */
-.ubicacion {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  max-width: 480px;
-  margin: 0 auto 8px;
-  padding: 16px 20px;
-  background: transparent;
-  border: 1px solid var(--xmas-line-soft);
-  border-radius: 999px;
-}
-
-.ubicacion__icon {
-  flex-shrink: 0;
-  display: grid;
-  place-items: center;
-  width: 34px; height: 34px;
-  border-radius: 50%;
-  background: var(--xmas-tint);
-  color: var(--color-gold);
-}
-
-.ubicacion__text { display: flex; flex-direction: column; gap: 1px; font-family: var(--font-sans); }
-.ubicacion__text strong {
-  font-size: 0.66rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--color-warm-gray);
-}
-.ubicacion__text span { font-size: 0.9rem; color: var(--color-dark); line-height: 1.4; }
-
-.note {
-  font-family: var(--font-sans);
-  font-size: 0.85rem;
-  line-height: 1.65;
-  color: var(--color-warm-gray);
-  text-align: center;
-  max-width: 460px;
-  margin: 0 auto 8px;
-}
-
-.note strong { color: var(--color-dark); font-weight: 600; }
-
-/* ── Precio de campaña ──────────────────────────────────────── */
-.precio {
-  max-width: 360px;
-  margin: 36px auto 20px;
-  padding: 32px 28px;
-  text-align: center;
-  background: var(--xmas-surface);
-  border-radius: var(--xmas-radius);
-  border: 1px solid var(--xmas-line-soft);
+  padding: 30px 28px;
   box-shadow: var(--xmas-shadow);
 }
 
-.precio--preventa { border-color: rgba(173, 138, 106, 0.35); }
-
-.precio__badge {
+.summary__badge {
   display: inline-block;
-  margin: 0 0 16px;
-  padding: 6px 15px;
+  margin: 0 0 14px;
+  padding: 6px 16px;
   border-radius: 999px;
   background: var(--xmas-tint);
-  color: var(--color-gold);
+  color: var(--xmas-gold);
   font-family: var(--font-sans);
   font-size: 0.64rem;
   font-weight: 700;
@@ -302,201 +456,389 @@
   text-transform: uppercase;
 }
 
-.precio__monto {
+.summary__amount {
   display: flex;
   align-items: baseline;
   justify-content: center;
   gap: 12px;
-  margin: 0 0 10px;
+  margin: 0 0 8px;
 }
 
-.precio__ahora {
+/* Shimmer: brillo dorado que recorre el precio en bucle. */
+.summary__now {
   font-family: var(--font-serif);
-  font-size: 3rem;
+  font-size: 3.1rem;
   font-weight: 400;
-  color: var(--color-dark);
   line-height: 1;
-  letter-spacing: -0.01em;
+  background: linear-gradient(100deg,
+    var(--xmas-gold) 0%, var(--xmas-gold-light) 22%, var(--xmas-wine) 42%,
+    var(--xmas-gold-light) 62%, var(--xmas-gold) 82%, var(--xmas-gold-light) 100%);
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 4.5s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-.precio__antes {
+.summary__was {
   font-family: var(--font-sans);
   font-size: 1rem;
-  color: var(--color-warm-gray);
+  color: var(--xmas-ink-faint);
   text-decoration-thickness: 1.5px;
 }
 
-.precio__meta {
+.summary__meta {
   font-family: var(--font-sans);
   font-size: 0.82rem;
   line-height: 1.5;
-  color: var(--color-warm-gray);
-  margin: 0;
+  color: var(--xmas-ink-soft);
+  text-align: center;
+  margin: 0 0 14px;
 }
+.summary__meta strong { color: var(--xmas-wine); font-weight: 700; }
 
-.precio__meta strong { color: var(--color-dark); font-weight: 600; }
+.summary__apartado {
+  font-family: var(--font-sans);
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: var(--xmas-ink-soft);
+  text-align: center;
+  margin: 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--xmas-line);
+}
+.summary__apartado strong { color: var(--xmas-ink); font-weight: 600; }
+
+/* Qué incluye: checklist con tick dorado en degradado. */
+.summary__block {
+  margin-top: 20px;
+  padding: 24px 26px;
+  background: var(--xmas-surface);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: var(--xmas-radius);
+  box-shadow: 0 18px 46px -24px rgba(45, 36, 32, 0.22);
+}
+.summary__block .eyebrow { margin-bottom: 16px; }
+
+.checklist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 13px; }
+.checklist__item { display: flex; align-items: flex-start; gap: 11px; font-family: var(--font-sans); }
+
+.checklist__tick {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 20px; height: 20px;
+  margin-top: 1px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--xmas-gold-light), var(--xmas-gold));
+  color: #fff;
+}
+.checklist__tick svg { width: 11px; height: 11px; }
+
+.checklist__text { display: flex; flex-direction: column; gap: 2px; }
+.checklist__text strong { font-size: 0.84rem; font-weight: 600; line-height: 1.4; color: var(--xmas-ink); }
+.checklist__text span { font-size: 0.8rem; color: var(--xmas-ink-soft); line-height: 1.5; }
+
+/* Ubicación como cita/quote editorial. */
+.summary__location {
+  margin-top: 20px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background: rgba(173, 138, 106, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.summary__location-icon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--xmas-gold-light), var(--xmas-gold));
+  color: #fff;
+}
+.summary__location-text { display: flex; flex-direction: column; gap: 1px; font-family: var(--font-sans); }
+.summary__location-text strong {
+  font-size: 0.62rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--xmas-ink-faint);
+}
+.summary__location-text span { font-size: 0.88rem; color: var(--xmas-ink); line-height: 1.4; }
+
+.note {
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
+  line-height: 1.65;
+  color: var(--xmas-ink-soft);
+  text-align: center;
+  max-width: 460px;
+  margin: 0 auto 8px;
+}
+.note strong { color: var(--xmas-ink); font-weight: 600; }
+
+/* ── Chip de resumen (paso 2) ───────────────────────────────── */
+.booking-chip {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  margin: 0 0 24px;
+  padding: 15px 16px 15px 20px;
+  background: var(--xmas-surface-strong);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 999px;
+  box-shadow: 0 14px 30px -16px rgba(45, 36, 32, 0.3);
+}
+.booking-chip__icon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--xmas-gold-light), var(--xmas-gold));
+  color: #fff;
+}
+.booking-chip__text { flex: 1; display: flex; flex-direction: column; gap: 1px; font-family: var(--font-sans); min-width: 0; }
+.booking-chip__text strong { font-size: 0.9rem; font-weight: 600; color: var(--xmas-ink); }
+.booking-chip__text strong::first-letter { text-transform: uppercase; }
+.booking-chip__text span { font-size: 0.78rem; color: var(--xmas-ink-soft); }
+
+.booking-chip__edit {
+  flex-shrink: 0;
+  margin-left: auto;
+  padding: 9px 16px;
+  border: 1px solid var(--xmas-line);
+  border-radius: 999px;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--xmas-ink-soft);
+  cursor: pointer;
+  transition: border-color 180ms ease, color 180ms ease;
+}
+.booking-chip__edit:hover { border-color: var(--xmas-gold); color: var(--xmas-wine); }
+.booking-chip__edit:focus-visible { outline: 2px solid var(--xmas-gold); outline-offset: 2px; }
 
 /* ── Formulario ─────────────────────────────────────────────── */
+/* En desktop ocupa el ancho de su columna (donde antes estaba el calendario), para
+   aprovechar el espacio; los campos se reparten en dos columnas cuando conviene. */
 .form {
-  max-width: 560px;
-  margin: 0 auto;
+  width: 100%;
+  margin: 0;
   background: var(--xmas-surface);
-  border: 1px solid var(--xmas-line-soft);
-  border-radius: var(--xmas-radius);
-  padding: 36px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 24px;
+  padding: 36px 40px;
   box-shadow: var(--xmas-shadow);
 }
 
-.field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 22px; }
+/* Los campos entran escalonados para dar un toque vivo al formulario. */
+.field, .field-row, .fieldset, .total { animation: fadeUp 520ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+.field:nth-child(1)  { animation-delay: 40ms; }
+.field:nth-child(2)  { animation-delay: 80ms; }
+.field-row           { animation-delay: 80ms; }
+.field:nth-child(3)  { animation-delay: 120ms; }
+.field:nth-child(4)  { animation-delay: 160ms; }
+
+.field { display: flex; flex-direction: column; gap: 7px; margin-bottom: 20px; }
 
 .field label,
 .fieldset legend {
   font-family: var(--font-sans);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--color-warm-gray);
+  color: var(--xmas-ink-faint);
 }
 
 .field__optional { font-weight: 400; text-transform: none; letter-spacing: 0; }
-.field__help { font-family: var(--font-sans); font-size: 0.76rem; color: var(--color-warm-gray); margin: 2px 0 0; }
+.field__help { font-family: var(--font-sans); font-size: 0.76rem; color: var(--xmas-ink-soft); margin: 2px 0 0; }
 
 .field input,
 .field select,
 .field textarea {
   font-family: var(--font-sans);
-  font-size: 0.95rem;
-  color: var(--color-dark);
+  font-size: 0.92rem;
+  color: var(--xmas-ink);
   min-height: 48px;
-  padding: 12px 15px;
+  padding: 12px 14px;
   border: 1px solid var(--xmas-line);
-  border-radius: var(--xmas-radius-sm);
+  border-radius: 12px;
   background: var(--color-cream);
-  transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+  transition: box-shadow 180ms ease, border-color 180ms ease, transform 180ms ease;
 }
 
+/* Select con formato propio: sin la apariencia nativa, con un chevron dorado dibujado
+   en el fondo y espacio a la derecha para que no se encime con el texto. */
+.field select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  padding-right: 42px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23AD8A6A' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 16px;
+}
+.field select::-ms-expand { display: none; }  /* oculta la flecha nativa en Edge/IE */
+.field select option { color: var(--color-dark); background: var(--color-white); }
+
+.field input::placeholder, .field textarea::placeholder { color: var(--xmas-ink-faint); }
 .field textarea { resize: vertical; min-height: 90px; }
 
 .field input:hover,
 .field select:hover,
-.field textarea:hover { border-color: rgba(45, 36, 32, 0.2); }
+.field textarea:hover { border-color: rgba(45, 36, 32, 0.22); }
 
+/* Foco con anillo dorado y ligero levantamiento: efecto moderno y claro. */
 .field input:focus,
 .field select:focus,
 .field textarea:focus {
   outline: none;
-  background: var(--color-white);
-  border-color: var(--color-gold);
-  box-shadow: 0 0 0 4px rgba(173, 138, 106, 0.12);
+  border-color: var(--xmas-gold);
+  box-shadow: 0 0 0 4px rgba(173, 138, 106, 0.15);
+  transform: translateY(-1px);
 }
 
-.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.field-row--nested { margin-top: 16px; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+.field-row--nested { margin-top: 16px; margin-bottom: 0; }
+.field-row .field { margin-bottom: 0; }
 
 .fieldset {
-  border: 1px solid var(--xmas-line-soft);
-  border-radius: var(--xmas-radius-sm);
-  padding: 20px;
-  margin: 0 0 22px;
+  border: 1px solid var(--xmas-line);
+  border-radius: 12px;
+  padding: 22px;
+  margin: 0 0 20px;
 }
 
-.yes-no { display: flex; gap: 10px; margin-top: 12px; }
-
+.yes-no { display: flex; gap: 8px; margin-top: 12px; }
 .yes-no button {
   flex: 1;
   min-height: 46px;
+  padding: 12px;
   border: 1px solid var(--xmas-line);
-  border-radius: var(--xmas-radius-sm);
+  border-radius: 12px;
   background: transparent;
   font-family: var(--font-sans);
-  font-size: 0.9rem;
-  color: var(--color-warm-gray);
+  font-size: 0.88rem;
+  color: var(--xmas-ink-soft);
   cursor: pointer;
-  transition: background 180ms ease, color 180ms ease, border-color 180ms ease;
+  transition: background 180ms ease, color 180ms ease, border-color 180ms ease, transform 180ms ease;
 }
-
-.yes-no button:hover { border-color: rgba(45, 36, 32, 0.2); }
-
+.yes-no button:hover { border-color: rgba(45, 36, 32, 0.28); color: var(--xmas-ink); }
 .yes-no button.is-active {
   background: var(--color-dark);
   border-color: var(--color-dark);
   color: var(--color-cream);
   font-weight: 600;
+  transform: translateY(-1px);
 }
+.yes-no button:focus-visible { outline: 2px solid var(--xmas-gold); outline-offset: 2px; }
 
-.yes-no button:focus-visible { outline: 2px solid var(--xmas-wine); outline-offset: 2px; }
-
+/* Total con degradado dorado suave, tipo prototipo. */
 .total {
-  margin: 0 0 22px;
-  padding: 18px 20px;
-  border-radius: var(--xmas-radius-sm);
-  background: var(--color-cream);
-  border: 1px solid var(--xmas-line-soft);
+  margin: 22px 0;
+  padding: 20px;
+  border-radius: 16px;
+  background: linear-gradient(120deg, rgba(173, 138, 106, 0.12), rgba(217, 184, 143, 0.12));
+  border: 1px solid var(--xmas-gold-light);
   font-family: var(--font-sans);
-  font-size: 0.82rem;
-  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--color-warm-gray);
+  color: var(--xmas-ink-soft);
   text-align: center;
 }
-
 .total strong {
   display: block;
   margin-top: 4px;
   font-family: var(--font-serif);
-  font-size: 1.8rem;
+  font-size: 1.9rem;
   letter-spacing: 0;
   text-transform: none;
-  color: var(--color-dark);
+  color: var(--xmas-wine);
 }
-.total span { color: var(--color-warm-gray); font-size: 0.72rem; text-transform: none; letter-spacing: 0.04em; }
+.total span { color: var(--xmas-ink-soft); font-size: 0.72rem; text-transform: none; letter-spacing: 0.04em; }
 
-/* Fuera de la vista pero enviable: los robots la llenan, las personas no la ven. */
 .honeypot { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
 
 /* ── Botones ────────────────────────────────────────────────── */
 .actions { display: flex; gap: 12px; justify-content: center; margin-top: 28px; }
+.booking__reserve .actions { justify-content: flex-end; margin-top: 20px; }
 
 .btn {
+  position: relative;
+  overflow: hidden;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 9px;
-  min-height: 50px;
-  padding: 14px 34px;
+  gap: 8px;
+  min-height: 52px;
+  padding: 15px 36px;
   border-radius: 999px;
   border: 1px solid transparent;
   font-family: var(--font-sans);
   font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   cursor: pointer;
   text-decoration: none;
-  transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1), background 200ms ease, box-shadow 220ms ease, opacity 200ms ease;
+  transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 220ms ease, opacity 200ms ease;
 }
 
-.btn--primary { background: var(--color-dark); color: var(--color-cream); }
-.btn--primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(45, 36, 32, 0.22); }
-.btn--primary:disabled { opacity: 0.4; cursor: not-allowed; }
+.btn--primary { background: linear-gradient(120deg, var(--color-dark), #3a2f29); color: var(--color-cream); }
+.btn--primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 14px 30px -8px rgba(45, 36, 32, 0.4); }
+/* Deshabilitado intencional (aún no eligen día/hora): dorado tenue, no gris apagado. */
+.btn--primary:disabled {
+  background: linear-gradient(120deg, rgba(173, 138, 106, 0.5), rgba(217, 184, 143, 0.5));
+  color: #fff;
+  cursor: not-allowed;
+}
 
-.btn--ghost { background: transparent; border-color: var(--xmas-line); color: var(--color-warm-gray); }
+/* Destello que recorre el botón al pasar el mouse. */
+.btn--primary::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -60%;
+  width: 40%; height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transform: skewX(-20deg);
+  transition: left 550ms ease;
+}
+.btn--primary:hover:not(:disabled)::after { left: 120%; }
+
+.btn--ghost { background: none; border-color: var(--xmas-line); color: var(--xmas-ink-soft); }
 .btn--ghost:hover { border-color: var(--color-dark); color: var(--color-dark); }
 
 .btn--whatsapp { background: #25D366; color: #fff; }
-.btn--whatsapp:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(37, 211, 102, 0.3); }
+.btn--whatsapp:hover { transform: translateY(-1px); box-shadow: 0 8px 22px rgba(37, 211, 102, 0.35); }
 
-.btn:focus-visible { outline: 2px solid var(--color-dark); outline-offset: 3px; }
+.btn:focus-visible { outline: 2px solid var(--xmas-gold); outline-offset: 3px; }
 
 .alert {
   max-width: 560px;
   margin: 24px auto 0;
   padding: 14px 20px;
-  border-radius: var(--xmas-radius-sm);
-  background: var(--color-white);
-  border: 1px solid var(--xmas-line);
-  color: var(--color-dark);
+  border-radius: 14px;
+  background: rgba(123, 46, 51, 0.08);
+  border: 1px solid rgba(123, 46, 51, 0.3);
+  color: var(--xmas-wine);
   font-family: var(--font-sans);
   font-size: 0.88rem;
   text-align: center;
@@ -508,11 +850,17 @@
 .done__mark {
   display: grid;
   place-items: center;
-  width: 72px; height: 72px;
+  width: 76px; height: 76px;
   margin: 0 auto 26px;
   border-radius: 50%;
-  background: var(--xmas-tint);
-  color: var(--color-gold);
+  background: linear-gradient(135deg, var(--xmas-gold-light), var(--xmas-gold));
+  color: #fff;
+  box-shadow: 0 0 40px -6px var(--xmas-glow);
+  animation: markPop 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes markPop {
+  from { opacity: 0; transform: scale(0.6); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
 .resumen {
@@ -520,58 +868,62 @@
   grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
   gap: 0;
   margin: 32px 0;
-  background: var(--xmas-surface);
-  border: 1px solid var(--xmas-line-soft);
+  background: var(--xmas-surface-strong);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
   border-radius: var(--xmas-radius);
   overflow: hidden;
+  box-shadow: var(--xmas-shadow);
   font-family: var(--font-sans);
 }
-
-/* Cada dato en su celda con divisorias finas, look de "ficha". */
-.resumen > div {
-  padding: 20px 18px;
-  border-right: 1px solid var(--xmas-line-soft);
-}
+.resumen > div { padding: 20px 18px; border-right: 1px solid var(--xmas-line); }
 .resumen > div:last-child { border-right: none; }
-
 .resumen dt {
-  font-size: 0.64rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--color-warm-gray);
-  margin-bottom: 7px;
+  font-size: 0.64rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--xmas-ink-faint); margin-bottom: 7px;
 }
-
-.resumen dd { margin: 0; font-size: 0.95rem; font-weight: 600; color: var(--color-dark); }
+.resumen dd { margin: 0; font-size: 0.95rem; font-weight: 600; color: var(--xmas-ink); }
 .resumen dd::first-letter { text-transform: uppercase; }
 
 .done__lead {
   font-family: var(--font-sans);
   font-size: 0.95rem;
   line-height: 1.7;
-  color: var(--color-warm-gray);
+  color: var(--xmas-ink-soft);
   max-width: 440px;
   margin: 0 auto 26px;
 }
-.done__lead strong { color: var(--color-dark); }
+.done__lead strong { color: var(--xmas-wine); }
 
-@media (max-width: 560px) {
-  .resumen { grid-template-columns: 1fr 1fr; }
-  .resumen > div:nth-child(2n) { border-right: none; }
-  .resumen > div { border-bottom: 1px solid var(--xmas-line-soft); }
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 960px) {
+  .booking { grid-template-columns: 1fr; gap: 28px; }
+  .summary { position: static; }
+  .booking__reserve .actions { justify-content: center; }
 }
 
 @media (max-width: 640px) {
-  .field-row { grid-template-columns: 1fr; }
-  .form { padding: 22px; }
+  .field-row { grid-template-columns: 1fr; gap: 0; }
+  .field-row .field { margin-bottom: 18px; }
+  .form { padding: 26px 20px; border-radius: 20px; }
+  .field { margin-bottom: 18px; }
+  .fieldset { padding: 18px; }
   .actions { flex-direction: column-reverse; }
   .btn { width: 100%; }
+  .booking__reserve .actions { justify-content: stretch; }
 
-  /* En movil el texto sigue centrado; el velo se refuerza un poco para asegurar contraste. */
-  .hero {
-    min-height: 80vh;
-    background-position: center center;
+  /* El chip pasa a envolver: fecha/hora arriba, botón "Cambiar" abajo a lo ancho. */
+  .booking-chip {
+    flex-wrap: wrap;
+    padding: 14px 16px;
+    border-radius: 18px;
+    gap: 10px 12px;
   }
+  .booking-chip__text { flex: 1 1 auto; }
+  .booking-chip__edit { margin-left: 0; width: 100%; }
+
+  .hero { min-height: 80vh; background-position: center center; }
   .hero__scrim {
     background: radial-gradient(
       ellipse 110% 58% at 50% 50%,
@@ -581,10 +933,45 @@
       rgba(249, 245, 242, 0) 100%
     );
   }
-  .pill { font-size: 0.72rem; padding: 7px 14px; }
+  .orb { filter: blur(70px); opacity: 0.2; }
 }
 
+@media (max-width: 560px) {
+  .resumen { grid-template-columns: 1fr 1fr; }
+  .resumen > div:nth-child(2n) { border-right: none; }
+  .resumen > div { border-bottom: 1px solid var(--xmas-line); }
+}
+
+/* Móviles pequeños: aprieta títulos, aire y superficies para aprovechar el ancho. */
+@media (max-width: 480px) {
+  .xmas > .section__head { padding: 40px 18px 0; }
+  .section { padding: 44px 18px 0; }
+  .section.booking { padding-top: 4px; }
+
+  .section__title { font-size: clamp(1.7rem, 8vw, 2.2rem); }
+  .section__lead { font-size: 0.95rem; }
+
+  .form { padding: 22px 16px; }
+  .field label, .fieldset legend { font-size: 0.66rem; }
+  .field input, .field select, .field textarea { font-size: 16px; } /* evita zoom en iOS */
+
+  .summary__price { padding: 26px 22px; }
+  .summary__now { font-size: 2.6rem; }
+  .summary__block { padding: 22px 20px; }
+
+  .booking-chip__text strong { font-size: 0.86rem; }
+  .booking-chip__text span { font-size: 0.74rem; }
+}
+
+/* Accesibilidad: sin animaciones para quien lo prefiera. */
 @media (prefers-reduced-motion: reduce) {
+  .orb, .spk, .dust, .summary__now, .section__title, .badge__dot, .done__mark,
+  .section, .booking__reserve > *, .field, .field-row, .fieldset, .total,
+  .steps__item, .steps__item::after {
+    animation: none !important;
+  }
+  /* Sin animación, el título debe recuperar su color sólido (el clip-path lo deja transparente). */
+  .section__title { -webkit-text-fill-color: var(--xmas-ink); color: var(--xmas-ink); }
   .btn, .yes-no button, .field input, .field select, .field textarea { transition: none; }
-  .btn:hover { transform: none; }
+  .btn:hover, .yes-no button.is-active, .field input:focus { transform: none; }
 }

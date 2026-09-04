@@ -1,180 +1,209 @@
 :host { display: block; }
 
+/* Reacomodado al prototipo v3: calendario arriba (tarjeta de cristal propia) y los
+   horarios debajo como pills, en lugar de dos columnas lado a lado. Da más aire al
+   calendario y hace el flujo elegir-día → elegir-hora más natural en vertical. */
 .xmas-calendar {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
-  gap: 40px;
-  background: var(--color-white);
-  border-radius: 20px;
-  padding: 32px;
-  box-shadow: 0 12px 40px rgba(45, 36, 32, 0.07);
+  display: block;
 }
 
-/* ── Calendario ─────────────────────────────────────────────── */
+/* ── Calendario (tarjeta de cristal) ────────────────────────── */
+/* Calendario cómodo: ocupa el ancho de su columna (con un tope generoso). */
+.cal {
+  width: 100%;
+  max-width: 620px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 22px;
+  padding: 28px;
+  margin: 0 0 24px;
+  box-shadow: 0 20px 46px -22px rgba(45, 36, 32, 0.25);
+}
+
 .cal__head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 24px;
+  margin-bottom: 14px;
 }
 
 .cal__month {
   font-family: var(--font-serif);
-  font-size: 1.35rem;
-  font-weight: 500;
-  color: var(--xmas-wine);
+  font-size: 1.05rem;
+  font-weight: 400;
+  color: var(--xmas-ink, #2D2420);
+  text-transform: capitalize;
   margin: 0;
 }
 
 .cal__nav {
   display: grid;
   place-items: center;
-  width: 44px;
-  height: 44px;                 /* objetivo tactil minimo */
+  width: 34px;
+  height: 34px;
   border: 1px solid var(--color-beige);
   border-radius: 50%;
-  background: transparent;
-  color: var(--color-dark);
+  background: var(--color-white);
+  color: var(--color-warm-gray);
   cursor: pointer;
-  transition: border-color 200ms ease, color 200ms ease;
+  transition: border-color 200ms ease, color 200ms ease, transform 200ms ease;
 }
-
-.cal__nav:hover:not(:disabled) { border-color: var(--xmas-wine); color: var(--xmas-wine); }
+.cal__nav:hover:not(:disabled) { border-color: var(--color-gold); color: var(--color-gold); transform: scale(1.08); }
 .cal__nav:disabled { opacity: 0.3; cursor: not-allowed; }
 
-.cal__grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 6px;
-}
+/* minmax(0, 1fr) permite que las columnas se encojan por debajo de su contenido,
+   evitando que la 7ª (domingo) se salga del contenedor en móvil. */
+.cal__grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
 
 .cal__weekday {
   text-align: center;
   font-family: var(--font-sans);
   font-size: 0.7rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.06em;
   color: var(--color-warm-gray);
-  padding-bottom: 8px;
+  padding-bottom: 12px;
 }
 
 .cal__blank { aspect-ratio: 1; }
 
+/* Días circulares con hover scale, tal cual el prototipo. */
 .cal__day {
+  position: relative;
   aspect-ratio: 1;
-  min-height: 44px;
+  min-height: 48px;
+  min-width: 0;
+  width: 100%;
   display: grid;
   place-items: center;
-  border: 1px solid transparent;
-  border-radius: 10px;
-  background: transparent;
+  border: none;
+  border-radius: 50%;
+  background: none;
   font-family: var(--font-sans);
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   color: var(--color-dark);
   cursor: pointer;
-  transition: background 180ms ease, color 180ms ease, border-color 180ms ease;
+  transition: transform 160ms ease, background 160ms ease, box-shadow 160ms ease;
 }
+.cal__day:hover:not(:disabled) { transform: scale(1.12); background: rgba(173, 138, 106, 0.14); }
+.cal__day:focus-visible { outline: 2px solid var(--color-gold); outline-offset: 2px; }
+.cal__day:disabled { color: rgba(45, 36, 32, 0.28); cursor: not-allowed; }
 
-.cal__day:hover:not(:disabled) { border-color: var(--color-gold); }
-.cal__day:focus-visible { outline: 2px solid var(--xmas-wine); outline-offset: 2px; }
-
-.cal__day:disabled {
-  color: var(--color-gray-light, #CCCCCC);
-  cursor: not-allowed;
-}
-
-/* Un dia lleno se distingue del pasado y del cerrado: no basta el color, lleva
-   tachado. Un dia cerrado simplemente no se ofrece. */
 .cal__day.is-full { text-decoration: line-through; }
 .cal__day.is-closed { opacity: 0.45; }
 
+/* Día elegido: oscuro con glow dorado pulsante (efecto "wow" del prototipo). */
 .cal__day.is-selected {
-  background: var(--xmas-wine);
-  border-color: var(--xmas-wine);
-  color: var(--color-white);
-  font-weight: 600;
+  background: var(--color-dark);
+  color: var(--color-cream);
+  font-weight: 700;
+  animation: dayGlow 2.2s ease-in-out infinite;
+}
+@keyframes dayGlow {
+  0%, 100% { box-shadow: 0 0 0 5px rgba(173, 138, 106, 0.3),  0 10px 20px -8px rgba(45, 36, 32, 0.4); }
+  50%      { box-shadow: 0 0 0 9px rgba(173, 138, 106, 0.14), 0 10px 26px -6px rgba(45, 36, 32, 0.45); }
 }
 
-/* ── Horarios ───────────────────────────────────────────────── */
-.slots { border-left: 1px solid var(--color-beige); padding-left: 40px; }
+/* ── Horarios (debajo del calendario, como pills) ───────────── */
+.slots { }
 
 .slots__title {
-  font-family: var(--font-serif);
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: var(--color-dark);
-  margin: 0 0 4px;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--color-warm-gray);
+  margin: 0 0 12px;
 }
-
-/* Solo la inicial de la frase: `capitalize` subiria tambien "Del" y "De". */
 .slots__title::first-letter { text-transform: uppercase; }
 
-.slots__meta {
-  font-family: var(--font-sans);
-  font-size: 0.8rem;
-  color: var(--color-warm-gray);
-  margin: 0 0 20px;
-}
-
-.slots__legend {
-  font-family: var(--font-sans);
-  font-size: 0.8rem;
-  color: var(--color-warm-gray);
-  margin: 12px 0 0;
-  line-height: 1.6;
-}
-
+.slots__meta,
+.slots__legend,
 .slots__hint {
   font-family: var(--font-sans);
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   color: var(--color-warm-gray);
   margin: 0;
 }
+.slots__legend { margin-top: 10px; line-height: 1.6; }
+.slots__meta { margin-bottom: 16px; }
 
 .slots__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
+/* Horario como pill redondeada. */
 .slot {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-height: 44px;
-  padding: 10px 12px;
-  border: 1px solid var(--color-beige);
-  border-radius: 10px;
-  background: transparent;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 46px;
+  padding: 12px 20px;
+  border: 1.5px solid var(--color-beige);
+  border-radius: 999px;
+  background: var(--color-white);
+  font-family: var(--font-sans);
   cursor: pointer;
   text-align: left;
-  transition: border-color 180ms ease, background 180ms ease;
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
 }
+.slot:hover { border-color: var(--color-gold); transform: translateY(-1px); }
+.slot:focus-visible { outline: 2px solid var(--color-gold); outline-offset: 2px; }
 
-.slot:hover { border-color: var(--color-gold); }
-.slot:focus-visible { outline: 2px solid var(--xmas-wine); outline-offset: 2px; }
-
-.slot__start {
-  font-family: var(--font-sans);
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--color-dark);
-}
-
+.slot__start { font-family: var(--font-sans); font-size: 0.87rem; font-weight: 600; color: var(--color-dark); }
 .slot__range { font-family: var(--font-sans); font-size: 0.72rem; color: var(--color-warm-gray); }
 
+/* Horario elegido: gradiente dorado con sombra, como el prototipo. */
 .slot.is-selected {
-  background: var(--xmas-wine);
-  border-color: var(--xmas-wine);
+  background: linear-gradient(120deg, var(--color-gold), #D9B88F);
+  border-color: transparent;
+  box-shadow: 0 10px 22px -8px rgba(173, 138, 106, 0.55);
 }
 .slot.is-selected .slot__start,
-.slot.is-selected .slot__range { color: var(--color-white); }
+.slot.is-selected .slot__range { color: #fff; }
 
-@media (max-width: 860px) {
-  .xmas-calendar { grid-template-columns: 1fr; gap: 28px; padding: 20px; }
-  .slots { border-left: none; border-top: 1px solid var(--color-beige); padding-left: 0; padding-top: 24px; }
+/* Ripple al elegir día u horario: un anillo que se expande una vez al pasar a
+   is-selected. Solo CSS — nace, corre y se queda quieto. */
+.cal__day.is-selected::before,
+.slot.is-selected::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 0 rgba(173, 138, 106, 0.55);
+  animation: ripple 650ms ease-out;
+  pointer-events: none;
+}
+@keyframes ripple {
+  from { box-shadow: 0 0 0 0 rgba(173, 138, 106, 0.55); }
+  to   { box-shadow: 0 0 0 16px rgba(173, 138, 106, 0); }
+}
+
+/* Responsive: en móvil el calendario ocupa todo el ancho con padding y días más
+   ajustados; los horarios como pills se reparten cómodos. */
+@media (max-width: 640px) {
+  .cal { padding: 18px 12px; border-radius: 18px; }
+  /* Sin min-height fijo: los días se encogen para que quepan los 7 (incluido Dom)
+     sin desbordar la grilla. El aspect-ratio mantiene la forma circular. */
+  .cal__day { min-height: 0; font-size: 0.82rem; }
+  .cal__grid { gap: 3px; }
+  .slots__grid { gap: 8px; }
+  .slot { padding: 11px 16px; }
+}
+
+@media (max-width: 380px) {
+  .cal { padding: 16px 8px; }
+  .cal__grid { gap: 2px; }
+  .cal__day { font-size: 0.76rem; }
+  .cal__weekday { font-size: 0.56rem; letter-spacing: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .cal__day, .cal__nav, .slot { transition: none; }
+  .cal__day.is-selected, .slot.is-selected { animation: none; }
+  .cal__day.is-selected::before, .slot.is-selected::before { display: none; }
+  .cal__day:hover:not(:disabled), .slot:hover { transform: none; }
 }

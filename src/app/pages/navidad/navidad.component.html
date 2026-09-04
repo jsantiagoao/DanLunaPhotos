@@ -1,6 +1,46 @@
 <app-navbar />
 
 <main class="xmas">
+  <!-- Fondo animado: orbes dorados flotantes + estrellas y arbolitos titilando + polvo
+       dorado cayendo. Puramente decorativo, oculto a lectores de pantalla y desactivado
+       con prefers-reduced-motion. Basado en el prototipo v3 aprobado. -->
+  <div class="xmas-bg" aria-hidden="true">
+    <span class="orb orb--1"></span>
+    <span class="orb orb--2"></span>
+
+    <div class="sparkles">
+      <span class="spk spk--star spk--sm"></span><span class="spk spk--tree"></span><span class="spk spk--star spk--lg"></span>
+      <span class="spk spk--star"></span><span class="spk spk--tree spk--sm"></span><span class="spk spk--star"></span>
+      <span class="spk spk--star spk--lg"></span><span class="spk spk--star spk--sm"></span><span class="spk spk--tree"></span>
+      <span class="spk spk--star"></span><span class="spk spk--star spk--sm"></span><span class="spk spk--star spk--lg"></span>
+      <span class="spk spk--tree spk--lg"></span><span class="spk spk--star spk--sm"></span><span class="spk spk--star"></span>
+      <span class="spk spk--star spk--lg"></span><span class="spk spk--tree"></span><span class="spk spk--star spk--sm"></span>
+      <span class="spk spk--star"></span><span class="spk spk--star spk--lg"></span><span class="spk spk--tree spk--sm"></span>
+      <span class="spk spk--star"></span><span class="spk spk--star"></span><span class="spk spk--star spk--lg"></span>
+      <span class="spk spk--tree spk--sm"></span><span class="spk spk--star"></span><span class="spk spk--star"></span>
+      <span class="spk spk--star spk--lg"></span><span class="spk spk--star spk--sm"></span><span class="spk spk--tree"></span>
+      <span class="spk spk--star"></span><span class="spk spk--star spk--sm"></span><span class="spk spk--star spk--lg"></span>
+      <span class="spk spk--tree spk--lg"></span><span class="spk spk--star"></span><span class="spk spk--star spk--sm"></span>
+      <span class="spk spk--star spk--lg"></span><span class="spk spk--tree spk--sm"></span><span class="spk spk--star spk--sm"></span>
+      <span class="spk spk--star"></span><span class="spk spk--star spk--lg"></span><span class="spk spk--tree"></span>
+      <span class="spk spk--star spk--sm"></span><span class="spk spk--star"></span><span class="spk spk--star spk--lg"></span>
+      <span class="spk spk--star"></span><span class="spk spk--tree spk--sm"></span><span class="spk spk--star"></span>
+    </div>
+
+    <div class="dust-field">
+      <span class="dust"></span><span class="dust"></span><span class="dust"></span>
+      <span class="dust"></span><span class="dust"></span><span class="dust"></span>
+      <span class="dust"></span><span class="dust"></span><span class="dust"></span>
+      <span class="dust"></span><span class="dust"></span><span class="dust"></span>
+      <span class="dust"></span><span class="dust"></span><span class="dust"></span>
+      <span class="dust"></span><span class="dust"></span><span class="dust"></span>
+      <span class="dust"></span><span class="dust"></span><span class="dust"></span>
+      <span class="dust"></span><span class="dust"></span><span class="dust"></span>
+      <span class="dust"></span><span class="dust"></span><span class="dust"></span>
+      <span class="dust"></span><span class="dust"></span><span class="dust"></span>
+    </div>
+  </div>
+
   <!-- Hero ------------------------------------------------------------- -->
   <section class="hero" [style.background-image]="'url(' + heroImageUrl() + ')'">
     <div class="hero__scrim"></div>
@@ -23,117 +63,121 @@
     <p class="alert" role="alert">{{ error() }}</p>
   }
 
-  <!-- Paso 1: qué incluye ---------------------------------------------- -->
-  @if (step() === 'detalle') {
-    <section class="section">
-      <header class="section__head">
-        <span class="eyebrow">La experiencia</span>
-        <h2 class="section__title">Qué incluye</h2>
-      </header>
+  <!-- Paso 1: detalle + reserva ---------------------------------------- -->
+  <!-- Reestructurado a dos columnas (patrón "detalle + reserva"): a la izquierda una
+       tarjeta resumen sticky con el precio como protagonista, qué incluye compacto y la
+       ubicación; a la derecha el calendario, que es la acción principal. En móvil se
+       apila. Da jerarquía clara y un flujo más amigable que la lista vertical anterior. -->
+  @if (step() === 'detalle' || step() === 'datos') {
+    <header class="section__head">
+      <span class="badge"><span class="badge__dot" aria-hidden="true"></span>Cupos limitados por temporada</span>
+      <h2 class="section__title">Aparta tu sesión navideña</h2>
+      <p class="section__lead">Elige el día, la hora y déjanos lo demás a nosotros.</p>
+    </header>
 
-      <ul class="includes">
-        @for (item of includes(); track item.title) {
-          <li class="include">
-            <span class="include__icon" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                @switch (item.icon) {
-                  @case ('clock') { <circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/> }
-                  @case ('users') { <path d="M17 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9.5" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/> }
-                  @case ('paw') { <circle cx="6" cy="10" r="2"/><circle cx="10" cy="6" r="2"/><circle cx="14" cy="6" r="2"/><circle cx="18" cy="10" r="2"/><path d="M8 16c0-2.2 1.8-4 4-4s4 1.8 4 4-1.8 5-4 5-4-2.8-4-5z"/> }
-                  @case ('palette') { <circle cx="12" cy="12" r="9"/><circle cx="8.5" cy="10" r="1"/><circle cx="12" cy="8" r="1"/><circle cx="15.5" cy="10" r="1"/><path d="M12 21a3 3 0 0 1 0-6h1a2 2 0 0 0 0-4"/> }
-                  @case ('camera') { <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/> }
-                  @case ('gallery') { <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/> }
-                }
+    <section class="section booking">
+      <!-- Columna de resumen (común a ambos pasos) -->
+      <aside class="summary">
+        @if (campaign(); as c) {
+          <div class="summary__price" [class.summary__price--preventa]="c.preventaActive">
+            @if (c.preventaActive) {
+              <span class="summary__badge">Preventa</span>
+            }
+            <div class="summary__amount">
+              <span class="summary__now">${{ c.price | number }}</span>
+              @if (c.preventaActive) { <s class="summary__was">${{ c.regularPrice | number }}</s> }
+            </div>
+            @if (c.preventaActive) {
+              <p class="summary__meta">
+                Hasta el {{ preventaHasta() }} · quedan
+                <strong>{{ c.spotsLeft }}</strong> {{ c.spotsLeft === 1 ? 'lugar' : 'lugares' }}
+              </p>
+            } @else {
+              <p class="summary__meta">Precio por sesión</p>
+            }
+            <p class="summary__apartado">
+              Aparta con <strong>${{ apartado() }}</strong> · se descuenta del total
+            </p>
+          </div>
+        }
+
+        <div class="summary__block">
+          <span class="eyebrow">Qué incluye</span>
+          <ul class="checklist">
+            @for (item of includes(); track item.title) {
+              <li class="checklist__item">
+                <span class="checklist__tick" aria-hidden="true">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                </span>
+                <span class="checklist__text">
+                  <strong>{{ item.title }}</strong>
+                  @if (item.detail) { <span>{{ item.detail }}</span> }
+                </span>
+              </li>
+            }
+          </ul>
+        </div>
+
+        @if (location()) {
+          <div class="summary__location">
+            <span class="summary__location-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
               </svg>
             </span>
-            <span class="include__text">
-              <strong>{{ item.title }}</strong>
-              @if (item.detail) { <span>{{ item.detail }}</span> }
+            <span class="summary__location-text">
+              <strong>Ubicación del set</strong>
+              <span>{{ location() }}</span>
             </span>
-          </li>
+          </div>
         }
-      </ul>
+      </aside>
 
-      @if (location()) {
-        <div class="ubicacion">
-          <span class="ubicacion__icon" aria-hidden="true">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
-            </svg>
-          </span>
-          <span class="ubicacion__text">
-            <strong>Ubicación del set</strong>
-            <span>{{ location() }}</span>
-          </span>
-        </div>
-      }
+      <!-- Columna derecha: cambia de calendario (paso 1) a formulario (paso 2),
+           manteniendo la columna de resumen a la izquierda. -->
+      <div class="booking__reserve">
+        @if (step() === 'detalle') {
+          <header class="reserve__head">
+            <span class="eyebrow">Reserva</span>
+            <h2 class="section__title">Elige tu día y horario</h2>
+          </header>
 
-      @if (campaign(); as c) {
-        <div class="precio" [class.precio--preventa]="c.preventaActive">
-          @if (c.preventaActive) {
-            <p class="precio__badge">Preventa</p>
-            <p class="precio__monto">
-              <span class="precio__ahora">${{ c.price | number }}</span>
-              <s class="precio__antes">${{ c.regularPrice | number }}</s>
-            </p>
-            <p class="precio__meta">
-              Hasta el {{ preventaHasta() }} · quedan
-              <strong>{{ c.spotsLeft }}</strong> {{ c.spotsLeft === 1 ? 'lugar' : 'lugares' }}
-            </p>
-          } @else {
-            <p class="precio__monto"><span class="precio__ahora">${{ c.price | number }}</span></p>
-            <p class="precio__meta">Precio por sesión</p>
-          }
-        </div>
-      }
+          <app-christmas-calendar
+            [intervals]="intervals()"
+            [config]="config()"
+            [currentMonth]="month()"
+            [currentYear]="year()"
+            [selectedDate]="form.date"
+            [selectedTime]="form.time"
+            [loading]="loading()"
+            (monthChange)="cambiarMes($event)"
+            (dateSelect)="elegirDia($event)"
+            (timeSelect)="elegirHora($event)" />
 
-      <p class="note">
-        Apartas tu lugar con <strong>${{ apartado() }}</strong>, que se descuenta del total.
-        Tu sesión se confirma al recibir tu comprobante.
-      </p>
+          <div class="actions">
+            <button type="button" class="btn btn--primary" [disabled]="!puedeContinuar" (click)="irADatos()">
+              Continuar
+            </button>
+          </div>
+        } @else {
+          <!-- Chip de resumen: recuerda qué día y hora eligió, con opción de cambiarlo. -->
+          <div class="booking-chip">
+            <span class="booking-chip__icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </span>
+            <span class="booking-chip__text">
+              <strong>{{ resumen().fecha }}</strong>
+              <span>{{ resumen().horario }}</span>
+            </span>
+            <button type="button" class="booking-chip__edit" (click)="volver('detalle')">Cambiar</button>
+          </div>
 
-      <header class="section__head section__head--divider">
-        <span class="eyebrow">Reserva</span>
-        <h2 class="section__title">Elige tu día y horario</h2>
-      </header>
-
-      <app-christmas-calendar
-        [intervals]="intervals()"
-        [config]="config()"
-        [currentMonth]="month()"
-        [currentYear]="year()"
-        [selectedDate]="form.date"
-        [selectedTime]="form.time"
-        [loading]="loading()"
-        (monthChange)="cambiarMes($event)"
-        (dateSelect)="elegirDia($event)"
-        (timeSelect)="elegirHora($event)" />
-
-      <div class="actions">
-        <button type="button" class="btn btn--primary" [disabled]="!puedeContinuar" (click)="irADatos()">
-          Continuar
-        </button>
-      </div>
-    </section>
-  }
-
-  <!-- Paso 3: datos ----------------------------------------------------- -->
-  @if (step() === 'datos') {
-    <section class="section">
-      <header class="section__head">
-        <span class="eyebrow">Casi listo</span>
-        <h2 class="section__title">Tus datos</h2>
-        <p class="section__lead">
-          Apartas el {{ resumen().fecha }} de {{ resumen().horario }}
-        </p>
-      </header>
-
-      <form class="form" (ngSubmit)="reservar()" novalidate>
-        <div class="field">
-          <label for="x-name">Nombre completo</label>
-          <input id="x-name" name="name" type="text" maxlength="100" required
-                 autocomplete="name" [(ngModel)]="form.name" />
-        </div>
+          <form class="form" (ngSubmit)="reservar()" novalidate>
+            <div class="field">
+              <label for="x-name">Nombre completo</label>
+              <input id="x-name" name="name" type="text" maxlength="100" required
+                     autocomplete="name" [(ngModel)]="form.name" />
+            </div>
 
         <div class="field-row">
           <div class="field">
@@ -148,36 +192,31 @@
           </div>
         </div>
 
-        <div class="field">
-          <label for="x-personas">¿Cuántas personas asisten?</label>
-          <select id="x-personas" name="personas" [(ngModel)]="form.personas">
-            @for (n of personasOptions(); track n) {
-              <option [value]="n">{{ n }} {{ n === 1 ? 'persona' : 'personas' }}</option>
-            }
-          </select>
-          <p class="field__help">Hasta 5 personas incluidas en tu sesión</p>
-        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="x-personas">¿Cuántas personas asisten?</label>
+            <select id="x-personas" name="personas" [(ngModel)]="form.personas">
+              @for (n of personasOptions(); track n) {
+                <option [value]="n">{{ n }} {{ n === 1 ? 'persona' : 'personas' }}</option>
+              }
+            </select>
+            <p class="field__help">Hasta 5 personas incluidas en tu sesión</p>
+          </div>
 
-        <div class="field">
-          <label for="x-extra">¿Van personas extra?</label>
-          <select id="x-extra" name="personasExtra" [(ngModel)]="form.personasExtra">
-            @for (n of extraOptions(); track n) {
-              <option [value]="n">
-                {{ n === 0 ? 'No, somos ' + form.personas : n + (n === 1 ? ' persona extra' : ' personas extra') + ' · $' + (n * extraPrice()) }}
-              </option>
-            }
-          </select>
-          <p class="field__help">
-            ${{ extraPrice() }} por persona adicional, hasta {{ limits().maxExtra }} · en el set caben {{ aforo() }} personas
-          </p>
+          <div class="field">
+            <label for="x-extra">¿Van personas extra?</label>
+            <select id="x-extra" name="personasExtra" [(ngModel)]="form.personasExtra">
+              @for (n of extraOptions(); track n) {
+                <option [value]="n">
+                  {{ n === 0 ? 'No, somos ' + form.personas : n + (n === 1 ? ' persona extra' : ' personas extra') + ' · $' + (n * extraPrice()) }}
+                </option>
+              }
+            </select>
+            <p class="field__help">
+              ${{ extraPrice() }} por persona adicional, hasta {{ limits().maxExtra }} · caben {{ aforo() }}
+            </p>
+          </div>
         </div>
-
-        @if (campaign(); as c) {
-          <p class="total">
-            Total de tu sesión: <strong>${{ totalEstimado | number }}</strong>
-            <span>&nbsp;· apartas con ${{ apartado() }}</span>
-          </p>
-        }
 
         <fieldset class="fieldset">
           <legend>¿Llevarás mascota?</legend>
@@ -217,13 +256,15 @@
         <input class="honeypot" type="text" name="website" tabindex="-1" autocomplete="off"
                aria-hidden="true" [(ngModel)]="honeypot" />
 
-        <div class="actions">
-          <button type="button" class="btn btn--ghost" (click)="volver('detalle')">Regresar</button>
-          <button type="submit" class="btn btn--primary" [disabled]="sending()">
-            {{ sending() ? 'Apartando…' : 'Apartar mi lugar' }}
-          </button>
-        </div>
-      </form>
+            <div class="actions">
+              <button type="button" class="btn btn--ghost" (click)="volver('detalle')">Regresar</button>
+              <button type="submit" class="btn btn--primary" [disabled]="sending()">
+                {{ sending() ? 'Apartando…' : 'Apartar mi lugar' }}
+              </button>
+            </div>
+          </form>
+        }
+      </div>
     </section>
   }
 
