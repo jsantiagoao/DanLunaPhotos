@@ -128,7 +128,7 @@
         <div class="field">
           <label for="x-personas">¿Cuántas personas asisten?</label>
           <select id="x-personas" name="personas" [(ngModel)]="form.personas">
-            @for (n of personasOptions; track n) {
+            @for (n of personasOptions(); track n) {
               <option [value]="n">{{ n }} {{ n === 1 ? 'persona' : 'personas' }}</option>
             }
           </select>
@@ -138,14 +138,14 @@
         <div class="field">
           <label for="x-extra">¿Van personas extra?</label>
           <select id="x-extra" name="personasExtra" [(ngModel)]="form.personasExtra">
-            @for (n of extraOptions; track n) {
+            @for (n of extraOptions(); track n) {
               <option [value]="n">
-                {{ n === 0 ? 'No, somos ' + form.personas : n + (n === 1 ? ' persona extra' : ' personas extra') + ' · $' + (n * extraPrice) }}
+                {{ n === 0 ? 'No, somos ' + form.personas : n + (n === 1 ? ' persona extra' : ' personas extra') + ' · $' + (n * extraPrice()) }}
               </option>
             }
           </select>
           <p class="field__help">
-            ${{ extraPrice }} por persona adicional, hasta 3 · en el set caben {{ aforo }} personas
+            ${{ extraPrice() }} por persona adicional, hasta {{ limits().maxExtra }} · en el set caben {{ aforo() }} personas
           </p>
         </div>
 

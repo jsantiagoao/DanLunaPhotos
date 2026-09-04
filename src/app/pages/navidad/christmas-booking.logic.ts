@@ -21,6 +21,26 @@ export const MAX_PERSONAS_EXTRA = 3;
 /** Aforo fisico del set: no depende de lo que la clienta quiera pagar. */
 export const MAX_AFORO = 8;
 export const EXTRA_PERSON_PRICE = 250;
+
+/**
+ * Limites y precio de aforo de la campaña. Editables por Daniela desde Studio; el backend
+ * los publica en `config.attendees` / `config.pricing`. Las constantes de arriba son solo
+ * el respaldo si la config no llego. Se inyectan a las funciones puras para no acoplar las
+ * reglas a un valor fijo (mismo patron que `shared/navidad.py`).
+ */
+export interface CampaignLimits {
+  maxPersonas: number;
+  maxExtra: number;
+  aforo: number;
+  extraPrice: number;
+}
+
+export const DEFAULT_LIMITS: CampaignLimits = {
+  maxPersonas: MAX_PERSONAS,
+  maxExtra: MAX_PERSONAS_EXTRA,
+  aforo: MAX_AFORO,
+  extraPrice: EXTRA_PERSON_PRICE,
+};
 export const PET_SIZES = ['chico', 'mediano', 'grande'] as const;
 export const MAX_PETICION = 500;
 export const WHATSAPP_NUMBER = '524424906891';
@@ -77,22 +97,22 @@ function digits(value: string): string {
 }
 
 /** El primer problema del formulario, en la voz con la que se le habla a la clienta. */
-export function validateChristmasForm(form: ChristmasForm): string | null {
+export function validateChristmasForm(form: ChristmasForm, limits: CampaignLimits = DEFAULT_LIMITS): string | null {
   if ((form.name || '').trim().length < 3) return 'Escribe tu nombre completo';
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email || '')) return 'Escribe un correo electrónico válido';
   if (digits(form.phone).length !== 10) return 'El teléfono debe tener 10 dígitos';
 
   const personas = Number(form.personas);
-  if (!personas || personas < 1 || personas > MAX_PERSONAS) {
-    return `El número de personas debe estar entre 1 y ${MAX_PERSONAS}`;
+  if (!personas || personas < 1 || personas > limits.maxPersonas) {
+    return `El número de personas debe estar entre 1 y ${limits.maxPersonas}`;
   }
 
   const extra = Number(form.personasExtra) || 0;
-  if (extra < 0 || extra > MAX_PERSONAS_EXTRA) {
-    return `Puedes agregar hasta ${MAX_PERSONAS_EXTRA} personas extra`;
+  if (extra < 0 || extra > limits.maxExtra) {
+    return `Puedes agregar hasta ${limits.maxExtra} personas extra`;
   }
-  if (personas + extra > MAX_AFORO) {
-    return `En el set caben hasta ${MAX_AFORO} personas`;
+  if (personas + extra > limits.aforo) {
+    return `En el set caben hasta ${limits.aforo} personas`;
   }
 
   if (form.mascota) {
@@ -146,8 +166,8 @@ export function toBookingRequest(form: ChristmasForm): ChristmasBookingRequest {
 }
 
 /** Lo que se va a cobrar: el precio de la sesion mas las personas extra. */
-export function sessionTotal(basePrice: number, form: ChristmasForm): number {
-  return basePrice + Math.max(0, Number(form.personasExtra) || 0) * EXTRA_PERSON_PRICE;
+export function sessionTotal(basePrice: number, form: ChristmasForm, extraPrice: number = EXTRA_PERSON_PRICE): number {
+  return basePrice + Math.max(0, Number(form.personasExtra) || 0) * extraPrice;
 }
 
 /** Lo minimo que necesita saber el aviso del precio, sin acoplarse a toda la campaña. */

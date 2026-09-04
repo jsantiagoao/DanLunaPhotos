@@ -12,7 +12,7 @@ import {
 import {
   EXTRA_PERSON_PRICE, MAX_AFORO, MAX_PERSONAS, MAX_PERSONAS_EXTRA, PET_SIZES,
   emptyChristmasForm, humanDate, humanSlot, priceChangeNotice, sessionTotal, toBookingRequest,
-  validateChristmasForm, whatsappConfirmUrl, type ChristmasForm,
+  validateChristmasForm, whatsappConfirmUrl, type ChristmasForm, type CampaignLimits,
 } from './christmas-booking.logic';
 import { SESSION_MINUTES, type BusyInterval, type CampaignConfig } from './christmas-slots';
 import type { CampaignStatus } from '../agendar/booking.models';
@@ -74,13 +74,30 @@ export class NavidadComponent implements OnInit {
    */
   protected readonly heroImageUrl = computed(() =>
     this.config()?.content?.heroImage || '/assets/images/navidad/fondo_navidad.jpeg');
-  protected readonly sessionMinutes = SESSION_MINUTES;
+  /**
+   * Aforo, personas y precio extra: los que Daniela edita en Studio (config.attendees /
+   * config.pricing). Las constantes locales son el respaldo si la config no llego. Se usan
+   * tanto en los selectores como en la validacion y el total, para que la clienta vea y el
+   * servidor cobre lo mismo.
+   */
+  protected readonly limits = computed<CampaignLimits>(() => {
+    const att = this.config()?.attendees;
+    const pri = this.config()?.pricing;
+    return {
+      maxPersonas: att?.included ?? MAX_PERSONAS,
+      maxExtra: att?.maxExtra ?? MAX_PERSONAS_EXTRA,
+      aforo: att?.aforo ?? MAX_AFORO,
+      extraPrice: pri?.extraPersonPrice ?? EXTRA_PERSON_PRICE,
+    };
+  });
+  /** Duracion de la sesion: del backend (agenda) o el respaldo local. */
+  protected readonly sessionMinutes = computed(() => this.config()?.agenda?.sessionMinutes ?? SESSION_MINUTES);
   /** El del backend manda; el local es el respaldo si la llamada falla. */
   protected readonly apartado = computed(() => this.campaign()?.apartado ?? APARTADO_AMOUNT);
-  protected readonly personasOptions = Array.from({ length: MAX_PERSONAS }, (_, i) => i + 1);
-  protected readonly extraOptions = Array.from({ length: MAX_PERSONAS_EXTRA + 1 }, (_, i) => i);
-  protected readonly extraPrice = EXTRA_PERSON_PRICE;
-  protected readonly aforo = MAX_AFORO;
+  protected readonly personasOptions = computed(() => Array.from({ length: this.limits().maxPersonas }, (_, i) => i + 1));
+  protected readonly extraOptions = computed(() => Array.from({ length: this.limits().maxExtra + 1 }, (_, i) => i));
+  protected readonly extraPrice = computed(() => this.limits().extraPrice);
+  protected readonly aforo = computed(() => this.limits().aforo);
   protected readonly petSizes = PET_SIZES;
 
   /** '2026-09-24' -> '24 de septiembre', para el aviso de preventa. */
@@ -94,7 +111,7 @@ export class NavidadComponent implements OnInit {
    * backend vuelve a calcularlo al reservar; esto es para que la clienta lo vea antes.
    */
   protected get totalEstimado(): number {
-    return sessionTotal(this.campaign()?.price ?? 0, this.form);
+    return sessionTotal(this.campaign()?.price ?? 0, this.form, this.limits().extraPrice);
   }
 
   protected readonly resumen = computed(() => ({
@@ -170,7 +187,7 @@ export class NavidadComponent implements OnInit {
   protected reservar(): void {
     if (this.honeypot) return;
 
-    const problema = validateChristmasForm(this.form);
+    const problema = validateChristmasForm(this.form, this.limits());
     if (problema) { this.error.set(problema); return; }
 
     this.error.set(null);
