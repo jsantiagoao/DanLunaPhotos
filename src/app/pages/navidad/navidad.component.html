@@ -72,7 +72,6 @@
     <header class="section__head">
       <span class="badge"><span class="badge__dot" aria-hidden="true"></span>Cupos limitados por temporada</span>
       <h2 class="section__title">Aparta tu sesión navideña</h2>
-      <p class="section__lead">Elige el día, la hora y déjanos lo demás a nosotros.</p>
     </header>
 
     <section class="section booking">
@@ -96,7 +95,7 @@
               <p class="summary__meta">Precio por sesión</p>
             }
             <p class="summary__apartado">
-              Aparta con <strong>${{ apartado() }}</strong> · se descuenta del total
+              Aparta con <strong>${{ apartado() }}</strong>
             </p>
           </div>
         }
@@ -259,7 +258,7 @@
             <div class="actions">
               <button type="button" class="btn btn--ghost" (click)="volver('detalle')">Regresar</button>
               <button type="submit" class="btn btn--primary" [disabled]="sending()">
-                {{ sending() ? 'Apartando…' : 'Apartar mi lugar' }}
+                {{ sending() ? 'Reservando…' : 'Reservar' }}
               </button>
             </div>
           </form>
