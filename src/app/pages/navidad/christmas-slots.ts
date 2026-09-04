@@ -48,6 +48,20 @@ export interface CampaignConfig {
     /** Clave: dia de la semana con lunes = 0 (como el backend). */
     weekly: Record<string, ReadonlyArray<readonly [string, number]>>;
   };
+  /** Precios editables. La landing usa extraPersonPrice; los demas los resuelve el backend en `campaign`. */
+  pricing?: {
+    preventaPrice: number;
+    regularPrice: number;
+    totalSlots: number;
+    apartado: number;
+    extraPersonPrice: number;
+  };
+  /** Aforo y personas editables: mandan los selectores y validaciones del formulario. */
+  attendees?: {
+    included: number;
+    maxExtra: number;
+    aforo: number;
+  };
   /** Contenido editable de la landing: nombre, textos, imagen de fondo e items de "que incluye". */
   content?: {
     name: string;

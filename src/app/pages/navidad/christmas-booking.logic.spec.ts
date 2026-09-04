@@ -195,6 +195,29 @@ describe('sessionTotal', () => {
   it('en precio regular tambien suma', () => {
     expect(sessionTotal(2300, valido({ personasExtra: 3 }))).toBe(3050);
   });
+
+  it('usa el precio extra inyectado (config de Studio)', () => {
+    // Si Daniela pone la persona extra en 300, el total lo respeta.
+    expect(sessionTotal(1800, valido({ personasExtra: 2 }), 300)).toBe(2400);
+  });
+});
+
+describe('limites inyectados desde la config', () => {
+  const limits = { maxPersonas: 6, maxExtra: 2, aforo: 7, extraPrice: 300 };
+
+  it('respeta el maximo de personas de la config', () => {
+    expect(validateChristmasForm(valido({ personas: 6 }), limits)).toBeNull();
+    expect(validateChristmasForm(valido({ personas: 7 }), limits)).toContain('personas');
+  });
+
+  it('respeta el maximo de extras de la config', () => {
+    expect(validateChristmasForm(valido({ personas: 1, personasExtra: 2 }), limits)).toBeNull();
+    expect(validateChristmasForm(valido({ personas: 1, personasExtra: 3 }), limits)).toContain('extra');
+  });
+
+  it('respeta el aforo de la config', () => {
+    expect(validateChristmasForm(valido({ personas: 6, personasExtra: 2 }), limits)).toContain('caben');
+  });
 });
 
 describe('priceChangeNotice', () => {
