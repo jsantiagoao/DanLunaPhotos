@@ -174,6 +174,32 @@
 .include__text strong { font-size: 0.95rem; font-weight: 600; color: var(--color-dark); }
 .include__text span { font-size: 0.85rem; color: var(--color-warm-gray); line-height: 1.5; }
 
+/* Ubicación del set: misma tarjeta que un "include", ancho completo bajo la lista. */
+.ubicacion {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 16px;
+  padding: 18px 22px;
+  background: var(--color-white);
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(45, 36, 32, 0.05);
+}
+
+.ubicacion__icon {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 42px; height: 42px;
+  border-radius: 12px;
+  background: rgba(173, 138, 106, 0.12);
+  color: var(--color-gold);
+}
+
+.ubicacion__text { display: flex; flex-direction: column; gap: 3px; font-family: var(--font-sans); }
+.ubicacion__text strong { font-size: 0.95rem; font-weight: 600; color: var(--color-dark); }
+.ubicacion__text span { font-size: 0.85rem; color: var(--color-warm-gray); line-height: 1.5; }
+
 .note {
   font-family: var(--font-sans);
   font-size: 0.88rem;
