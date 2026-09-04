@@ -26,7 +26,10 @@
   <!-- Paso 1: qué incluye ---------------------------------------------- -->
   @if (step() === 'detalle') {
     <section class="section">
-      <h2 class="section__title">Qué incluye</h2>
+      <header class="section__head">
+        <span class="eyebrow">La experiencia</span>
+        <h2 class="section__title">Qué incluye</h2>
+      </header>
 
       <ul class="includes">
         @for (item of includes(); track item.title) {
@@ -89,7 +92,10 @@
         Tu sesión se confirma al recibir tu comprobante.
       </p>
 
-      <h2 class="section__title">Elige tu día y horario</h2>
+      <header class="section__head section__head--divider">
+        <span class="eyebrow">Reserva</span>
+        <h2 class="section__title">Elige tu día y horario</h2>
+      </header>
 
       <app-christmas-calendar
         [intervals]="intervals()"
@@ -114,10 +120,13 @@
   <!-- Paso 3: datos ----------------------------------------------------- -->
   @if (step() === 'datos') {
     <section class="section">
-      <h2 class="section__title">Tus datos</h2>
-      <p class="section__lead">
-        Apartas el {{ resumen().fecha }} de {{ resumen().horario }}
-      </p>
+      <header class="section__head">
+        <span class="eyebrow">Casi listo</span>
+        <h2 class="section__title">Tus datos</h2>
+        <p class="section__lead">
+          Apartas el {{ resumen().fecha }} de {{ resumen().horario }}
+        </p>
+      </header>
 
       <form class="form" (ngSubmit)="reservar()" novalidate>
         <div class="field">
