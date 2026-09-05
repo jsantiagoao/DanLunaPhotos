@@ -43,5 +43,130 @@
 </head>
 <body>
   <app-root></app-root>
+
+  <!-- Loader de entrada solo para /sesiones-navidad. Se pinta antes de Angular
+       (por eso vive aquí y no en un componente) y se desvanece al cargar.
+       Vintage-moderno: fondo blanco, dorado suave, árbol navideño que se dibuja. -->
+  <div id="xmas-loader" aria-hidden="true">
+    <div class="xl-stage">
+      <svg class="xl-tree" viewBox="0 0 120 140" width="120" height="140">
+        <!-- Árbol: tres capas trianguladas que se dibujan -->
+        <path class="xl-draw" d="M60 14 L86 56 L34 56 Z" fill="none" stroke="url(#xlGold)" stroke-width="2.2" stroke-linejoin="round"/>
+        <path class="xl-draw" d="M60 40 L92 86 L28 86 Z" fill="none" stroke="url(#xlGold)" stroke-width="2.2" stroke-linejoin="round"/>
+        <path class="xl-draw" d="M60 66 L98 116 L22 116 Z" fill="none" stroke="url(#xlGold)" stroke-width="2.2" stroke-linejoin="round"/>
+        <!-- Tronco -->
+        <rect class="xl-trunk" x="53" y="116" width="14" height="16" rx="2" fill="url(#xlGold)"/>
+        <!-- Estrella superior -->
+        <circle class="xl-topstar" cx="60" cy="10" r="4" fill="#E0B450"/>
+        <!-- Esferas doradas -->
+        <circle class="xl-ball" cx="52" cy="50" r="2.4" fill="#D9A441"/>
+        <circle class="xl-ball" cx="70" cy="76" r="2.4" fill="#D9A441"/>
+        <circle class="xl-ball" cx="48" cy="82" r="2.4" fill="#D9A441"/>
+        <circle class="xl-ball" cx="66" cy="104" r="2.4" fill="#D9A441"/>
+        <circle class="xl-ball" cx="50" cy="108" r="2.4" fill="#D9A441"/>
+        <defs>
+          <linearGradient id="xlGold" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#E7C173"/>
+            <stop offset="50%" stop-color="#C79A42"/>
+            <stop offset="100%" stop-color="#E7C173"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span class="xl-word">Christmas Sessions 2026</span>
+    </div>
+    <div class="xl-dust" id="xl-dust"></div>
+  </div>
+
+  <style>
+    #xmas-loader {
+      position: fixed; inset: 0; z-index: 99999;
+      display: none;
+      align-items: center; justify-content: center;
+      background: radial-gradient(circle at 50% 42%, #ffffff 0%, #fdf9f3 55%, #f6efe4 100%);
+      transition: opacity .7s ease, visibility .7s ease;
+      overflow: hidden;
+    }
+    #xmas-loader.on { display: flex; }
+    #xmas-loader.off { opacity: 0; visibility: hidden; }
+    .xl-stage { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+
+    /* Árbol que se dibuja */
+    .xl-tree { filter: drop-shadow(0 6px 14px rgba(199,154,66,.22)); }
+    .xl-draw { stroke-dasharray: 200; stroke-dashoffset: 200; animation: xl-draw 1.1s ease forwards; }
+    .xl-tree path.xl-draw:nth-of-type(1) { animation-delay: .1s; }
+    .xl-tree path.xl-draw:nth-of-type(2) { animation-delay: .35s; }
+    .xl-tree path.xl-draw:nth-of-type(3) { animation-delay: .6s; }
+    .xl-trunk { opacity: 0; animation: xl-pop .4s ease 1.4s forwards; }
+    .xl-topstar { opacity: 0; transform-origin: 60px 10px; animation: xl-pop .5s ease 1.5s forwards, xl-twinkle 1.6s ease 2s infinite; }
+    .xl-ball { opacity: 0; animation: xl-pop .4s ease forwards; }
+    .xl-ball:nth-of-type(1) { animation-delay: 1.6s; }
+    .xl-ball:nth-of-type(2) { animation-delay: 1.7s; }
+    .xl-ball:nth-of-type(3) { animation-delay: 1.8s; }
+    .xl-ball:nth-of-type(4) { animation-delay: 1.9s; }
+    .xl-ball:nth-of-type(5) { animation-delay: 2.0s; }
+
+    .xl-word {
+      font-family: 'Fraunces', Georgia, serif;
+      font-size: 1.5rem; letter-spacing: .12em; text-transform: uppercase;
+      text-align: center; margin-top: 6px;
+      background: linear-gradient(90deg, #b98f3e 0%, #E7C173 45%, #fff3d6 50%, #E7C173 55%, #b98f3e 100%);
+      background-size: 220% auto;
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent; color: transparent;
+      opacity: 0;
+      animation: xl-shimmer 2.4s linear 1.2s infinite, xl-fade .7s ease 1.1s both;
+    }
+    .xl-dust { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+    .xl-dust span {
+      position: absolute; bottom: -10px; border-radius: 50%;
+      background: #E0B450; box-shadow: 0 0 6px rgba(224,180,80,.6); opacity: 0;
+      animation: xl-rise linear infinite;
+    }
+    @keyframes xl-draw { to { stroke-dashoffset: 0; } }
+    @keyframes xl-pop { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: scale(1); } }
+    @keyframes xl-twinkle { 0%,100% { opacity: 1; } 50% { opacity: .5; } }
+    @keyframes xl-shimmer { to { background-position: 220% center; } }
+    @keyframes xl-fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes xl-rise {
+      0% { transform: translateY(0) scale(1); opacity: 0; }
+      15% { opacity: .9; }
+      100% { transform: translateY(-110vh) scale(.4); opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #xmas-loader [class^="xl-"] { animation: none !important; opacity: 1 !important; stroke-dashoffset: 0 !important; }
+    }
+  </style>
+
+  <script>
+    (function () {
+      var isXmas = location.pathname.indexOf('/sesiones-navidad') === 0;
+      var seen = sessionStorage.getItem('xmas_loader_seen');
+      var el = document.getElementById('xmas-loader');
+      if (!el || !isXmas || seen) { if (el) el.remove(); return; }
+
+      el.classList.add('on');
+      document.body.style.overflow = 'hidden';
+
+      var dust = document.getElementById('xl-dust');
+      for (var i = 0; i < 36; i++) {
+        var s = document.createElement('span');
+        s.style.left = Math.random() * 100 + '%';
+        s.style.animationDuration = (4 + Math.random() * 4) + 's';
+        s.style.animationDelay = (Math.random() * 3) + 's';
+        var sz = 2 + Math.random() * 3;
+        s.style.width = sz + 'px'; s.style.height = sz + 'px';
+        dust.appendChild(s);
+      }
+
+      function hide() {
+        el.classList.add('off');
+        document.body.style.overflow = '';
+        sessionStorage.setItem('xmas_loader_seen', '1');
+        setTimeout(function () { el.remove(); }, 800);
+      }
+      el.addEventListener('click', hide);
+      setTimeout(hide, 2900);
+    })();
+  </script>
 </body>
 </html>
