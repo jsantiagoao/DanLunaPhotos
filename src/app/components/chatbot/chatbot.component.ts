@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { WHATSAPP_DISPLAY } from '../../shared/contact-info';
 
 interface ChatMessage {
   role: 'user' | 'bot';
@@ -61,7 +62,7 @@ export class ChatbotComponent {
       },
       error: () => {
         this.loading.set(false);
-        this.messages.update(m => [...m, { role: 'bot', text: 'Disculpa, hubo un error. Contáctanos por WhatsApp al +52 56 6770 4976' }]);
+        this.messages.update(m => [...m, { role: 'bot', text: `Disculpa, hubo un error. Contáctanos por WhatsApp al ${WHATSAPP_DISPLAY}` }]);
         this.shouldScroll = true;
       }
     });

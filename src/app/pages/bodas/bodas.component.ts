@@ -4,6 +4,7 @@ import { Title, Meta } from '@angular/platform-browser';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { LoaderComponent } from '../../components/loader/loader.component';
+import { WHATSAPP_E164 } from '../../shared/contact-info';
 
 @Component({
   selector: 'app-bodas',
@@ -67,7 +68,7 @@ export class BodasComponent implements OnInit, OnDestroy {
           '@id': 'https://danlunaphoto.com/#business',
           name: 'Dan Luna Photo',
           url: 'https://danlunaphoto.com',
-          telephone: '+524424906891',
+          telephone: WHATSAPP_E164,
           address: { '@type': 'PostalAddress', addressLocality: 'Querétaro', addressRegion: 'Querétaro', addressCountry: 'MX' }
         },
         {

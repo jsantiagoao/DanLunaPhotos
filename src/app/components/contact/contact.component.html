@@ -37,14 +37,24 @@
             <textarea formControlName="mensaje" placeholder="Mensaje..." rows="5"></textarea>
           </div>
 
-          <div class="contact__field contact__field--captcha" [class.contact__field--error]="hasError('captcha')">
+          <div class="contact__field contact__field--captcha" [class.contact__field--error]="hasError('captcha') || captchaError">
             <label class="contact__captcha-label">{{ captchaQuestion }}</label>
             <input formControlName="captcha" type="number" placeholder="Tu respuesta" />
+            @if (captchaError) {
+              <p class="contact__field-msg" role="alert">Esa no era. Te dejamos otra operación.</p>
+            }
           </div>
         </div>
 
-        <button type="submit" class="contact__submit">
-          Enviar mensaje →
+        @if (sendError) {
+          <p class="contact__error" role="alert">
+            No pudimos enviar tu mensaje. Tu texto sigue aquí: revisa tu conexión e
+            inténtalo de nuevo, o escríbenos por WhatsApp al {{ whatsappDisplay }}.
+          </p>
+        }
+
+        <button type="submit" class="contact__submit" [disabled]="sending">
+          {{ sending ? 'Enviando…' : 'Enviar mensaje →' }}
         </button>
       </form>
     </div>

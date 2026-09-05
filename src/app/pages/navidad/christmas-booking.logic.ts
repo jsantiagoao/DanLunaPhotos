@@ -43,7 +43,10 @@ export const DEFAULT_LIMITS: CampaignLimits = {
 };
 export const PET_SIZES = ['chico', 'mediano', 'grande'] as const;
 export const MAX_PETICION = 500;
-export const WHATSAPP_NUMBER = '524424906891';
+// Reexportado desde la fuente compartida para no tener dos numeros en el repo.
+// Se importa ademas de reexportar porque whatsappConfirmUrl lo usa aqui mismo.
+import { WHATSAPP_NUMBER } from '../../shared/contact-info';
+export { WHATSAPP_NUMBER };
 
 export type PetSize = (typeof PET_SIZES)[number] | '';
 

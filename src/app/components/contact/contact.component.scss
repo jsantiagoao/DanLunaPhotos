@@ -44,6 +44,26 @@
     color: var(--color-dark);
   }
 
+  // Mismo lenguaje que __success pero en rojo tierra, para que el fallo se lea
+  // como parte del sitio y no como un error del navegador.
+  &__error {
+    padding: 16px 20px;
+    background-color: rgba(158, 74, 58, 0.10);
+    border-left: 3px solid #9E4A3A;
+    border-radius: 8px;
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--color-dark);
+  }
+
+  &__field-msg {
+    margin-top: 6px;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    color: #9E4A3A;
+  }
+
   &__form { display: contents; }
 
   &__fields {
@@ -124,6 +144,11 @@
     cursor: pointer;
     transition: opacity 0.2s;
     align-self: flex-start;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: progress;
+    }
 
     &:hover { opacity: 0.85; }
   }

@@ -7,7 +7,8 @@
   justify-content: center;
   z-index: 99999;
   opacity: 1;
-  transition: opacity 0.5s ease;
+  // Debe coincidir con LOADER_FADE_MS del componente.
+  transition: opacity 0.3s ease;
 
   &--exit {
     opacity: 0;
@@ -20,19 +21,31 @@
     overflow: visible;
   }
 
+  // La D dibuja 0-0.7s y la L 0.2-0.9s: el trazo cierra justo cuando el
+  // componente dispara el fade (LOADER_VISIBLE_MS). Antes duraba 3.4s y el
+  // visitante esperaba la animacion completa antes de ver una sola foto.
   &__path {
     stroke-dasharray: 6000;
     stroke-dashoffset: 6000;
-    animation: draw-path 2.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation: draw-path 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 
     &--l {
-      animation-delay: 0.8s;
+      animation-delay: 0.2s;
     }
   }
 }
 
 @keyframes draw-path {
   to {
+    stroke-dashoffset: 0;
+  }
+}
+
+// El componente ya no monta el loader con reduced-motion; esto cubre el caso de
+// que la preferencia cambie con el loader en pantalla.
+@media (prefers-reduced-motion: reduce) {
+  .loader__path {
+    animation: none;
     stroke-dashoffset: 0;
   }
 }

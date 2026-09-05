@@ -9,6 +9,7 @@ import { AboutComponent } from '../../components/about/about.component';
 import { TestimonialsComponent } from '../../components/testimonials/testimonials.component';
 import { ContactComponent } from '../../components/contact/contact.component';
 import { FooterComponent } from '../../components/footer/footer.component';
+import { WHATSAPP_E164 } from '../../shared/contact-info';
 
 @Component({
   selector: 'app-home',
@@ -92,7 +93,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           name: 'Dan Luna Photo',
           description: 'Estudio de fotografía profesional en Querétaro. Sesiones de retrato, familias, eventos y mini sesiones especiales.',
           url: 'https://danlunaphoto.com',
-          telephone: '+52-56-6770-4976',
+          telephone: WHATSAPP_E164,
           image: 'https://danlunaphoto.com/assets/images/og-default.jpg',
           address: {
             '@type': 'PostalAddress',
@@ -117,7 +118,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           },
           contactPoint: {
             '@type': 'ContactPoint',
-            telephone: '+52-56-6770-4976',
+            telephone: WHATSAPP_E164,
             contactType: 'customer service',
             availableLanguage: 'Spanish'
           }
