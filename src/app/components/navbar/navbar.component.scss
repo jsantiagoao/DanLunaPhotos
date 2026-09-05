@@ -172,6 +172,18 @@
   }
 }
 
+@media (max-width: 1300px) {
+  /* Entre 1024px y 1300px el logo + links + CTA con los gaps grandes no caben
+     y el CTA "Reservar sesión" se salía por la derecha. Se comprimen espacios
+     y el CTA sin cambiar el diseño de escritorio. */
+  .navbar {
+    &__inner { padding: 0 32px; gap: 20px; }
+    &__links { gap: 24px; }
+    &__cta { padding: 10px 18px; font-size: 13px; }
+    &__logo img { height: 52px; }
+  }
+}
+
 @media (max-width: 1023px) {
   .navbar {
     &__inner { padding: 0 40px; gap: 24px; }

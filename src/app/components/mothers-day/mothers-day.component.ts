@@ -6,6 +6,7 @@ import { LoaderComponent } from '../loader/loader.component';
 import { FooterComponent } from '../footer/footer.component';
 import { MothersDayContentComponent } from '../mothers-day-content/mothers-day-content.component';
 import { BreadcrumbItem } from '../breadcrumb/breadcrumb.component';
+import { WHATSAPP_E164 } from '../../shared/contact-info';
 
 @Component({
   selector: 'app-mothers-day',
@@ -124,7 +125,7 @@ export class MothersDayComponent implements OnInit, OnDestroy {
           name: 'Dan Luna Photo',
           description: 'Estudio de fotografía profesional en Querétaro especializado en retratos, familias y sesiones especiales.',
           url: 'https://danlunaphoto.com',
-          telephone: '+524424906891',
+          telephone: WHATSAPP_E164,
           address: {
             '@type': 'PostalAddress',
             addressLocality: 'Querétaro',

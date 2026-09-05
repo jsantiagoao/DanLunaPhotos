@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { WHATSAPP_DISPLAY } from '../../shared/contact-info';
 
 export interface BookingStep {
   number: string;
@@ -27,7 +28,7 @@ export class BookingStepsComponent {
       title: 'Selecciona tu fecha disponible',
       contentLines: [
         'Revisa la disponibilidad en el calendario y elige la fecha y hora de tu sesión fotográfica.',
-        '¿No encuentras un horario disponible? Escríbenos por WhatsApp al +52 56 6770 4976 y coordinamos un espacio para ti.'
+        `¿No encuentras un horario disponible? Escríbenos por WhatsApp al ${WHATSAPP_DISPLAY} y coordinamos un espacio para ti.`
       ],
       button: {
         text: 'Ver fechas disponibles',

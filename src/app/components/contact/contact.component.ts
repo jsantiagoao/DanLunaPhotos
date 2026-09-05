@@ -3,6 +3,9 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import {
+  CITY, CONTACT_EMAIL, INSTAGRAM_HANDLE, WHATSAPP_DISPLAY,
+} from '../../shared/contact-info';
 
 @Component({
   selector: 'app-contact',
@@ -16,6 +19,9 @@ export class ContactComponent {
   private http = inject(HttpClient);
 
   sent = false;
+  sending = false;
+  sendError = false;
+  captchaError = false;
   captchaQuestion = '';
   captchaAnswer = 0;
 
@@ -36,11 +42,14 @@ export class ContactComponent {
   ];
 
   readonly infoItems = [
-    { label: 'WhatsApp',   value: '+52 56 6770 4976'   },
-    { label: 'Email',      value: 'hola@danlunaphoto.com' },
-    { label: 'Instagram',  value: '@danlunaphoto'         },
-    { label: 'Ciudad',     value: 'Querétaro, México' }
+    { label: 'WhatsApp',   value: WHATSAPP_DISPLAY  },
+    { label: 'Email',      value: CONTACT_EMAIL     },
+    { label: 'Instagram',  value: INSTAGRAM_HANDLE  },
+    { label: 'Ciudad',     value: CITY              }
   ];
+
+  /** Para el enlace de rescate cuando falla el envio. */
+  readonly whatsappDisplay = WHATSAPP_DISPLAY;
 
   constructor() {
     this.generateCaptcha();
@@ -54,22 +63,38 @@ export class ContactComponent {
   }
 
   onSubmit(): void {
-    if (this.form.valid) {
-      const captchaValue = parseInt(this.form.get('captcha')?.value || '0');
-      if (captchaValue !== this.captchaAnswer) {
-        alert('Respuesta incorrecta del captcha. Inténtalo de nuevo.');
-        this.generateCaptcha();
-        this.form.patchValue({ captcha: '' });
-        return;
-      }
-      console.log('Form submitted:', this.form.value);
-      this.http.post(`${environment.apiUrl}/contacto`, this.form.value).subscribe({
-        next: () => { this.sent = true; this.form.reset(); this.generateCaptcha(); },
-        error: () => { this.sent = true; this.form.reset(); this.generateCaptcha(); }
-      });
-    } else {
+    if (!this.form.valid) {
       this.form.markAllAsTouched();
+      return;
     }
+
+    const captchaValue = parseInt(this.form.get('captcha')?.value || '0');
+    if (captchaValue !== this.captchaAnswer) {
+      // Antes esto era un alert(): rompe el flujo y en movil tapa el formulario.
+      this.captchaError = true;
+      this.generateCaptcha();
+      this.form.patchValue({ captcha: '' });
+      return;
+    }
+
+    this.captchaError = false;
+    this.sendError = false;
+    this.sending = true;
+
+    this.http.post(`${environment.apiUrl}/contacto`, this.form.value).subscribe({
+      next: () => {
+        this.sending = false;
+        this.sent = true;
+        this.form.reset();
+        this.generateCaptcha();
+      },
+      error: () => {
+        // No se limpia el formulario: si el envio fallo, lo que escribio el
+        // visitante es lo unico que queda para reintentar o pasarlo a WhatsApp.
+        this.sending = false;
+        this.sendError = true;
+      }
+    });
   }
 
   hasError(field: string): boolean {

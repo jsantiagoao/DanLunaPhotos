@@ -4,6 +4,7 @@ import { Title, Meta } from '@angular/platform-browser';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { BreadcrumbComponent, BreadcrumbItem } from '../../components/breadcrumb/breadcrumb.component';
+import { WHATSAPP_E164 } from '../../shared/contact-info';
 
 @Component({
   selector: 'app-fotografa-en-queretaro',
@@ -96,7 +97,7 @@ export class FotografaEnQueretaroComponent implements OnInit, OnDestroy {
           '@id': 'https://danlunaphoto.com/#business',
           name: 'Dan Luna Photo',
           url: 'https://danlunaphoto.com',
-          telephone: '+52-56-6770-4976',
+          telephone: WHATSAPP_E164,
           address: {
             '@type': 'PostalAddress',
             addressLocality: 'Querétaro',

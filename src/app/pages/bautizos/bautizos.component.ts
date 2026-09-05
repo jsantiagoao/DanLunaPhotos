@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { LoaderComponent } from '../../components/loader/loader.component';
 import { FooterComponent } from '../../components/footer/footer.component';
+import { WHATSAPP_E164 } from '../../shared/contact-info';
 
 @Component({
   selector: 'app-bautizos',
@@ -211,7 +212,7 @@ export class BautizosComponent implements OnInit, OnDestroy, AfterViewInit {
           '@id': 'https://danlunaphoto.com/#business',
           name: 'Dan Luna Photo',
           url: 'https://danlunaphoto.com',
-          telephone: '+524424906891',
+          telephone: WHATSAPP_E164,
           address: { '@type': 'PostalAddress', addressLocality: 'Querétaro', addressRegion: 'Querétaro', addressCountry: 'MX' }
         },
         {
