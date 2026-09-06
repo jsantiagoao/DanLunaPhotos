@@ -5,11 +5,12 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { LoaderComponent } from '../../components/loader/loader.component';
 import { WHATSAPP_E164 } from '../../shared/contact-info';
+import { AppImageComponent } from '../../shared/ui/app-image/app-image.component';
 
 @Component({
   selector: 'app-bodas',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, FooterComponent, LoaderComponent],
+  imports: [CommonModule, NavbarComponent, FooterComponent, LoaderComponent, AppImageComponent],
   templateUrl: './bodas.component.html',
   styleUrl: './bodas.component.scss'
 })
