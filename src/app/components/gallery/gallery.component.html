@@ -18,7 +18,7 @@
         <div class="gallery__grid" #carousel>
           @for (card of visible; track card.num) {
             <div class="gallery__card">
-              <app-image class="gallery__card-img" [src]="card.image" [alt]="card.name + ' — ' + card.count" />
+              <app-image class="gallery__card-img" profile="card" [src]="card.image" [alt]="card.name + ' — ' + card.count" />
               <div class="gallery__card-overlay"></div>
               <div class="gallery__card-info">
                 <span class="gallery__card-num">{{ card.num }}</span>

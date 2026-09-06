@@ -91,4 +91,34 @@ describe('AppImageComponent', () => {
     // El <source> webp se retira → el navegador usa el <img src=jpg>.
     expect(source).toBeNull();
   });
+
+  it('should_emit_srcset_with_variants_when_widths_provided', () => {
+    fixture.componentRef.setInput('src', 'assets/images/gallery/boda.jpg');
+    fixture.componentRef.setInput('alt', 'Boda');
+    fixture.componentRef.setInput('widths', [400, 800, 1600]);
+    fixture.detectChanges();
+    const source = fixture.nativeElement.querySelector('source');
+    expect(source?.getAttribute('srcset')).toBe(
+      'assets/images/gallery/boda-400.webp 400w, ' +
+      'assets/images/gallery/boda-800.webp 800w, ' +
+      'assets/images/gallery/boda-1600.webp 1600w'
+    );
+  });
+
+  it('should_emit_sizes_attribute_when_provided', () => {
+    fixture.componentRef.setInput('src', 'a/foto.jpg');
+    fixture.componentRef.setInput('alt', 'x');
+    fixture.componentRef.setInput('widths', [400, 800]);
+    fixture.componentRef.setInput('sizes', '(max-width: 600px) 100vw, 33vw');
+    fixture.detectChanges();
+    const source = fixture.nativeElement.querySelector('source');
+    expect(source?.getAttribute('sizes')).toBe('(max-width: 600px) 100vw, 33vw');
+  });
+
+  it('should_use_single_webp_when_no_widths_given', () => {
+    // Retrocompatible: sin widths, se comporta como antes (webp unico).
+    render('assets/images/gallery/boda.jpg', 'Boda');
+    const source = fixture.nativeElement.querySelector('source');
+    expect(source?.getAttribute('srcset')).toBe('assets/images/gallery/boda.webp');
+  });
 });
