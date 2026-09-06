@@ -6,7 +6,7 @@
   <section class="hero-slider">
     @for (img of sliderImages; track img; let i = $index) {
       <div class="slide" [class.active]="i === currentSlide">
-        <img [src]="img" alt="Fotografía de bautizo en Querétaro" loading="eager" />
+        <app-image [src]="img" alt="Fotografía de bautizo en Querétaro" [lazy]="false" />
       </div>
     }
     <div class="hero-overlay">
@@ -128,7 +128,7 @@
       <div class="gallery-grid">
         @for (img of visibleImages; track img.src; let i = $index) {
           <div class="gallery-item" [class.tall]="img.orientation === 'v'" [class.wide]="img.orientation === 'h' && i % 11 === 5">
-            <img [src]="img.src" [alt]="'Fotografía de bautizo en Querétaro ' + (i + 1)" loading="lazy" decoding="async" />
+            <app-image [src]="img.src" [alt]="'Fotografía de bautizo en Querétaro ' + (i + 1)" />
           </div>
         }
       </div>
@@ -148,7 +148,7 @@
   <!-- CTA -->
   <section class="cta-section">
     <div class="cta-bg">
-      <img src="assets/images/bautizos/slider/BAUTIZO-025.jpg" alt="" loading="lazy" />
+      <app-image src="assets/images/bautizos/slider/BAUTIZO-025.jpg" alt="" />
     </div>
     <div class="cta-container">
       <h2>¿Listo para capturar este momento único?</h2>

@@ -92,8 +92,6 @@
     position: relative;
     height: 480px;
     border-radius: 16px;
-    background-size: cover;
-    background-position: center;
     background-color: var(--color-beige);
     overflow: hidden;
     display: flex;
@@ -102,6 +100,14 @@
     transition: transform 0.3s;
 
     &:hover { transform: scale(1.01); }
+  }
+
+  /* app-image reemplaza el antiguo background-image: capa de fondo con webp+fallback. */
+  &__card-img {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    :is(img) { width: 100%; height: 100%; object-fit: cover; }
   }
 
   &__card-overlay {

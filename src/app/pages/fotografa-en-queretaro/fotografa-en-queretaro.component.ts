@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
+import { AppImageComponent } from '../../shared/ui/app-image/app-image.component';
 import { isPlatformBrowser } from '@angular/common';
 import { Title, Meta } from '@angular/platform-browser';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
@@ -9,7 +10,7 @@ import { WHATSAPP_E164 } from '../../shared/contact-info';
 @Component({
   selector: 'app-fotografa-en-queretaro',
   standalone: true,
-  imports: [NavbarComponent, FooterComponent, BreadcrumbComponent],
+  imports: [NavbarComponent, FooterComponent, BreadcrumbComponent, AppImageComponent],
   templateUrl: './fotografa-en-queretaro.component.html',
   styleUrl: './fotografa-en-queretaro.component.scss'
 })

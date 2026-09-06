@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { AppImageComponent } from '../../shared/ui/app-image/app-image.component';
 import { CommonModule } from '@angular/common';
 
 export interface CarouselPhoto {
@@ -10,7 +11,7 @@ export interface CarouselPhoto {
 @Component({
   selector: 'app-mothers-day-carousel',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, AppImageComponent],
   templateUrl: './mothers-day-carousel.component.html',
   styleUrl: './mothers-day-carousel.component.scss'
 })

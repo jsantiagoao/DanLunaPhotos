@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { INSTAGRAM_URL } from '../../shared/contact-info';
+import { AppImageComponent } from '../../shared/ui/app-image/app-image.component';
 
 export interface GalleryCard {
   num: string;
@@ -12,7 +13,7 @@ export interface GalleryCard {
 @Component({
   selector: 'app-gallery',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, AppImageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './gallery.component.html',
   styleUrl: './gallery.component.scss'

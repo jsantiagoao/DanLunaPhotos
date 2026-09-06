@@ -6,11 +6,12 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { LoaderComponent } from '../../components/loader/loader.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { WHATSAPP_E164 } from '../../shared/contact-info';
+import { AppImageComponent } from '../../shared/ui/app-image/app-image.component';
 
 @Component({
   selector: 'app-bautizos',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, LoaderComponent, FooterComponent],
+  imports: [CommonModule, NavbarComponent, LoaderComponent, FooterComponent, AppImageComponent],
   templateUrl: './bautizos.component.html',
   styleUrl: './bautizos.component.scss'
 })

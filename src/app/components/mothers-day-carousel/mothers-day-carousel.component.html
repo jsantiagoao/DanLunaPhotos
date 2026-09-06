@@ -5,11 +5,10 @@
     <div class="carousel__grid" #carousel>
       @for (photo of getVisiblePhotos(); track photo.id) {
         <div class="carousel__item">
-          <img 
-            [src]="photo.src" 
+          <app-image
+            [src]="photo.src"
             [alt]="photo.alt"
             class="carousel__image"
-            loading="lazy"
           />
         </div>
       }

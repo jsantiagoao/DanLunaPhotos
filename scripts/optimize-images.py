@@ -36,6 +36,7 @@ PNG_PHOTO_BYTES = 500 * 1024
 
 # Solo las imagenes grandes reciben hermano .webp: son las que se sirven con
 # <picture>. Generarlo para todas anade peso muerto que nadie descarga.
+# (Para generar webp de imagenes ya optimizadas, ver scripts/generate-webp.py)
 WEBP_MIN_BYTES = 1024 * 1024
 
 JPEG_QUALITY = 82
