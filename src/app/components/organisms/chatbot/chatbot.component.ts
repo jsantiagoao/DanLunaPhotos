@@ -27,9 +27,15 @@ export class ChatbotComponent {
   ]);
   inputText = '';
   loading = signal(false);
-  private sessionId = crypto.randomUUID();
+  /** Se genera de forma perezosa en el primer envio (siempre en el navegador),
+      para no invocar crypto durante el prerender en el servidor. */
+  private _sessionId?: string;
   private apiUrl = `${environment.apiUrl}/chat`;
   private shouldScroll = false;
+
+  private get sessionId(): string {
+    return (this._sessionId ??= crypto.randomUUID());
+  }
 
   constructor(private http: HttpClient) {}
 

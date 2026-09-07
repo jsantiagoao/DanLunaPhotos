@@ -1,6 +1,6 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectionStrategy, signal, computed } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectionStrategy, signal, computed, PLATFORM_ID, inject } from '@angular/core';
 import { AppImageComponent } from '../../../shared/ui/app-image/app-image.component';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 export interface CarouselPhoto {
   id: number;
@@ -57,8 +57,12 @@ export class MothersDayCarouselComponent implements OnInit, OnDestroy {
   private intervalId: ReturnType<typeof setInterval> | null = null;
   private touchStartX = 0;
   private touchThreshold = 50;
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   ngOnInit() {
+    // Los timers de autoplay/rotacion solo corren en el navegador; en prerender
+    // (server) mantendrian la app "inestable" y colgarian el build (timeout).
+    if (!this.isBrowser) return;
     this.startAutoScroll();
     this.startPhraseRotation();
   }

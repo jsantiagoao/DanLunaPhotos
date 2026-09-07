@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef, ViewChild, PLATFORM_ID, inject } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { NavbarComponent } from '../../components/organisms/navbar/navbar.component';
@@ -23,6 +23,7 @@ export class BautizosComponent implements OnInit, OnDestroy, AfterViewInit {
   private observer: IntersectionObserver | null = null;
 
   @ViewChild('sentinel') sentinelRef!: ElementRef;
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   sliderImages = BAUTIZOS_SLIDER_IMAGES;
 
@@ -89,6 +90,9 @@ export class BautizosComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    // IntersectionObserver solo existe en el navegador; en prerender (server)
+    // no hay scroll infinito que observar.
+    if (!this.isBrowser) return;
     this.observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && this.hasMoreImages && !this.loading) {

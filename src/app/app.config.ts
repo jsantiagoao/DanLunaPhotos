@@ -1,7 +1,8 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
@@ -12,6 +13,9 @@ export const appConfig: ApplicationConfig = {
       withInMemoryScrolling({ scrollPositionRestoration: 'top' })
     ),
     provideAnimationsAsync(),
-    provideHttpClient()
+    // withFetch: requerido para transferir el estado HTTP entre server y cliente.
+    provideHttpClient(withFetch()),
+    // Hidratacion del HTML prerenderizado + replay de eventos previos a hidratar.
+    provideClientHydration(withEventReplay())
   ]
 };

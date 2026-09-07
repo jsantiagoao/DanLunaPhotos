@@ -51,7 +51,13 @@ export class SeoService {
     this.meta.updateTag({ property: 'og:url', content: cfg.url });
     this.meta.updateTag({ property: 'og:title', content: ogTitle });
     this.meta.updateTag({ property: 'og:description', content: ogDesc });
-    if (cfg.image) this.meta.updateTag({ property: 'og:image', content: cfg.image });
+    if (cfg.image) {
+      // Actualiza TODOS los tags de imagen (no solo og:image), para que el
+      // secure_url/alt heredados del index.html base no apunten al generico.
+      this.meta.updateTag({ property: 'og:image', content: cfg.image });
+      this.meta.updateTag({ property: 'og:image:secure_url', content: cfg.image });
+      this.meta.updateTag({ property: 'og:image:alt', content: ogTitle });
+    }
 
     this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
     this.meta.updateTag({ name: 'twitter:title', content: ogTitle });

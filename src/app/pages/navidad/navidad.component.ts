@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, OnDestroy, computed, inject, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Meta, Title } from '@angular/platform-browser';
 import { NavbarComponent } from '../../components/organisms/navbar/navbar.component';
 import { FooterComponent } from '../../components/organisms/footer/footer.component';
 import { BookingService } from '../agendar/booking.service';
+import { SeoService } from '../../shared/seo/seo.service';
 import { ChristmasCalendarComponent } from './christmas-calendar.component';
 import {
   APARTADO_AMOUNT, CAMPAIGN_NAME, CAMPAIGN_SUBTITLE, CHRISTMAS_INCLUDES, LOCATION,
@@ -35,10 +35,9 @@ import type { CampaignStatus } from '../agendar/booking.models';
   templateUrl: './navidad.component.html',
   styleUrl: './navidad.component.scss',
 })
-export class NavidadComponent implements OnInit {
+export class NavidadComponent implements OnInit, OnDestroy {
   private readonly booking = inject(BookingService);
-  private readonly title = inject(Title);
-  private readonly meta = inject(Meta);
+  private readonly seo = inject(SeoService);
 
   protected readonly step = signal<'detalle' | 'datos' | 'listo'>('detalle');
   protected readonly loading = signal(false);
@@ -120,14 +119,37 @@ export class NavidadComponent implements OnInit {
   }));
 
   ngOnInit(): void {
-    this.title.setTitle(`${CAMPAIGN_NAME} · ${CAMPAIGN_SUBTITLE} | Dan Luna Photo`);
-    this.meta.updateTag({
-      name: 'description',
-      content:
-        'Mini sesiones navideñas en Querétaro: 40 minutos en set navideño, 45 fotografías ' +
-        'editadas, hasta 5 personas y pet friendly. Aparta tu lugar con $500.',
+    const desc = 'Mini sesiones navideñas en Querétaro: 40 minutos en set navideño, 45 fotografías ' +
+      'editadas, hasta 5 personas y pet friendly. Aparta tu lugar con $500.';
+    this.seo.apply({
+      title: `${CAMPAIGN_NAME} · ${CAMPAIGN_SUBTITLE} | Dan Luna Photo`,
+      description: desc,
+      keywords: 'mini sesiones navideñas querétaro, fotos navidad querétaro, sesión navideña familiar, ' +
+        'fotografía navidad set, mini sesiones diciembre querétaro, Dan Luna Photo',
+      url: 'https://danlunaphoto.com/sesiones-navidad',
+      image: 'https://danlunaphoto.com/assets/images/navidad/fondo_navidad.jpeg',
+      ogTitle: `🎄 ${CAMPAIGN_NAME} · Mini Sesiones Navideñas en Querétaro`,
+      ogDescription: desc,
+      jsonLd: {
+        '@context': 'https://schema.org',
+        '@type': 'Event',
+        name: `${CAMPAIGN_NAME} · ${CAMPAIGN_SUBTITLE}`,
+        description: desc,
+        image: 'https://danlunaphoto.com/assets/images/navidad/fondo_navidad.jpeg',
+        eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+        location: {
+          '@type': 'Place',
+          name: LOCATION,
+          address: { '@type': 'PostalAddress', addressLocality: 'Querétaro', addressRegion: 'Querétaro', addressCountry: 'MX' }
+        },
+        organizer: { '@type': 'LocalBusiness', name: 'Dan Luna Photo', url: 'https://danlunaphoto.com' }
+      }
     });
     this.loadAvailability();
+  }
+
+  ngOnDestroy(): void {
+    this.seo.clearJsonLd();
   }
 
   private loadAvailability(): void {

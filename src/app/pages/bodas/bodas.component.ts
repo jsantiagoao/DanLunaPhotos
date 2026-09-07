@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, OnDestroy, PLATFORM_ID, inject } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { NavbarComponent } from '../../components/organisms/navbar/navbar.component';
 import { FooterComponent } from '../../components/organisms/footer/footer.component';
 import { LoaderComponent } from '../../components/molecules/loader/loader.component';
@@ -24,9 +24,15 @@ export class BodasComponent implements OnInit, OnDestroy {
     'assets/images/bodas/slider-mobile/slider-mobile-1.jpg',
     'assets/images/bodas/slider-mobile/slider-mobile-2.jpg',
   ];
-  isMobile = window.innerWidth <= 768;
+  /** Se resuelve en el navegador; en prerender (server) queda false y el
+      carrusel usa las imagenes de escritorio hasta que hidrata. */
+  isMobile = false;
 
-  constructor(private seo: SeoService) {}
+  constructor(private seo: SeoService) {
+    if (isPlatformBrowser(inject(PLATFORM_ID))) {
+      this.isMobile = window.innerWidth <= 768;
+    }
+  }
 
   ngOnInit(): void {
     this.seo.apply({

@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, signal, PLATFORM_ID, inject } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-session-pricing',
@@ -16,9 +17,12 @@ export class SessionPricingComponent implements OnInit, OnDestroy {
   private charIndex = 0;
   private isDeleting = false;
   private timer: ReturnType<typeof setTimeout> | null = null;
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   ngOnInit(): void {
-    this.tick();
+    // El typewriter (setTimeout recursivo) solo corre en el navegador; en
+    // prerender colgaria la estabilizacion. En server queda el texto vacio.
+    if (this.isBrowser) this.tick();
   }
 
   ngOnDestroy(): void {
