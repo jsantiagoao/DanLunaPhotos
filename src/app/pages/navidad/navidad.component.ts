@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnInit, OnDestroy, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, OnDestroy, computed, effect, inject, signal } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../../components/organisms/navbar/navbar.component';
@@ -119,34 +119,48 @@ export class NavidadComponent implements OnInit, OnDestroy {
   }));
 
   ngOnInit(): void {
+    this.loadAvailability();
+  }
+
+  /**
+   * SEO/JSON-LD para el usuario real y Google. Es un effect (no ngOnInit fijo) porque el
+   * nombre e imagen los edita Daniela en Studio y llegan async en `config()`: al llegar, el
+   * SEO del navegador se recalcula con los valores reales. Para el preview de crawlers
+   * sociales (WhatsApp/FB) no dependemos de esto — lo sirve la Lambda og-meta leyendo Mongo.
+   */
+  private readonly seoEffect = effect(() => {
+    const name = this.campaignName();
+    const subtitle = this.campaignSubtitle();
+    const image = this.heroImageUrl().startsWith('http')
+      ? this.heroImageUrl()
+      : `https://danlunaphoto.com${this.heroImageUrl()}`;
     const desc = 'Mini sesiones navideñas en Querétaro: 40 minutos en set navideño, 45 fotografías ' +
       'editadas, hasta 5 personas y pet friendly. Aparta tu lugar con $500.';
     this.seo.apply({
-      title: `${CAMPAIGN_NAME} · ${CAMPAIGN_SUBTITLE} | Dan Luna Photo`,
+      title: `${name} · ${subtitle} | Dan Luna Photo`,
       description: desc,
       keywords: 'mini sesiones navideñas querétaro, fotos navidad querétaro, sesión navideña familiar, ' +
         'fotografía navidad set, mini sesiones diciembre querétaro, Dan Luna Photo',
       url: 'https://danlunaphoto.com/sesiones-navidad',
-      image: 'https://danlunaphoto.com/assets/images/navidad/fondo_navidad.jpeg',
-      ogTitle: `🎄 ${CAMPAIGN_NAME} · Mini Sesiones Navideñas en Querétaro`,
+      image,
+      ogTitle: `🎄 ${name} · Mini Sesiones Navideñas en Querétaro`,
       ogDescription: desc,
       jsonLd: {
         '@context': 'https://schema.org',
         '@type': 'Event',
-        name: `${CAMPAIGN_NAME} · ${CAMPAIGN_SUBTITLE}`,
+        name: `${name} · ${subtitle}`,
         description: desc,
-        image: 'https://danlunaphoto.com/assets/images/navidad/fondo_navidad.jpeg',
+        image,
         eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
         location: {
           '@type': 'Place',
-          name: LOCATION,
+          name: this.location(),
           address: { '@type': 'PostalAddress', addressLocality: 'Querétaro', addressRegion: 'Querétaro', addressCountry: 'MX' }
         },
         organizer: { '@type': 'LocalBusiness', name: 'Dan Luna Photo', url: 'https://danlunaphoto.com' }
       }
     });
-    this.loadAvailability();
-  }
+  });
 
   ngOnDestroy(): void {
     this.seo.clearJsonLd();
