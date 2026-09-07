@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Title, Meta } from '@angular/platform-browser';
-import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { NavbarComponent } from '../../components/organisms/navbar/navbar.component';
 import { environment } from '../../../environments/environment';
-import { FooterComponent } from '../../components/footer/footer.component';
+import { FooterComponent } from '../../components/organisms/footer/footer.component';
 
 interface Question {
   id: string;

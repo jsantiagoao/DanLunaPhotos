@@ -1,14 +1,12 @@
-import { Component, signal, computed, inject, OnInit } from '@angular/core';
+import { Component, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { BookingService } from './booking.service';
 import { BusySlot, BookingRequest } from './booking.models';
 import { BookingLogic } from './booking.logic';
-import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { FooterComponent } from '../../components/footer/footer.component';
-import { SESSION_TYPES, FIELD_LABELS, FIELD_TYPES } from './session-types.config';
-import { environment } from '../../../environments/environment';
+import { NavbarComponent } from '../../components/organisms/navbar/navbar.component';
+import { FooterComponent } from '../../components/organisms/footer/footer.component';
+import { SESSION_TYPES, FIELD_LABELS, FIELD_TYPES, SessionTypeConfig, SessionPackage } from './session-types.config';
 
 @Component({
   selector: 'app-agendar',
@@ -18,7 +16,6 @@ import { environment } from '../../../environments/environment';
   styleUrl: './agendar.component.scss',
 })
 export class AgendarComponent implements OnInit {
-  private http = inject(HttpClient);
 
   // State
   step = signal<'type' | 'package' | 'calendar' | 'slots' | 'form' | 'success'>('type');
@@ -35,8 +32,8 @@ export class AgendarComponent implements OnInit {
   selectedType = '';
   selectedPackageId = '';
   needsSecondSlot = false;
-  sessionTypes: any[] = SESSION_TYPES;
-  currentPackages: any[] = [];
+  sessionTypes: SessionTypeConfig[] = SESSION_TYPES;
+  currentPackages: SessionPackage[] = [];
   currentFields: string[] = [];
 
   // Form
@@ -44,7 +41,7 @@ export class AgendarComponent implements OnInit {
   formDetails: Record<string, string> = {};
 
   ngOnInit() {
-    this.http.get<any[]>(`${environment.apiUrl}/packages`).subscribe({
+    this.bookingSvc.getSessionTypes().subscribe({
       next: (types) => { this.sessionTypes = types; },
       error: () => {} // fallback to static
     });
@@ -78,7 +75,7 @@ export class AgendarComponent implements OnInit {
   // Step 1: Type
   selectType(typeId: string) {
     this.selectedType = typeId;
-    const t = this.sessionTypes.find((st: any) => st.id === typeId);
+    const t = this.sessionTypes.find((st) => st.id === typeId);
     this.currentPackages = t?.packages || [];
     this.step.set('package');
   }
@@ -86,8 +83,8 @@ export class AgendarComponent implements OnInit {
   // Step 2: Package
   selectPackage(pkgId: string) {
     this.selectedPackageId = pkgId;
-    const t = this.sessionTypes.find((st: any) => st.id === this.selectedType);
-    const pkg = t?.packages.find((p: any) => p.id === pkgId);
+    const t = this.sessionTypes.find((st) => st.id === this.selectedType);
+    const pkg = t?.packages.find((p) => p.id === pkgId);
     this.currentFields = pkg?.fields || [];
     this.needsSecondSlot = this.currentFields.some(f => f.startsWith('horaFiesta') || f.startsWith('horaEvento'));
     this.step.set('calendar');
@@ -155,8 +152,8 @@ export class AgendarComponent implements OnInit {
   // Helpers
   getTypeLabel(): string { return this.sessionTypes.find(t => t.id === this.selectedType)?.label || ''; }
   getPackageName(): string {
-    const t = this.sessionTypes.find((st: any) => st.id === this.selectedType);
-    return t?.packages.find((p: any) => p.id === this.selectedPackageId)?.name || '';
+    const t = this.sessionTypes.find((st) => st.id === this.selectedType);
+    return t?.packages.find((p) => p.id === this.selectedPackageId)?.name || '';
   }
   getFieldLabel(key: string): string { return FIELD_LABELS[key] || key; }
   getFieldType(key: string): string { return FIELD_TYPES[key] || 'text'; }
@@ -186,7 +183,7 @@ export class AgendarComponent implements OnInit {
   submitBooking(): void {
     if (!this.isFormValid() || this.loading() || this.honeypot) return;
 
-    const payload: any = {
+    const payload: BookingRequest = {
       name: this.sanitize(this.form.name.trim()),
       email: this.form.email.trim().toLowerCase(),
       phone: this.form.phone.replace(/\s/g, ''),

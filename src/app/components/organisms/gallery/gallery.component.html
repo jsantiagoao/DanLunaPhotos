@@ -1,0 +1,39 @@
+<section class="gallery">
+  <div class="gallery__inner">
+
+    <header class="gallery__header">
+      <div class="gallery__title-group">
+        <p class="gallery__overline">Sesiones destacadas</p>
+        <h2 class="gallery__title">Sesiones Destacadas</h2>
+      </div>
+      <a [href]="instagramUrl" target="_blank" rel="noopener" class="gallery__link">Ver todo el trabajo →</a>
+    </header>
+
+    <div class="gallery__carousel-wrapper">
+      <button class="gallery__nav gallery__nav--prev" (click)="prev()" aria-label="Anterior">
+        ←
+      </button>
+      
+      <div class="gallery__grid-container">
+        <div class="gallery__grid" #carousel>
+          @for (card of visible; track card.num) {
+            <div class="gallery__card">
+              <app-image class="gallery__card-img" profile="card" [src]="card.image" [alt]="card.name + ' — ' + card.count" />
+              <div class="gallery__card-overlay"></div>
+              <div class="gallery__card-info">
+                <span class="gallery__card-num">{{ card.num }}</span>
+                <span class="gallery__card-name">{{ card.name }}</span>
+                <span class="gallery__card-count">{{ card.count }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <button class="gallery__nav gallery__nav--next" (click)="next()" aria-label="Siguiente">
+        →
+      </button>
+    </div>
+
+  </div>
+</section>

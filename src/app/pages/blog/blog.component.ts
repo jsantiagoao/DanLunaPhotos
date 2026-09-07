@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
-import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { FooterComponent } from '../../components/footer/footer.component';
+import { NavbarComponent } from '../../components/organisms/navbar/navbar.component';
+import { FooterComponent } from '../../components/organisms/footer/footer.component';
 
 interface BlogPost {
   _id: string;

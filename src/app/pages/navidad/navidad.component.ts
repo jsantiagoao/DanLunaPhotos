@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } 
 import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Meta, Title } from '@angular/platform-browser';
-import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { FooterComponent } from '../../components/footer/footer.component';
+import { NavbarComponent } from '../../components/organisms/navbar/navbar.component';
+import { FooterComponent } from '../../components/organisms/footer/footer.component';
 import { BookingService } from '../agendar/booking.service';
 import { ChristmasCalendarComponent } from './christmas-calendar.component';
 import {

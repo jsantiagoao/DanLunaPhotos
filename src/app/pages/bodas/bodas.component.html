@@ -4,11 +4,7 @@
 <main class="bodas-page">
   <!-- HERO SLIDER -->
   <section class="hero-slider">
-    @for (img of (isMobile ? sliderMobileImages : sliderImages); track img; let i = $index) {
-      <div class="slide" [class.active]="i === currentSlide">
-        <app-image [src]="img" alt="Fotografía de bodas en Querétaro" [lazy]="false" />
-      </div>
-    }
+    <app-carousel [images]="isMobile ? sliderMobileImages : sliderImages" alt="Fotografía de bodas en Querétaro" [interval]="5000" profile="hero" />
     <div class="hero-overlay">
       <div class="hero-content">
         <p class="hero-tag">✦ Fotografía de Bodas en Querétaro ✦</p>
@@ -26,13 +22,6 @@
         <div class="scroll-dot"></div>
       </div>
     </div>
-
-    <!-- Dots -->
-    <div class="slider-dots">
-      @for (img of sliderImages; track img; let i = $index) {
-        <button [class.active]="i === currentSlide" (click)="goToSlide(i)"></button>
-      }
-    </div>
   </section>
 
   <!-- GALERÍA -->
@@ -44,20 +33,20 @@
 
       <div class="gallery-grid">
         <div class="gallery-item large">
-          <app-image src="assets/images/bodas/gallery/J_D-18.04.26-268.jpg" alt="Fotografía de boda en Querétaro" />
+          <app-image src="assets/images/bodas/gallery/J_D-18.04.26-268.jpg" alt="Fotografía de boda en Querétaro" profile="hero" />
           <div class="gallery-overlay"><p>Amor infinito</p></div>
         </div>
         <div class="gallery-item">
-          <app-image src="assets/images/bodas/gallery/J_D-18.04.26-621.jpg" alt="Sesión fotográfica de boda" />
+          <app-image src="assets/images/bodas/gallery/J_D-18.04.26-621.jpg" alt="Sesión fotográfica de boda" profile="gallery" />
         </div>
         <div class="gallery-item">
-          <app-image src="assets/images/bodas/gallery/S_N_16.05.16-186.jpg" alt="Fotógrafo de bodas Querétaro" />
+          <app-image src="assets/images/bodas/gallery/S_N_16.05.16-186.jpg" alt="Fotógrafo de bodas Querétaro" profile="gallery" />
         </div>
         <div class="gallery-item">
-          <app-image src="assets/images/bodas/gallery/Delvin_Alan-381.jpg" alt="Fotografía profesional de boda" />
+          <app-image src="assets/images/bodas/gallery/Delvin_Alan-381.jpg" alt="Fotografía profesional de boda" profile="gallery" />
         </div>
         <div class="gallery-item">
-          <app-image src="assets/images/bodas/gallery/S_N_16.05.16-169.jpg" alt="Fotos de boda profesionales" />
+          <app-image src="assets/images/bodas/gallery/S_N_16.05.16-169.jpg" alt="Fotos de boda profesionales" profile="gallery" />
         </div>
       </div>
 

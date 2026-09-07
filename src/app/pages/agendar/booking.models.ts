@@ -41,12 +41,14 @@ export interface BookingRequest {
   email: string;
   phone: string;
   type: string;
+  /** Id del paquete elegido dentro del tipo de sesion. */
+  package?: string;
   date: string;
   time: string;
   location?: string;
   notes?: string;
   /** Datos propios del tipo de sesion (en Navidad: personas, mascota, peticion). */
-  details?: Record<string, any>;
+  details?: Record<string, string>;
 }
 
 export interface BookingResponse {

@@ -119,7 +119,7 @@ export function validateChristmasForm(form: ChristmasForm, limits: CampaignLimit
   }
 
   if (form.mascota) {
-    if (!PET_SIZES.includes(form.mascotaTamano as any)) return 'Elige el tamaño de tu mascota';
+    if (!(PET_SIZES as readonly string[]).includes(form.mascotaTamano)) return 'Elige el tamaño de tu mascota';
     if (!(form.mascotaNombre || '').trim()) return 'Escribe el nombre de tu mascota';
   }
 
