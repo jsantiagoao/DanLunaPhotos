@@ -2,9 +2,9 @@ import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core
 import { AppImageComponent } from '../../shared/ui/app-image/app-image.component';
 import { isPlatformBrowser } from '@angular/common';
 import { Title, Meta } from '@angular/platform-browser';
-import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { FooterComponent } from '../../components/footer/footer.component';
-import { BreadcrumbComponent, BreadcrumbItem } from '../../components/breadcrumb/breadcrumb.component';
+import { NavbarComponent } from '../../components/organisms/navbar/navbar.component';
+import { FooterComponent } from '../../components/organisms/footer/footer.component';
+import { BreadcrumbComponent, BreadcrumbItem } from '../../components/atoms/breadcrumb/breadcrumb.component';
 import { WHATSAPP_E164 } from '../../shared/contact-info';
 
 @Component({

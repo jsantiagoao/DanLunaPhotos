@@ -4,11 +4,7 @@
 <main class="bodas-page">
   <!-- HERO SLIDER -->
   <section class="hero-slider">
-    @for (img of (isMobile ? sliderMobileImages : sliderImages); track img; let i = $index) {
-      <div class="slide" [class.active]="i === currentSlide">
-        <app-image [src]="img" alt="Fotografía de bodas en Querétaro" profile="hero" [lazy]="false" />
-      </div>
-    }
+    <app-carousel [images]="isMobile ? sliderMobileImages : sliderImages" alt="Fotografía de bodas en Querétaro" [interval]="5000" profile="hero" />
     <div class="hero-overlay">
       <div class="hero-content">
         <p class="hero-tag">✦ Fotografía de Bodas en Querétaro ✦</p>
@@ -25,13 +21,6 @@
       <div class="scroll-mouse">
         <div class="scroll-dot"></div>
       </div>
-    </div>
-
-    <!-- Dots -->
-    <div class="slider-dots">
-      @for (img of sliderImages; track img; let i = $index) {
-        <button [class.active]="i === currentSlide" (click)="goToSlide(i)"></button>
-      }
     </div>
   </section>
 

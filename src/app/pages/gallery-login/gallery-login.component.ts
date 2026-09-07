@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
+import { GalleryInfoResponse, GalleryAuthResponse } from '../gallery-view/gallery.models';
 
 @Component({
   selector: 'app-gallery-login',
@@ -57,7 +58,7 @@ export class GalleryLoginComponent {
   ngOnInit() {
     this.slug = this.route.snapshot.paramMap.get('slug') || '';
     // Load gallery info (cover + title)
-    this.http.get<any>(`${environment.apiUrl}/gallery/${this.slug}`).subscribe({
+    this.http.get<GalleryInfoResponse>(`${environment.apiUrl}/gallery/${this.slug}`).subscribe({
       next: (data) => { this.title = data.title; this.coverUrl = data.coverUrl; },
       error: () => {}
     });
@@ -67,7 +68,7 @@ export class GalleryLoginComponent {
     if (!this.password || !this.pin) { this.error.set('Ingresa contraseña y PIN'); return; }
     this.loading.set(true);
     this.error.set('');
-    this.http.post<any>(`${environment.apiUrl}/gallery/${this.slug}/auth`, { password: this.password, pin: this.pin }).subscribe({
+    this.http.post<GalleryAuthResponse>(`${environment.apiUrl}/gallery/${this.slug}/auth`, { password: this.password, pin: this.pin }).subscribe({
       next: (res) => {
         sessionStorage.setItem(`gallery_token_${this.slug}`, res.token);
         sessionStorage.setItem(`gallery_data_${this.slug}`, JSON.stringify(res.gallery));

@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Title, Meta } from '@angular/platform-browser';
-import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { LoaderComponent } from '../../components/loader/loader.component';
-import { HeroComponent } from '../../components/hero/hero.component';
-import { GalleryComponent } from '../../components/gallery/gallery.component';
-import { AboutComponent } from '../../components/about/about.component';
-import { TestimonialsComponent } from '../../components/testimonials/testimonials.component';
-import { ContactComponent } from '../../components/contact/contact.component';
-import { FooterComponent } from '../../components/footer/footer.component';
+import { NavbarComponent } from '../../components/organisms/navbar/navbar.component';
+import { LoaderComponent } from '../../components/molecules/loader/loader.component';
+import { HeroComponent } from '../../components/molecules/hero/hero.component';
+import { GalleryComponent } from '../../components/organisms/gallery/gallery.component';
+import { AboutComponent } from '../../components/molecules/about/about.component';
+import { TestimonialsComponent } from '../../components/organisms/testimonials/testimonials.component';
+import { ContactComponent } from '../../components/organisms/contact/contact.component';
+import { FooterComponent } from '../../components/organisms/footer/footer.component';
 import { WHATSAPP_E164 } from '../../shared/contact-info';
 
 @Component({

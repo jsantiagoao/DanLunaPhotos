@@ -1,0 +1,108 @@
+<div class="gallery" [class.dark]="design.theme === 'dark'" (contextmenu)="$event.preventDefault()">
+  <!-- Cover Full Screen -->
+  <div class="cover-fullscreen" [class]="'cover-' + design.coverStyle"
+       [style.background-image]="'url(' + coverUrl + ')'"
+       [style.background-position]="focalPoint"
+       [style.--cover-text-color]="design.highlightColor || '#FFFFFF'">
+    <div class="cover-fs-overlay">
+      <div class="cover-logo-icon">
+        <img src="assets/images/logo-light.png" alt="Dan Luna" class="cover-logo-img" />
+      </div>
+      <div class="cover-brand">DAN LUNA PHOTOS</div>
+      <h1 class="cover-title" [class]="'title-' + design.typography">{{ gallery.title }}</h1>
+      <p class="cover-date">{{ gallery.date || '' }}</p>
+      <button class="cover-enter-btn" (click)="scrollToGallery()">VER GALERÍA</button>
+    </div>
+  </div>
+
+  <!-- Sticky nav bar -->
+  <div class="gallery-nav" id="gallery-nav">
+    <div class="nav-title">
+      <span class="nav-name">{{ gallery.title }}</span>
+      <span class="nav-brand">DAN LUNA PHOTOS</span>
+    </div>
+    <div class="nav-sets">
+      @for (s of gallery.sets; track s) {
+        <button [class.active]="activeSet === s" (click)="activeSet = s">{{ s }}</button>
+      }
+    </div>
+    <div class="nav-actions">
+      <button class="na-btn" [class.active]="showFavoritesOnly" (click)="showFavoritesOnly = !showFavoritesOnly" title="Favoritas">♥</button>
+      <button class="na-btn" (click)="showDownloadScreen = true" title="Descargar">⬇</button>
+      <button class="na-btn" (click)="shareGallery()" title="Compartir">↗</button>
+      <button class="na-btn" (click)="startSlideshow()" title="Slideshow">▶</button>
+    </div>
+  </div>
+
+  <!-- Download screen -->
+  @if (showDownloadScreen) {
+    <div class="download-screen">
+      <div class="download-card">
+        <div class="download-header">
+          <span class="download-title">{{ gallery.title }}</span>
+          <span class="download-brand">DAN LUNA PHOTOS</span>
+        </div>
+        <div class="download-body">
+          <h2>Descargar fotografías</h2>
+          <p>Tu correo electrónico se utilizará para notificarte cuando los archivos estén listos para su descarga. Para descargar esta colección de fotos, introduce el PIN de descarga proporcionado por Dan Luna Photos.</p>
+          <input type="email" [(ngModel)]="downloadEmail" placeholder="Tu correo electrónico" />
+          <input type="text" [(ngModel)]="downloadPin" placeholder="Introduce el pin de descarga" maxlength="6" />
+          <button class="btn-download" (click)="confirmDownload()">SIGUIENTE</button>
+        </div>
+        <button class="download-close" (click)="showDownloadScreen = false">✕</button>
+      </div>
+    </div>
+  }
+
+  <!-- Grid -->
+  <div class="photo-grid" [class]="'layout-' + design.gridLayout + ' spacing-' + design.spacing">
+    @for (p of displayedPhotos(); track p._id) {
+      <div class="photo-item" (click)="openLightbox(p)">
+        <img [src]="p.thumbUrl" [alt]="p.filename" loading="lazy" />
+        <button class="fav-btn" [class.active]="p.isFavorite" (click)="toggleFav(p); $event.stopPropagation()">♥</button>
+        <input type="checkbox" class="select-check" [checked]="selectedIds.includes(p._id)" (click)="toggleSelect(p._id); $event.stopPropagation()" />
+      </div>
+    }
+  </div>
+
+  @if (selectedIds.length) {
+    <div class="selection-bar">
+      <span>{{ selectedIds.length }} seleccionadas</span>
+      <button (click)="downloadSelected()">⬇ Descargar selección</button>
+      <button (click)="selectedIds = []">✕</button>
+    </div>
+  }
+
+  <!-- Lightbox -->
+  @if (lightboxPhoto(); as lb) {
+    <div class="lightbox" (click)="lightboxPhoto.set(null)">
+      <div class="lb-content" (click)="$event.stopPropagation()">
+        <img class="lb-thumb" [src]="lb.thumbUrl" [class.loaded]="lightboxWebLoaded" />
+        <img class="lb-web" [src]="lb.webUrl || lb.thumbUrl" (load)="lightboxWebLoaded = true" [class.loaded]="lightboxWebLoaded" />
+        <div class="lb-actions">
+          <button (click)="prevPhoto()">‹</button>
+          <button class="fav-btn-lb" [class.active]="lb.isFavorite" (click)="toggleFav(lb)">♥</button>
+          @if (gallery.downloads?.enabled) {
+            <a [href]="lb.originalUrl" download class="dl-btn">⬇</a>
+          }
+          <button (click)="nextPhoto()">›</button>
+        </div>
+        <button class="lb-close" (click)="lightboxPhoto.set(null)">✕</button>
+      </div>
+    </div>
+  }
+
+  <!-- Slideshow -->
+  @if (slideshowActive) {
+    <div class="slideshow" (click)="slideshowActive = false">
+      @if (currentSlideshowPhoto; as photo) {
+        <img [src]="photo.thumbUrl" [alt]="photo.filename" />
+      }
+      <div class="slideshow-controls" (click)="$event.stopPropagation()">
+        <button (click)="slideshowPrev()">‹</button>
+        <button (click)="slideshowActive = false">✕</button>
+        <button (click)="slideshowNext()">›</button>
+      </div>
+    </div>
+  }
+</div>

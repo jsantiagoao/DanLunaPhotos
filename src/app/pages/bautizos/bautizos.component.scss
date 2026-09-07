@@ -21,6 +21,12 @@ $font-sans: 'DM Sans', system-ui, sans-serif;
   height: 100vh;
   overflow: hidden;
 
+  app-carousel {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
   .slide {
     position: absolute;
     inset: 0;
