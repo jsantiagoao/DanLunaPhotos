@@ -9,30 +9,45 @@
       <a [href]="instagramUrl" target="_blank" rel="noopener" class="gallery__link">Ver todo el trabajo →</a>
     </header>
 
-    <div class="gallery__carousel-wrapper">
-      <button class="gallery__nav gallery__nav--prev" (click)="prev()" aria-label="Anterior">
-        ←
-      </button>
-      
-      <div class="gallery__grid-container">
-        <div class="gallery__grid" #carousel>
-          @for (card of visible; track card.num) {
-            <div class="gallery__card">
-              <app-image class="gallery__card-img" profile="card" [src]="card.image" [alt]="card.name + ' — ' + card.count" />
-              <div class="gallery__card-overlay"></div>
-              <div class="gallery__card-info">
-                <span class="gallery__card-num">{{ card.num }}</span>
-                <span class="gallery__card-name">{{ card.name }}</span>
-                <span class="gallery__card-count">{{ card.count }}</span>
-              </div>
-            </div>
-          }
-        </div>
+    <div class="gallery__coverflow">
+      <button class="gallery__nav gallery__nav--prev" (click)="prev()" aria-label="Sesión anterior">←</button>
+
+      <div class="gallery__stage" role="listbox" aria-label="Sesiones destacadas"
+           (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+        @for (item of positioned(); track item.card.num; let i = $index) {
+          <button
+            type="button"
+            class="gallery__card"
+            [class]="'gallery__card gallery__card--' + item.position"
+            (click)="select(i)"
+            [attr.aria-selected]="item.position === 'center'"
+            [attr.tabindex]="item.position === 'center' ? 0 : -1"
+            [attr.aria-label]="item.card.name">
+            <app-image class="gallery__card-img" profile="card" [src]="item.card.image" [alt]="item.card.name + ' — ' + item.card.count" />
+            <span class="gallery__card-overlay"></span>
+          </button>
+        }
       </div>
 
-      <button class="gallery__nav gallery__nav--next" (click)="next()" aria-label="Siguiente">
-        →
-      </button>
+      <button class="gallery__nav gallery__nav--next" (click)="next()" aria-label="Sesión siguiente">→</button>
+    </div>
+
+    <div class="gallery__caption" aria-live="polite">
+      <span class="gallery__caption-num">{{ activeCard().num }}</span>
+      <span class="gallery__caption-name">{{ activeCard().name }}</span>
+      <span class="gallery__caption-desc">{{ activeCard().count }}</span>
+    </div>
+
+    <div class="gallery__dots" role="tablist" aria-label="Seleccionar sesión">
+      @for (card of cards; track card.num; let i = $index) {
+        <button
+          type="button"
+          class="gallery__dot"
+          [class.gallery__dot--active]="i === currentIndex()"
+          (click)="select(i)"
+          [attr.aria-label]="'Ver ' + card.name"
+          [attr.aria-selected]="i === currentIndex()"></button>
+      }
     </div>
 
   </div>

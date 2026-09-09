@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, PLATFORM_ID, inject, signal, computed } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { INSTAGRAM_URL } from '../../../shared/contact-info';
 import { AppImageComponent } from '../../../shared/ui/app-image/app-image.component';
@@ -10,6 +10,20 @@ export interface GalleryCard {
   image: string;
 }
 
+/** Posición visual de una card respecto a la activa en el coverflow 3D. */
+export type CardPosition = 'center' | 'left' | 'right' | 'far-left' | 'far-right' | 'hidden';
+
+/** Card con su posición ya resuelta, para que el template no calcule nada. */
+export interface PositionedCard {
+  card: GalleryCard;
+  position: CardPosition;
+}
+
+/**
+ * Sesiones Destacadas — carrusel "coverflow" 3D: la sesión activa se muestra grande y al
+ * frente; las vecinas, escaladas y atenuadas detrás. La lógica de posición es pura
+ * (positionFor) para poder probarla sin renderizar. Autoplay solo en navegador (SSR-safe).
+ */
 @Component({
   selector: 'app-gallery',
   standalone: true,
@@ -19,8 +33,6 @@ export interface GalleryCard {
   styleUrl: './gallery.component.scss'
 })
 export class GalleryComponent implements OnInit, OnDestroy {
-  @ViewChild('carousel') carousel!: ElementRef<HTMLDivElement>;
-
   readonly cards: GalleryCard[] = [
     { num: '01', name: 'Bautizos',        count: 'Momentos sagrados, recuerdos eternos', image: 'assets/images/gallery/bautizo.jpg' },
     { num: '02', name: 'Bodas',           count: 'Fotografías para revivir tu gran día', image: 'assets/images/gallery/boda.jpg' },
@@ -28,92 +40,112 @@ export class GalleryComponent implements OnInit, OnDestroy {
     { num: '04', name: 'Sesión familiar', count: 'Amor en familia',                      image: 'assets/images/gallery/sesion-familiar.jpg' }
   ];
 
-  currentIndex = 0;
-  isTransitioning = false;
-  visibleCards = 4;
-  /** Portafolio real del estudio (fuente única en contact-info). */
+  /** Índice de la card al frente. */
+  readonly currentIndex = signal(0);
+
+  /** Cada card con su posición resuelta respecto a la activa (para el template). */
+  readonly positioned = computed<PositionedCard[]>(() =>
+    this.cards.map((card, i) => ({ card, position: this.positionFor(i, this.currentIndex(), this.cards.length) }))
+  );
+
+  /** La card actualmente al frente; su info se muestra bajo el carrusel. */
+  readonly activeCard = computed(() => this.cards[this.currentIndex()]);
+
   readonly instagramUrl = INSTAGRAM_URL;
-  /** Precalculado: NO se llama desde el template para no re-evaluar en cada ciclo. */
-  visible: GalleryCard[] = [];
 
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly isBrowser = isPlatformBrowser(this.platformId);
   private intervalId: ReturnType<typeof setInterval> | null = null;
-  /** Referencia estable del handler para poder removerlo en ngOnDestroy. */
-  private readonly onResize = () => this.updateVisibleCards();
 
-  constructor(
-    private cdr: ChangeDetectorRef,
-    @Inject(PLATFORM_ID) private platformId: object
-  ) {}
+  ngOnInit(): void {
+    if (this.isBrowser) this.startAutoScroll();
+  }
 
-  ngOnInit() {
-    if (!isPlatformBrowser(this.platformId)) {
-      this.rebuildVisible();
-      return;
+  ngOnDestroy(): void {
+    this.stopAutoScroll();
+  }
+
+  /**
+   * Posición de la card `i` cuando la activa es `active`, en un anillo de `total` cards.
+   * Función pura: distancia circular con signo -> center / (far-)left / (far-)right.
+   */
+  positionFor(i: number, active: number, total: number): CardPosition {
+    let diff = i - active;
+    // Distancia circular con signo: el camino más corto alrededor del anillo.
+    if (diff > total / 2) diff -= total;
+    if (diff < -total / 2) diff += total;
+
+    switch (diff) {
+      case 0: return 'center';
+      case 1: return 'right';
+      case -1: return 'left';
+      case 2: return 'far-right';
+      case -2: return 'far-left';
+      default: return 'hidden';
     }
-    this.updateVisibleCards();
-    window.addEventListener('resize', this.onResize);
+  }
+
+  select(index: number): void {
+    this.currentIndex.set(index);
+    this.restartAutoScroll();
+  }
+
+  prev(): void {
+    const n = this.cards.length;
+    this.currentIndex.update((i) => (i - 1 + n) % n);
+    this.restartAutoScroll();
+  }
+
+  next(): void {
+    const n = this.cards.length;
+    this.currentIndex.update((i) => (i + 1) % n);
+    this.restartAutoScroll();
+  }
+
+  // ── Swipe táctil (móvil) ───────────────────────────────
+  /** Umbral mínimo en px para considerar el gesto un swipe y no un tap. */
+  private static readonly SWIPE_THRESHOLD = 40;
+  private touchStartX: number | null = null;
+
+  onTouchStart(event: TouchEvent): void {
+    this.touchStartX = event.changedTouches[0]?.clientX ?? null;
+  }
+
+  onTouchEnd(event: TouchEvent): void {
+    if (this.touchStartX === null) return;
+    const endX = event.changedTouches[0]?.clientX ?? this.touchStartX;
+    const dir = this.swipeDirection(this.touchStartX, endX);
+    this.touchStartX = null;
+    // Swipe a la izquierda → siguiente; a la derecha → anterior (como en apps nativas).
+    if (dir === 'left') this.next();
+    else if (dir === 'right') this.prev();
+  }
+
+  /**
+   * Traduce el desplazamiento horizontal en dirección de navegación. Pura y testeable:
+   * ignora gestos por debajo del umbral (tap o micro-movimiento).
+   */
+  swipeDirection(startX: number, endX: number): 'left' | 'right' | 'none' {
+    const delta = endX - startX;
+    if (Math.abs(delta) < GalleryComponent.SWIPE_THRESHOLD) return 'none';
+    return delta < 0 ? 'left' : 'right';
+  }
+
+  private startAutoScroll(): void {
+    this.intervalId = setInterval(() => this.next(), 4000);
+  }
+
+  private stopAutoScroll(): void {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+      this.intervalId = null;
+    }
+  }
+
+  /** Tras interacción manual, reinicia el temporizador para no saltar de inmediato. */
+  private restartAutoScroll(): void {
+    if (!this.isBrowser) return;
+    this.stopAutoScroll();
     this.startAutoScroll();
-  }
-
-  ngOnDestroy() {
-    if (this.intervalId) clearInterval(this.intervalId);
-    if (isPlatformBrowser(this.platformId)) {
-      window.removeEventListener('resize', this.onResize);
-    }
-  }
-
-  private updateVisibleCards() {
-    const width = window.innerWidth;
-    if (width <= 600) this.visibleCards = 1;
-    else if (width <= 900) this.visibleCards = 2;
-    else if (width <= 1199) this.visibleCards = 3;
-    else this.visibleCards = 4;
-    this.rebuildVisible();
-  }
-
-  /** Recalcula las cards visibles una sola vez, cuando cambia el índice o el viewport. */
-  private rebuildVisible() {
-    const out: GalleryCard[] = [];
-    for (let i = 0; i < this.visibleCards; i++) {
-      out.push(this.cards[(this.currentIndex + i) % this.cards.length]);
-    }
-    this.visible = out;
-    this.cdr.markForCheck();
-  }
-
-  private startAutoScroll() {
-    this.intervalId = setInterval(() => this.next(), 3000);
-  }
-
-  prev() {
-    if (this.isTransitioning) return;
-    this.isTransitioning = true;
-    const grid = this.carousel.nativeElement;
-    const shift = 100 / this.visibleCards;
-    grid.style.transition = 'transform 0.5s ease-in-out';
-    grid.style.transform = `translateX(${shift}%)`;
-    setTimeout(() => {
-      this.currentIndex = (this.currentIndex - 1 + this.cards.length) % this.cards.length;
-      grid.style.transition = 'none';
-      grid.style.transform = 'translateX(0)';
-      this.isTransitioning = false;
-      this.rebuildVisible();
-    }, 500);
-  }
-
-  next() {
-    if (this.isTransitioning) return;
-    this.isTransitioning = true;
-    const grid = this.carousel.nativeElement;
-    const shift = 100 / this.visibleCards;
-    grid.style.transition = 'transform 0.5s ease-in-out';
-    grid.style.transform = `translateX(-${shift}%)`;
-    setTimeout(() => {
-      this.currentIndex = (this.currentIndex + 1) % this.cards.length;
-      grid.style.transition = 'none';
-      grid.style.transform = 'translateX(0)';
-      this.isTransitioning = false;
-      this.rebuildVisible();
-    }, 500);
   }
 }
