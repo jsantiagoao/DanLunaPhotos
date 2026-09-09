@@ -11,7 +11,7 @@
 
       <div class="type-grid">
         @for (t of sessionTypes; track t.id) {
-          <button class="type-card" (click)="selectType(t.id)">
+          <button class="type-card" appGradientBorder (click)="selectType(t.id)">
             {{ t.label }}
           </button>
         }
@@ -27,7 +27,7 @@
 
       <div class="package-grid">
         @for (p of currentPackages; track p.id) {
-          <button class="package-card" (click)="selectPackage(p.id)">
+          <button class="package-card" appGradientBorder (click)="selectPackage(p.id)">
             <span class="pkg-name">{{ p.name }}</span>
             <span class="pkg-price">{{ p.price | currency:'MXN':'symbol':'1.0-0' }}</span>
           </button>

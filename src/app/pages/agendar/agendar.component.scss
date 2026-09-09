@@ -340,3 +340,55 @@ $beige: #EAE7E1;
   .slots-grid { grid-template-columns: repeat(3, 1fr); }
   .booking-header h1 { font-size: 1.4rem; }
 }
+
+// ── Efecto contorno (gradient border que sigue al cursor) ──────────────
+// La directiva appGradientBorder agrega .has-gradient-border y actualiza --gb-x/--gb-y.
+// El borde se dibuja en un ::before recortado al perímetro con mask (solo el marco).
+.type-card.has-gradient-border,
+.package-card.has-gradient-border {
+  position: relative;
+  --gb-x: 50%;
+  --gb-y: 0%;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1.5px; // grosor del contorno
+    background: radial-gradient(
+      120px circle at var(--gb-x) var(--gb-y),
+      $gold 0%,
+      rgba($gold, 0.5) 35%,
+      transparent 70%
+    );
+    // Recorta el relleno para dejar solo el marco (borde), no el interior.
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    pointer-events: none;
+  }
+
+  &:hover::before { opacity: 1; }
+}
+
+// Sin puntero fino (táctil): un contorno estático sutil, sin depender del cursor.
+@media (hover: none) {
+  .type-card.has-gradient-border::before,
+  .package-card.has-gradient-border::before {
+    background: linear-gradient(135deg, rgba($gold, 0.6), transparent 60%);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .type-card.has-gradient-border::before,
+  .package-card.has-gradient-border::before { transition: none; }
+}

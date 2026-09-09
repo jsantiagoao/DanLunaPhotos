@@ -6,12 +6,13 @@ import { BusySlot, BookingRequest } from './booking.models';
 import { BookingLogic } from './booking.logic';
 import { NavbarComponent } from '../../components/organisms/navbar/navbar.component';
 import { FooterComponent } from '../../components/organisms/footer/footer.component';
+import { GradientBorderDirective } from '../../shared/ui/gradient-border/gradient-border.directive';
 import { SESSION_TYPES, FIELD_LABELS, FIELD_TYPES, SessionTypeConfig, SessionPackage, filterBookableTypes } from './session-types.config';
 
 @Component({
   selector: 'app-agendar',
   standalone: true,
-  imports: [CommonModule, FormsModule, NavbarComponent, FooterComponent],
+  imports: [CommonModule, FormsModule, NavbarComponent, FooterComponent, GradientBorderDirective],
   templateUrl: './agendar.component.html',
   styleUrl: './agendar.component.scss',
 })
