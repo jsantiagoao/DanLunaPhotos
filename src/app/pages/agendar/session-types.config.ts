@@ -82,6 +82,19 @@ export const SESSION_TYPES: SessionTypeConfig[] = [
   },
 ];
 
+/**
+ * Tipos de sesión que NO se agendan por el flujo genérico de /agendar porque tienen su
+ * propio calendario/landing (p. ej. la campaña navideña vive en /sesiones-navidad). El
+ * backend /packages los devuelve porque Studio sí los administra; la landing pública los
+ * excluye aquí. Añadir un tipo a esta lista lo saca del selector de /agendar.
+ */
+export const SELF_SERVICE_EXCLUDED_TYPES: readonly string[] = ['navidad'];
+
+/** Deja solo los tipos agendables por el flujo genérico (quita los de flujo propio). */
+export function filterBookableTypes(types: SessionTypeConfig[]): SessionTypeConfig[] {
+  return types.filter((t) => !SELF_SERVICE_EXCLUDED_TYPES.includes(t.id));
+}
+
 export const FIELD_LABELS: Record<string, string> = {
   horaCeremonia: 'Hora de ceremonia',
   horaFiesta: 'Hora de fiesta',

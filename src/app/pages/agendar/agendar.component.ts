@@ -6,7 +6,7 @@ import { BusySlot, BookingRequest } from './booking.models';
 import { BookingLogic } from './booking.logic';
 import { NavbarComponent } from '../../components/organisms/navbar/navbar.component';
 import { FooterComponent } from '../../components/organisms/footer/footer.component';
-import { SESSION_TYPES, FIELD_LABELS, FIELD_TYPES, SessionTypeConfig, SessionPackage } from './session-types.config';
+import { SESSION_TYPES, FIELD_LABELS, FIELD_TYPES, SessionTypeConfig, SessionPackage, filterBookableTypes } from './session-types.config';
 
 @Component({
   selector: 'app-agendar',
@@ -32,7 +32,8 @@ export class AgendarComponent implements OnInit {
   selectedType = '';
   selectedPackageId = '';
   needsSecondSlot = false;
-  sessionTypes: SessionTypeConfig[] = SESSION_TYPES;
+  // El fallback estático ya está limpio; el filtro protege también lo que venga del backend.
+  sessionTypes: SessionTypeConfig[] = filterBookableTypes(SESSION_TYPES);
   currentPackages: SessionPackage[] = [];
   currentFields: string[] = [];
 
@@ -42,7 +43,7 @@ export class AgendarComponent implements OnInit {
 
   ngOnInit() {
     this.bookingSvc.getSessionTypes().subscribe({
-      next: (types) => { this.sessionTypes = types; },
+      next: (types) => { this.sessionTypes = filterBookableTypes(types); },
       error: () => {} // fallback to static
     });
   }

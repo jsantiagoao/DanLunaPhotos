@@ -10,12 +10,30 @@ describe('AgendarComponent (unit)', () => {
   beforeEach(() => {
     mockBookingSvc = {
       getAvailability: jest.fn().mockReturnValue(of({ month: 7, year: 2026, busySlots: [] })),
+      getSessionTypes: jest.fn().mockReturnValue(of([])),
       reserve: jest.fn(),
     };
     // El componente usa `inject(HttpClient)` en un inicializador de campo, asi que
     // construirlo con `new` fuera de un contexto de inyeccion falla (NG0203).
     TestBed.configureTestingModule({ providers: [provideHttpClient()] });
     component = TestBed.runInInjectionContext(() => new AgendarComponent(mockBookingSvc));
+  });
+
+  it('excluye del selector los tipos con flujo propio (navidad tiene su propio calendario)', () => {
+    // El backend /packages devuelve navidad porque Studio lo administra, pero en la
+    // landing pública navidad se agenda en /sesiones-navidad, no en /agendar.
+    mockBookingSvc.getSessionTypes.mockReturnValue(of([
+      { id: 'bautizo', label: 'Bautizo', packages: [] },
+      { id: 'navidad', label: 'Sesión Navideña', packages: [] },
+      { id: 'familia', label: 'Familia', packages: [] },
+    ]));
+
+    component.ngOnInit();
+
+    const ids = component.sessionTypes.map((t) => t.id);
+    expect(ids).toContain('bautizo');
+    expect(ids).toContain('familia');
+    expect(ids).not.toContain('navidad');
   });
 
   it('should create and load availability when a package is chosen', () => {
