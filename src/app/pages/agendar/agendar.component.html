@@ -26,8 +26,8 @@
       </header>
 
       <div class="package-grid">
-        @for (p of currentPackages; track p.id) {
-          <button class="package-card" appGradientBorder (click)="selectPackage(p.id)">
+        @for (p of currentPackages; track p._id) {
+          <button class="package-card" appGradientBorder (click)="selectPackage(p._id)">
             <span class="pkg-name">{{ p.name }}</span>
             <span class="pkg-price">{{ p.price | currency:'MXN':'symbol':'1.0-0' }}</span>
           </button>

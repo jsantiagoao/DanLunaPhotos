@@ -4,7 +4,7 @@
  */
 
 export interface SessionPackage {
-  id: string;
+  _id: string;       // id del paquete = _id de Mongo (ADR-005)
   name: string;
   price: number;
   fields: string[]; // campos adicionales requeridos
@@ -21,63 +21,63 @@ export const SESSION_TYPES: SessionTypeConfig[] = [
     id: 'bautizo',
     label: 'Bautizo',
     packages: [
-      { id: 'ceremonia', name: 'Ceremonia', price: 1850, fields: ['horaCeremonia', 'iglesia', 'iglesiaMaps'] },
-      { id: 'ceremonia_fiesta_1h', name: 'Ceremonia + Fiesta 1h', price: 2850, fields: ['horaCeremonia', 'iglesia', 'iglesiaMaps', 'horaFiesta', 'lugarFiesta', 'lugarFiestaMaps'] },
-      { id: 'ceremonia_fiesta_2h', name: 'Ceremonia + Fiesta 2h', price: 3950, fields: ['horaCeremonia', 'iglesia', 'iglesiaMaps', 'horaFiesta', 'lugarFiesta', 'lugarFiestaMaps'] },
+      { _id: 'ceremonia', name: 'Ceremonia', price: 1850, fields: ['horaCeremonia', 'iglesia', 'iglesiaMaps'] },
+      { _id: 'ceremonia_fiesta_1h', name: 'Ceremonia + Fiesta 1h', price: 2850, fields: ['horaCeremonia', 'iglesia', 'iglesiaMaps', 'horaFiesta', 'lugarFiesta', 'lugarFiestaMaps'] },
+      { _id: 'ceremonia_fiesta_2h', name: 'Ceremonia + Fiesta 2h', price: 3950, fields: ['horaCeremonia', 'iglesia', 'iglesiaMaps', 'horaFiesta', 'lugarFiesta', 'lugarFiestaMaps'] },
     ]
   },
   {
     id: 'embarazo',
     label: 'Embarazo',
     packages: [
-      { id: 'estudio', name: 'Estudio', price: 1500, fields: [] },
-      { id: 'exteriores', name: 'Exteriores', price: 2000, fields: ['ubicacion', 'ubicacionMaps'] },
+      { _id: 'estudio', name: 'Estudio', price: 1500, fields: [] },
+      { _id: 'exteriores', name: 'Exteriores', price: 2000, fields: ['ubicacion', 'ubicacionMaps'] },
     ]
   },
   {
     id: 'newborn',
     label: 'Newborn',
     packages: [
-      { id: 'basico', name: 'Básico', price: 1800, fields: [] },
-      { id: 'premium', name: 'Premium', price: 2500, fields: [] },
+      { _id: 'basico', name: 'Básico', price: 1800, fields: [] },
+      { _id: 'premium', name: 'Premium', price: 2500, fields: [] },
     ]
   },
   {
     id: 'familia',
     label: 'Familia',
     packages: [
-      { id: 'mini', name: 'Mini sesión 30min', price: 1200, fields: ['ubicacion', 'ubicacionMaps'] },
-      { id: 'completa', name: 'Sesión completa 1h', price: 2200, fields: ['ubicacion', 'ubicacionMaps'] },
+      { _id: 'mini', name: 'Mini sesión 30min', price: 1200, fields: ['ubicacion', 'ubicacionMaps'] },
+      { _id: 'completa', name: 'Sesión completa 1h', price: 2200, fields: ['ubicacion', 'ubicacionMaps'] },
     ]
   },
   {
     id: 'xv',
     label: 'XV Años',
     packages: [
-      { id: 'casual', name: 'Sesión casual', price: 2500, fields: ['ubicacion', 'ubicacionMaps'] },
-      { id: 'evento', name: 'Evento completo', price: 5000, fields: ['horaCeremonia', 'iglesia', 'iglesiaMaps', 'horaEvento', 'salon', 'salonMaps'] },
+      { _id: 'casual', name: 'Sesión casual', price: 2500, fields: ['ubicacion', 'ubicacionMaps'] },
+      { _id: 'evento', name: 'Evento completo', price: 5000, fields: ['horaCeremonia', 'iglesia', 'iglesiaMaps', 'horaEvento', 'salon', 'salonMaps'] },
     ]
   },
   {
     id: 'comunion',
     label: 'Primera Comunión',
     packages: [
-      { id: 'ceremonia', name: 'Ceremonia', price: 1850, fields: ['horaCeremonia', 'iglesia', 'iglesiaMaps'] },
-      { id: 'ceremonia_evento', name: 'Ceremonia + Fiesta 1hr', price: 2400, fields: ['horaCeremonia', 'iglesia', 'iglesiaMaps', 'horaEvento', 'lugarEvento', 'lugarEventoMaps'] },
+      { _id: 'ceremonia', name: 'Ceremonia', price: 1850, fields: ['horaCeremonia', 'iglesia', 'iglesiaMaps'] },
+      { _id: 'ceremonia_evento', name: 'Ceremonia + Fiesta 1hr', price: 2400, fields: ['horaCeremonia', 'iglesia', 'iglesiaMaps', 'horaEvento', 'lugarEvento', 'lugarEventoMaps'] },
     ]
   },
   {
     id: 'set_personalizada',
     label: 'Sesión en Set Personalizada',
     packages: [
-      { id: 'set_personalizada', name: 'Set Personalizada', price: 1800, fields: [] },
+      { _id: 'set_personalizada', name: 'Set Personalizada', price: 1800, fields: [] },
     ]
   },
   {
     id: 'sesion_exterior',
     label: 'Sesión Exterior',
     packages: [
-      { id: 'sesion_exterior', name: 'Sesión Exterior', price: 2000, fields: [] },
+      { _id: 'sesion_exterior', name: 'Sesión Exterior', price: 2000, fields: [] },
     ]
   },
 ];

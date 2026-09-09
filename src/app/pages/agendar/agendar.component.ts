@@ -86,7 +86,7 @@ export class AgendarComponent implements OnInit {
   selectPackage(pkgId: string) {
     this.selectedPackageId = pkgId;
     const t = this.sessionTypes.find((st) => st.id === this.selectedType);
-    const pkg = t?.packages.find((p) => p.id === pkgId);
+    const pkg = t?.packages.find((p) => p._id === pkgId);
     this.currentFields = pkg?.fields || [];
     this.needsSecondSlot = this.currentFields.some(f => f.startsWith('horaFiesta') || f.startsWith('horaEvento'));
     this.step.set('calendar');
@@ -155,7 +155,7 @@ export class AgendarComponent implements OnInit {
   getTypeLabel(): string { return this.sessionTypes.find(t => t.id === this.selectedType)?.label || ''; }
   getPackageName(): string {
     const t = this.sessionTypes.find((st) => st.id === this.selectedType);
-    return t?.packages.find((p) => p.id === this.selectedPackageId)?.name || '';
+    return t?.packages.find((p) => p._id === this.selectedPackageId)?.name || '';
   }
   getFieldLabel(key: string): string { return FIELD_LABELS[key] || key; }
   getFieldType(key: string): string { return FIELD_TYPES[key] || 'text'; }
