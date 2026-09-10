@@ -16,7 +16,16 @@
       object-fit: cover;
       object-position: center;
       display: block;
+      // Efecto Ken Burns: zoom/pan lento y cinematográfico sobre la foto.
+      // Refuerza la imagen (activo principal) sin taparla. Cero JS.
+      animation: heroKenBurns 20s ease-in-out infinite alternate;
+      will-change: transform;
     }
+  }
+
+  // Respeta la preferencia de accesibilidad de movimiento reducido.
+  @media (prefers-reduced-motion: reduce) {
+    &__media img { animation: none; }
   }
 
   &__overlay {
@@ -168,4 +177,12 @@
     &__inner { padding: 80px 20px 40px; }
     &__headline { font-size: 32px; }
   }
+}
+
+// Ken Burns — zoom + pan sutil. Empieza en escala 1 (LCP nítido) y
+// deriva lentamente. El desplazamiento es pequeño (<2%) para que la
+// imagen nunca revele bordes ni descentre el sujeto.
+@keyframes heroKenBurns {
+  from { transform: scale(1) translate(0, 0); }
+  to   { transform: scale(1.08) translate(-1.5%, -1%); }
 }

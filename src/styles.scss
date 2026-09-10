@@ -76,3 +76,32 @@ button {
   background: none;
   font-family: var(--font-sans);
 }
+
+/* ─── Scroll reveal (RevealOnScrollDirective) ──────────────────────────────
+   Estado inicial: la sección está oculta y ligeramente desplazada hacia abajo.
+   Al entrar en viewport, la directiva añade `.reveal--visible` y hace la
+   transición a su posición natural. La animación es sutil y editorial,
+   coherente con la marca (calidez, sin efectos bruscos). */
+.reveal {
+  display: block; // los host de componentes Angular son inline por defecto;
+                  // transform/opacity requieren un box block para animar bien.
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.22, 0.61, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: opacity, transform;
+}
+.reveal--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Accesibilidad: sin desplazamiento ni fundido para quien prefiere
+   movimiento reducido; el contenido aparece de inmediato. */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

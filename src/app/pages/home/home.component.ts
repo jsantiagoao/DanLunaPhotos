@@ -7,6 +7,7 @@ import { AboutComponent } from '../../components/molecules/about/about.component
 import { TestimonialsComponent } from '../../components/organisms/testimonials/testimonials.component';
 import { ContactComponent } from '../../components/organisms/contact/contact.component';
 import { FooterComponent } from '../../components/organisms/footer/footer.component';
+import { RevealOnScrollDirective } from '../../shared/directives/reveal-on-scroll.directive';
 import { WHATSAPP_E164 } from '../../shared/contact-info';
 import { SeoService } from '../../shared/seo/seo.service';
 
@@ -21,17 +22,21 @@ import { SeoService } from '../../shared/seo/seo.service';
     AboutComponent,
     TestimonialsComponent,
     ContactComponent,
-    FooterComponent
+    FooterComponent,
+    RevealOnScrollDirective
   ],
   template: `
     <app-loader />
     <app-navbar />
     <main>
+      <!-- El hero NO se anima: es el contenido "above the fold" y debe estar
+           presente al cargar (protege el LCP). El scroll reveal empieza en la
+           galería. -->
       <app-hero id="inicio" />
-      <app-gallery id="portfolio" />
-      <app-about id="sobre-mi" />
-      <app-testimonials id="testimonios" />
-      <app-contact id="contacto" />
+      <app-gallery id="portfolio" appReveal />
+      <app-about id="sobre-mi" appReveal />
+      <app-testimonials id="testimonios" appReveal />
+      <app-contact id="contacto" appReveal />
     </main>
     <app-footer />
   `,
