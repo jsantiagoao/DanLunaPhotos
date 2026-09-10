@@ -11,10 +11,11 @@ export class BookingService {
 
   constructor(private http: HttpClient) {}
 
-  getAvailability(month: number, year: number): Observable<AvailabilityResponse> {
-    return this.http.get<AvailabilityResponse>(`${this.baseUrl}/availability`, {
-      params: { month: month.toString(), year: year.toString() },
-    });
+  getAvailability(month: number, year: number, campaignType?: string): Observable<AvailabilityResponse> {
+    const params: Record<string, string> = { month: month.toString(), year: year.toString() };
+    // ADR-007: la landing de una campaña pide el estado de SU campaña por slug.
+    if (campaignType) params['type'] = campaignType;
+    return this.http.get<AvailabilityResponse>(`${this.baseUrl}/availability`, { params });
   }
 
   /** Tipos de sesion y paquetes desde el backend (fallback: SESSION_TYPES local). */

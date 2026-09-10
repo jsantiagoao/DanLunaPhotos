@@ -18,6 +18,9 @@ export const serverRoutes: ServerRoute[] = [
   // Blog con parametro dinamico: cliente (el contenido llega por API).
   { path: 'blog/:slug', renderMode: RenderMode.Client },
   { path: 'blog', renderMode: RenderMode.Client },
+  // Landing de campaña dinámica (ADR-007): el slug y su config llegan por API en runtime
+  // (no existen en build), así que se sirve como SPA cliente, igual que el blog.
+  { path: 'campana/:slug', renderMode: RenderMode.Client },
   // Resto de rutas (home, campanas, servicios): prerender estatico con og-tags.
   { path: '**', renderMode: RenderMode.Prerender },
 ];

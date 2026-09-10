@@ -13,6 +13,8 @@ export interface SessionPackage {
 export interface SessionTypeConfig {
   id: string;
   label: string;
+  /** Clase del tipo (ADR-006/007). Las campañas tienen su propia landing, no van en /agendar. */
+  kind?: 'simple' | 'campaign';
   packages: SessionPackage[];
 }
 
@@ -86,13 +88,15 @@ export const SESSION_TYPES: SessionTypeConfig[] = [
  * Tipos de sesión que NO se agendan por el flujo genérico de /agendar porque tienen su
  * propio calendario/landing (p. ej. la campaña navideña vive en /sesiones-navidad). El
  * backend /packages los devuelve porque Studio sí los administra; la landing pública los
- * excluye aquí. Añadir un tipo a esta lista lo saca del selector de /agendar.
+ * excluye aquí. Se excluye por `kind === 'campaign'` (ADR-007): cualquier campaña tiene su
+ * propia landing y no entra al flujo genérico. Se conserva el fallback por slug para datos
+ * que aún no traigan `kind`.
  */
 export const SELF_SERVICE_EXCLUDED_TYPES: readonly string[] = ['navidad'];
 
-/** Deja solo los tipos agendables por el flujo genérico (quita los de flujo propio). */
+/** Deja solo los tipos agendables por el flujo genérico (quita las campañas). */
 export function filterBookableTypes(types: SessionTypeConfig[]): SessionTypeConfig[] {
-  return types.filter((t) => !SELF_SERVICE_EXCLUDED_TYPES.includes(t.id));
+  return types.filter((t) => t.kind !== 'campaign' && !SELF_SERVICE_EXCLUDED_TYPES.includes(t.id));
 }
 
 export const FIELD_LABELS: Record<string, string> = {

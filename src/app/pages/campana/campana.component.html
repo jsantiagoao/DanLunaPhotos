@@ -1,0 +1,111 @@
+@if (loading()) {
+  <div class="campana-state">Cargando…</div>
+} @else if (notFound()) {
+  <div class="campana-state">
+    <h1>Campaña no disponible</h1>
+    <p>Esta campaña no existe o aún no está activa. Revisa el enlace o vuelve más tarde.</p>
+  </div>
+} @else {
+  <main class="campana">
+    <!-- Hero -->
+    <header class="campana__hero"
+            [style.background-image]="heroImage() ? 'url(' + heroImage() + ')' : null">
+      <div class="campana__hero-overlay">
+        <h1>{{ title() }}</h1>
+        @if (subtitle()) { <p class="campana__subtitle">{{ subtitle() }}</p> }
+        @if (campaign(); as c) {
+          <div class="campana__pricing">
+            @if (c.preventaActive) {
+              <span class="campana__price">Preventa ${{ c.price | number }}</span>
+              <span class="campana__regular">${{ c.regularPrice | number }}</span>
+              <span class="campana__spots">Quedan {{ c.spotsLeft }} lugares</span>
+            } @else {
+              <span class="campana__price">${{ c.price | number }}</span>
+            }
+            @if (c.apartado) { <span class="campana__apartado">Aparta con ${{ c.apartado | number }}</span> }
+          </div>
+        }
+      </div>
+    </header>
+
+    <!-- Qué incluye -->
+    @if (includes().length) {
+      <section class="campana__includes">
+        <h2>Qué incluye</h2>
+        <ul>
+          @for (item of includes(); track $index) {
+            <li>
+              <strong>{{ item.title || item }}</strong>
+              @if (item.detail) { <span>{{ item.detail }}</span> }
+            </li>
+          }
+        </ul>
+      </section>
+    }
+
+    <!-- Reserva -->
+    <section class="campana__booking">
+      <h2>Aparta tu sesión</h2>
+      @if (done()) {
+        <div class="campana__success">
+          <p>¡Reservación creada! Te enviamos un correo con los siguientes pasos.</p>
+        </div>
+      } @else {
+        <form class="campana__form" (ngSubmit)="submit()">
+          <label><span>Nombre completo</span>
+            <input type="text" name="name" [(ngModel)]="form['name']" required /></label>
+          <label><span>Correo</span>
+            <input type="email" name="email" [(ngModel)]="form['email']" required /></label>
+          <label><span>Teléfono</span>
+            <input type="tel" name="phone" [(ngModel)]="form['phone']" required /></label>
+          <label><span>Fecha</span>
+            <input type="date" name="date" [(ngModel)]="form['date']" required /></label>
+          <label><span>Horario</span>
+            <input type="time" name="time" [(ngModel)]="form['time']" required /></label>
+
+          <!-- Campos dinámicos de la campaña (fieldSchema) -->
+          @for (field of shownFields(); track field.key) {
+            <label [class.full]="field.type === 'textarea'">
+              <span>{{ field.label }}@if (field.required) { <em>*</em> }</span>
+
+              @switch (field.type) {
+                @case ('boolean') {
+                  <select [name]="field.key" [(ngModel)]="details[field.key]">
+                    <option [ngValue]="false">No</option>
+                    <option [ngValue]="true">Sí</option>
+                  </select>
+                }
+                @case ('select') {
+                  <select [name]="field.key" [(ngModel)]="details[field.key]">
+                    <option value="">Elige…</option>
+                    @for (opt of field.options || []; track opt) {
+                      <option [value]="opt">{{ opt }}</option>
+                    }
+                  </select>
+                }
+                @case ('number') {
+                  <input type="number" [name]="field.key" [(ngModel)]="details[field.key]"
+                         [min]="field.min ?? null" [max]="field.max ?? null" />
+                }
+                @case ('textarea') {
+                  <textarea rows="3" [name]="field.key" [(ngModel)]="details[field.key]"
+                            [maxlength]="field.maxLength ?? null"></textarea>
+                }
+                @default {
+                  <input type="text" [name]="field.key" [(ngModel)]="details[field.key]"
+                         [maxlength]="field.maxLength ?? null" />
+                }
+              }
+            </label>
+          }
+
+          @if (error(); as e) { <p class="campana__error">{{ e }}</p> }
+
+          <button type="submit" class="campana__submit" [disabled]="submitting()">
+            {{ submitting() ? 'Enviando…' : 'Reservar' }}
+          </button>
+        </form>
+      }
+    </section>
+  </main>
+}

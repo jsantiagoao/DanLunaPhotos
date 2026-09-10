@@ -23,5 +23,8 @@ export const routes: Routes = [
   { path: 'galeria/:slug/ver', loadComponent: () => import('./pages/gallery-view/gallery-view.component').then(m => m.GalleryViewComponent) },
   // Oculta del menú pero accesible por URL directa (no eliminada)
   { path: 'dia-de-las-madres', loadComponent: () => import('./components/organisms/mothers-day/mothers-day.component').then(m => m.MothersDayComponent) },
+  // Landing genérica de campaña (ADR-007): cualquier campaña configurada se sirve aquí.
+  // Navidad conserva su landing con arte propio en /sesiones-navidad.
+  { path: 'campana/:slug', loadComponent: () => import('./pages/campana/campana.component').then(m => m.CampanaComponent) },
   { path: '**', redirectTo: '' }
 ];
