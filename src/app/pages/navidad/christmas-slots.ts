@@ -71,6 +71,8 @@ export interface CampaignConfig {
     includes: ReadonlyArray<{ icon: string; title: string; detail: string }>;
     /** Datos de la cuenta de depósito, editables desde Studio. Se muestran al confirmar. */
     payment?: { bank: string; accountHolder: string; clabe: string; instructions?: string };
+    /** ObjectId del paquete de catálogo asociado a la campaña; con él se registra la reserva. */
+    packageId?: string;
   };
 }
 

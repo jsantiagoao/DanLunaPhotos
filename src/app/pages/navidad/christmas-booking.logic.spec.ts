@@ -1,5 +1,5 @@
 import {
-  CHRISTMAS_PACKAGE_ID, EXTRA_PERSON_PRICE, MAX_AFORO, MAX_PERSONAS, MAX_PERSONAS_EXTRA, PET_SIZES,
+  EXTRA_PERSON_PRICE, MAX_AFORO, MAX_PERSONAS, MAX_PERSONAS_EXTRA, PET_SIZES,
   emptyChristmasForm, priceChangeNotice, sessionTotal, toBookingRequest, validateChristmasForm, whatsappConfirmUrl,
 } from './christmas-booking.logic';
 
@@ -91,36 +91,37 @@ describe('validateChristmasForm', () => {
 });
 
 describe('toBookingRequest', () => {
+  const PKG = '6a97b674fc61d2ab3802603e';
+
   it('reserva como sesion navideña', () => {
-    expect(toBookingRequest(valido()).type).toBe('navidad');
+    expect(toBookingRequest(valido(), PKG).type).toBe('navidad');
   });
 
-  it('identifica el paquete de la campaña', () => {
-    // Sin paquete, en el panel la sesion aparece sin nombre y sin precio de catalogo.
-    expect(toBookingRequest(valido()).package).toBe(CHRISTMAS_PACKAGE_ID);
+  it('usa el paquete que le pasa la config de la campaña (única fuente de verdad)', () => {
+    expect(toBookingRequest(valido(), PKG).package).toBe(PKG);
   });
 
   it('manda el telefono sin espacios', () => {
-    expect(toBookingRequest(valido({ phone: '442 123 4567' })).phone).toBe('4421234567');
+    expect(toBookingRequest(valido({ phone: '442 123 4567' }), PKG).phone).toBe('4421234567');
   });
 
   it('los datos de la sesion viajan en details', () => {
-    const req = toBookingRequest(valido({ personas: 4, peticionEspecial: 'trineo' }));
+    const req = toBookingRequest(valido({ personas: 4, peticionEspecial: 'trineo' }), PKG);
     expect(req.details).toEqual({ personas: 4, mascota: false, peticionEspecial: 'trineo' });
   });
 
   it('sin mascota no manda su tamaño ni su nombre', () => {
-    const req = toBookingRequest(valido({ mascota: false, mascotaTamano: 'chico', mascotaNombre: 'Nieve' }));
+    const req = toBookingRequest(valido({ mascota: false, mascotaTamano: 'chico', mascotaNombre: 'Nieve' }), PKG);
     expect(req.details['mascotaNombre']).toBeUndefined();
   });
 
   it('con mascota los manda recortados', () => {
-    const req = toBookingRequest(valido({ mascota: true, mascotaTamano: 'grande', mascotaNombre: '  Nieve  ' }));
+    const req = toBookingRequest(valido({ mascota: true, mascotaTamano: 'grande', mascotaNombre: '  Nieve  ' }), PKG);
     expect(req.details['mascotaNombre']).toBe('Nieve');
   });
 
   it('una peticion vacia no viaja', () => {
-    expect(toBookingRequest(valido()).details['peticionEspecial']).toBeUndefined();
+    expect(toBookingRequest(valido(), PKG).details['peticionEspecial']).toBeUndefined();
   });
 });
 
@@ -175,11 +176,11 @@ describe('personas extra', () => {
   });
 
   it('los extras viajan en el detalle', () => {
-    expect(toBookingRequest(valido({ personasExtra: 2 })).details['personasExtra']).toBe(2);
+    expect(toBookingRequest(valido({ personasExtra: 2 }), '6a97b674fc61d2ab3802603e').details['personasExtra']).toBe(2);
   });
 
   it('sin extras no ensucia el detalle', () => {
-    expect(toBookingRequest(valido({ personasExtra: 0 })).details['personasExtra']).toBeUndefined();
+    expect(toBookingRequest(valido({ personasExtra: 0 }), '6a97b674fc61d2ab3802603e').details['personasExtra']).toBeUndefined();
   });
 });
 

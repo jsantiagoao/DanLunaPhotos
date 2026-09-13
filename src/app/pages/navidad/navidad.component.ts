@@ -227,6 +227,14 @@ export class NavidadComponent implements OnInit, OnDestroy {
     const problema = validateChristmasForm(this.form, this.limits());
     if (problema) { this.error.set(problema); return; }
 
+    // Sin paquete configurado en la campaña no se puede registrar la sesión (quedaría
+    // sin precio ni nombre en el panel). Es un error de configuración, no de la clienta:
+    // se bloquea el envío y se avisa para que se corrija en Studio.
+    if (!(this.config()?.content?.packageId || '').trim()) {
+      this.error.set('Esta campaña aún no tiene un paquete configurado. Escríbenos por WhatsApp para apartar tu lugar.');
+      return;
+    }
+
     this.error.set(null);
     this.sending.set(true);
 
@@ -253,7 +261,10 @@ export class NavidadComponent implements OnInit, OnDestroy {
 
   private enviarReserva(): void {
     this.sending.set(true);
-    this.booking.reserve(toBookingRequest(this.form)).subscribe({
+    // El paquete lo dicta la config de la campaña (content.packageId), única fuente de
+    // verdad. `reservar()` ya garantizó que existe antes de llegar aquí.
+    const packageId = (this.config()?.content?.packageId || '').trim();
+    this.booking.reserve(toBookingRequest(this.form, packageId)).subscribe({
       next: () => { this.sending.set(false); this.step.set('listo'); },
       error: (e) => {
         this.sending.set(false);

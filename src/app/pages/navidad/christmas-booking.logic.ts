@@ -7,14 +7,6 @@ import { slotEnd } from './christmas-slots';
  * para que la pagina se limite a orquestar. Es el gemelo de `shared/navidad.py`: el
  * servidor valida lo mismo, aqui se valida para avisar antes de enviar.
  */
-/**
- * Id del paquete navideño en el catalogo `packages`.
- *
- * Viaja en la reserva para que en el panel la sesion se vea con su nombre y su
- * precio de catalogo, como cualquier otra.
- */
-export const CHRISTMAS_PACKAGE_ID = 'noel_tale';
-
 export const MAX_PERSONAS = 5;
 /** Se pueden agregar hasta 3 personas mas, sin pasar del aforo del set. */
 export const MAX_PERSONAS_EXTRA = 3;
@@ -137,8 +129,12 @@ export function validateChristmasForm(form: ChristmasForm, limits: CampaignLimit
  *
  * Lo que la clienta descarto no viaja: si contesto que no lleva mascota, el nombre
  * que alcanzo a escribir no se manda ni se guarda.
+ *
+ * `packageId` es el ObjectId del paquete de catálogo de la campaña y es OBLIGATORIO:
+ * viene de la config (content.packageId), única fuente de verdad. Sin él la reserva no
+ * puede armarse — quien orquesta debe impedir llegar aquí (no hay valor por defecto).
  */
-export function toBookingRequest(form: ChristmasForm): ChristmasBookingRequest {
+export function toBookingRequest(form: ChristmasForm, packageId: string): ChristmasBookingRequest {
   const details: Record<string, any> = {
     personas: Number(form.personas),
     mascota: !!form.mascota,
@@ -161,7 +157,7 @@ export function toBookingRequest(form: ChristmasForm): ChristmasBookingRequest {
     email: (form.email || '').trim(),
     phone: digits(form.phone),
     type: 'navidad',
-    package: CHRISTMAS_PACKAGE_ID,
+    package: packageId,
     date: form.date,
     time: form.time,
     details,
