@@ -69,6 +69,8 @@ export interface CampaignConfig {
     location: string;
     heroImage: string;
     includes: ReadonlyArray<{ icon: string; title: string; detail: string }>;
+    /** Datos de la cuenta de depósito, editables desde Studio. Se muestran al confirmar. */
+    payment?: { bank: string; accountHolder: string; clabe: string; instructions?: string };
   };
 }
 

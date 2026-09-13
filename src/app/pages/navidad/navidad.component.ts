@@ -15,6 +15,7 @@ import {
   validateChristmasForm, whatsappConfirmUrl, type ChristmasForm, type CampaignLimits,
 } from './christmas-booking.logic';
 import { SESSION_MINUTES, type BusyInterval, type CampaignConfig } from './christmas-slots';
+import { resolvePaymentInfo, formatClabe, type PaymentInfo } from './christmas-payment';
 import type { CampaignStatus } from '../agendar/booking.models';
 
 /**
@@ -266,6 +267,31 @@ export class NavidadComponent implements OnInit, OnDestroy {
   // ── Confirmacion ────────────────────────────────────────────
   protected get whatsappUrl(): string {
     return whatsappConfirmUrl(this.form);
+  }
+
+  /**
+   * Datos de la cuenta de depósito, editables por Daniela desde Studio (config.content.payment).
+   * Si no hay datos cargados, es `null` y la tarjeta no se muestra (se mantiene el texto simple).
+   * No hay respaldo hardcodeado: los datos bancarios reales solo viven en la config, nunca en código.
+   */
+  protected readonly payment = computed<PaymentInfo | null>(() =>
+    resolvePaymentInfo(this.config()?.content ?? null, null));
+  /** CLABE en grupos de 4 para leerla sin errores. */
+  protected readonly clabeFormateada = computed(() => formatClabe(this.payment()?.clabe || ''));
+  /** Feedback efímero tras copiar la CLABE. */
+  protected readonly clabeCopiada = signal(false);
+
+  /** Copia la CLABE al portapapeles y muestra el "¡Copiada!" por un momento. */
+  protected async copiarClabe(): Promise<void> {
+    const clabe = this.payment()?.clabe;
+    if (!clabe) return;
+    try {
+      await navigator.clipboard.writeText(clabe);
+      this.clabeCopiada.set(true);
+      setTimeout(() => this.clabeCopiada.set(false), 2000);
+    } catch {
+      // Si el navegador bloquea el portapapeles, la clienta aún ve la CLABE para copiarla a mano.
+    }
   }
 
   protected volver(paso: 'detalle'): void {

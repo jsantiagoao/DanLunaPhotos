@@ -117,3 +117,84 @@
   margin: 0 auto 26px;
 }
 .done__lead strong { color: var(--xmas-wine); }
+
+
+/* ── Tarjeta de datos de depósito (solo en la confirmación) ──────────────
+   Aparece después de apartar, no antes: es el momento donde la clienta espera
+   saber cómo pagar. Discreta, sin pop-ups. La CLABE se copia de un toque. */
+.pay-card {
+  width: 100%;
+  max-width: 420px;
+  margin: 8px auto 4px;
+  padding: 20px 22px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(217, 184, 143, 0.28);
+  backdrop-filter: blur(6px);
+  text-align: left;
+  animation: payFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes payFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.pay-card__eyebrow {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  margin-bottom: 14px;
+}
+.pay-card__rows { display: flex; flex-direction: column; gap: 10px; }
+.pay-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.pay-row__label {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+.pay-row__value { font-size: 0.95rem; font-weight: 600; }
+.pay-row__value--mono { font-variant-numeric: tabular-nums; letter-spacing: 0.06em; }
+.pay-row--clabe {
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(217, 184, 143, 0.18);
+}
+.pay-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(217, 184, 143, 0.4);
+  background: transparent;
+  color: var(--color-gold);
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+}
+.pay-copy:hover { background: rgba(217, 184, 143, 0.14); transform: translateY(-1px); }
+.pay-copy.is-copied {
+  background: rgba(120, 180, 120, 0.18);
+  border-color: rgba(120, 180, 120, 0.5);
+  color: #8fd18f;
+}
+.pay-card__note {
+  margin: 14px 0 0;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  opacity: 0.8;
+}
