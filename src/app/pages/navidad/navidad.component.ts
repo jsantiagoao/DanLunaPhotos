@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, OnInit, OnDestroy, computed, effect
 import { DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../../components/organisms/navbar/navbar.component';
-import { FooterComponent } from '../../components/organisms/footer/footer.component';
 import { BookingService } from '../agendar/booking.service';
 import { SeoService } from '../../shared/seo/seo.service';
 import { ChristmasCalendarComponent } from './christmas-calendar.component';
@@ -14,7 +13,7 @@ import {
   emptyChristmasForm, humanDate, humanSlot, priceChangeNotice, sessionTotal, toBookingRequest,
   validateChristmasForm, whatsappConfirmUrl, type ChristmasForm, type CampaignLimits,
 } from './christmas-booking.logic';
-import { SESSION_MINUTES, type BusyInterval, type CampaignConfig } from './christmas-slots';
+import { SESSION_MINUTES, initialCalendarMonth, type BusyInterval, type CampaignConfig } from './christmas-slots';
 import { resolvePaymentInfo, formatClabe, type PaymentInfo } from './christmas-payment';
 import type { CampaignStatus } from '../agendar/booking.models';
 
@@ -32,7 +31,7 @@ import type { CampaignStatus } from '../agendar/booking.models';
   selector: 'app-navidad',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DecimalPipe, FormsModule, NavbarComponent, FooterComponent, ChristmasCalendarComponent],
+  imports: [DecimalPipe, FormsModule, NavbarComponent, ChristmasCalendarComponent],
   templateUrl: './navidad.component.html',
   styleUrl: './navidad.component.scss',
 })
@@ -175,6 +174,18 @@ export class NavidadComponent implements OnInit, OnDestroy {
         if (res.campaign) this.campaign.set(res.campaign);
         if (res.config) this.config.set(res.config);
         this.loading.set(false);
+        // La primera vez que llega la config, colocar el calendario en el mes de inicio de
+        // temporada (p. ej. octubre/noviembre) en vez del mes actual. Solo una vez, para no
+        // pisar la navegación del usuario. Si cambia de mes, se recarga la disponibilidad.
+        if (!this.calendarioPosicionado && res.config?.dates?.seasonStart) {
+          this.calendarioPosicionado = true;
+          const inicial = initialCalendarMonth(res.config.dates.seasonStart);
+          if (inicial.month !== this.month() || inicial.year !== this.year()) {
+            this.month.set(inicial.month);
+            this.year.set(inicial.year);
+            this.loadAvailability();
+          }
+        }
       },
       error: () => {
         this.error.set('No pudimos cargar la disponibilidad. Vuelve a intentarlo.');
@@ -182,6 +193,8 @@ export class NavidadComponent implements OnInit, OnDestroy {
       },
     });
   }
+  /** Evita reposicionar el calendario más de una vez (no pisar la navegación del usuario). */
+  private calendarioPosicionado = false;
 
   protected cambiarMes(delta: number): void {
     const next = this.month() + delta;
@@ -265,7 +278,13 @@ export class NavidadComponent implements OnInit, OnDestroy {
     // verdad. `reservar()` ya garantizó que existe antes de llegar aquí.
     const packageId = (this.config()?.content?.packageId || '').trim();
     this.booking.reserve(toBookingRequest(this.form, packageId)).subscribe({
-      next: () => { this.sending.set(false); this.step.set('listo'); },
+      next: () => {
+        this.sending.set(false);
+        this.step.set('listo');
+        // La confirmación es una pantalla nueva: llevar el foco al inicio para que la clienta
+        // vea el mensaje y los datos de pago, no el pie del formulario donde quedó el scroll.
+        if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+      },
       error: (e) => {
         this.sending.set(false);
         this.error.set(e?.error?.message || 'No pudimos apartar tu lugar. Intenta de nuevo.');

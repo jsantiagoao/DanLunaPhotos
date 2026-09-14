@@ -1,6 +1,6 @@
 import {
   BREAK_MINUTES, SESSION_MINUTES, SLOT_MINUTES,
-  availableSlots, isDayClosed, isDayFull, slotEnd, slotsForDate, type BusyInterval,
+  availableSlots, initialCalendarMonth, isDayClosed, isDayFull, slotEnd, slotsForDate, type BusyInterval,
 } from './christmas-slots';
 
 /**
@@ -199,5 +199,25 @@ describe('config inyectada', () => {
     const c = conConfig({ dates: { ...DEFAULT_CAMPAIGN_CONFIG.dates, preventaStart: '2026-10-01', preventaEnd: '2026-10-31' } });
     expect(isPreventaActive(new Date(2026, 9, 15), c)).toBe(true);   // 15 oct dentro
     expect(isPreventaActive(new Date(2026, 8, 20), c)).toBe(false);  // 20 sep fuera
+  });
+});
+
+describe('initialCalendarMonth', () => {
+  it('abre en el mes de inicio de temporada si es futuro', () => {
+    // Hoy 20-sep, temporada arranca 31-oct → el calendario abre en octubre.
+    expect(initialCalendarMonth('2026-10-31', new Date(2026, 8, 20))).toEqual({ month: 10, year: 2026 });
+  });
+
+  it('si la temporada ya empezó, abre en el mes de hoy', () => {
+    expect(initialCalendarMonth('2026-10-31', new Date(2026, 10, 8))).toEqual({ month: 11, year: 2026 });
+  });
+
+  it('cruza de año correctamente', () => {
+    expect(initialCalendarMonth('2027-01-05', new Date(2026, 11, 20))).toEqual({ month: 1, year: 2027 });
+  });
+
+  it('sin seasonStart cae al mes de hoy', () => {
+    expect(initialCalendarMonth(undefined, new Date(2026, 8, 20))).toEqual({ month: 9, year: 2026 });
+    expect(initialCalendarMonth('', new Date(2026, 8, 20))).toEqual({ month: 9, year: 2026 });
   });
 });

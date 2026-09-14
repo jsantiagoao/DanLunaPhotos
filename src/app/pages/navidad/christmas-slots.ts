@@ -247,3 +247,22 @@ export function isDayFull(dateKey: string, intervals: readonly BusyInterval[], t
 export function dateKeyOf(day: number, month: number, year: number): string {
   return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 }
+
+/**
+ * Mes/año en el que debe ABRIR el calendario: el del inicio de temporada (`seasonStart`),
+ * para que la clienta no aterrice en un mes sin sesiones. Si hoy ya cae dentro o después de
+ * la temporada, se queda en el mes de hoy. Devuelve {month (1-12), year}.
+ */
+export function initialCalendarMonth(
+  seasonStart: string | undefined,
+  today: Date = new Date(),
+): { month: number; year: number } {
+  const hoy = { month: today.getMonth() + 1, year: today.getFullYear() };
+  const parts = (seasonStart || '').split('-').map(Number);
+  if (parts.length < 2 || !parts[0] || !parts[1]) return hoy;
+  const inicio = { year: parts[0], month: parts[1] };
+  // Si la temporada arranca en un mes futuro, abrimos ahí; si ya empezó, en el mes de hoy.
+  const hoyIdx = hoy.year * 12 + hoy.month;
+  const inicioIdx = inicio.year * 12 + inicio.month;
+  return inicioIdx > hoyIdx ? inicio : hoy;
+}

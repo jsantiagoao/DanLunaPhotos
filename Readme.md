@@ -39,12 +39,17 @@ ng serve
 
 ## Build y Deploy
 
+> ⚠️ **Deploy preferente: por CI** (merge a la rama de despliegue). El deploy manual es
+> excepcional. Si lo haces a mano, USA SIEMPRE el `--exclude "assets/campaign/*"`: esa carpeta
+> guarda imágenes subidas por el negocio desde Studio (banners de campaña) que NO viven en el
+> build; sin el exclude, el `--delete` las BORRA en cada deploy. (El workflow de CI ya lo excluye.)
+
 ```bash
 # Build producción
 ng build --configuration production
 
-# Deploy a S3
-aws s3 sync dist/dan-luna-photo/browser/ s3://danlunaphoto-site/ --delete --profile danluna
+# Deploy a S3 (NOTA el --exclude: no borra los assets subidos por el negocio)
+aws s3 sync dist/dan-luna-photo/browser/ s3://danlunaphoto-site/ --delete --exclude "assets/campaign/*" --profile danluna
 
 # Invalidar caché
 aws cloudfront create-invalidation --distribution-id EJO49OMBXOJUI --paths "/*" --profile danluna
