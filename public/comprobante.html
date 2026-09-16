@@ -5,9 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
   <title>Enviar comprobante — Dan Luna Photos</title>
-  <!-- Redirige al WhatsApp de atención (comprobantes / dudas). Número editable aquí
-       sin necesidad de reaprobar la plantilla de WhatsApp. -->
-  <meta http-equiv="refresh" content="0; url=https://wa.me/524424906891?text=Hola%2C%20env%C3%ADo%20mi%20comprobante%20de%20anticipo%20para%20mi%20sesi%C3%B3n.">
   <style>
     body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #f7f2ec;
            color: #4a3b32; display: flex; min-height: 100vh; margin: 0; align-items: center;
@@ -23,7 +20,30 @@
     <h1>Dan Luna Photos</h1>
     <p>Te estamos llevando a WhatsApp para que envíes tu comprobante de anticipo…</p>
     <p>Si no abre automáticamente, toca el botón:</p>
-    <a class="btn" href="https://wa.me/524424906891?text=Hola%2C%20env%C3%ADo%20mi%20comprobante%20de%20anticipo%20para%20mi%20sesi%C3%B3n.">Abrir WhatsApp</a>
+    <a class="btn" id="waLink" href="#">Abrir WhatsApp</a>
   </div>
+  <script>
+    // WhatsApp de atención (comprobantes / dudas). Editable aquí sin reaprobar la plantilla.
+    var PHONE = '524424906891';
+    var p = new URLSearchParams(location.search);
+    var nombre = (p.get('nombre') || '').trim();
+    var fecha = (p.get('fecha') || '').trim();
+    var hora = (p.get('hora') || '').trim();
+
+    // Arma el mensaje con lo que venga; si faltan datos, degrada a una versión más corta.
+    var msg = 'Hola';
+    if (nombre) msg += ', mi nombre es ' + nombre;
+    msg += '. Acabo de reservar mi sesión navideña NOËL TALE';
+    if (fecha) {
+      msg += ' para el ' + fecha;
+      if (hora) msg += ' a las ' + hora;
+    }
+    msg += '. Envío mi comprobante de anticipo.';
+
+    var url = 'https://wa.me/' + PHONE + '?text=' + encodeURIComponent(msg);
+    document.getElementById('waLink').href = url;
+    // redirección automática
+    location.replace(url);
+  </script>
 </body>
 </html>
