@@ -88,8 +88,7 @@
             </div>
             @if (c.preventaActive) {
               <p class="summary__meta">
-                Hasta el {{ preventaHasta() }} · quedan
-                <strong>{{ c.spotsLeft }}</strong> {{ c.spotsLeft === 1 ? 'lugar' : 'lugares' }}
+                Precio de preventa hasta el {{ preventaHasta() }}
               </p>
             } @else {
               <p class="summary__meta">Precio por sesión</p>
