@@ -36,9 +36,9 @@ export const DEFAULT_LIMITS: CampaignLimits = {
 export const PET_SIZES = ['chico', 'mediano', 'grande'] as const;
 export const MAX_PETICION = 500;
 // Reexportado desde la fuente compartida para no tener dos numeros en el repo.
-// Se importa ademas de reexportar porque whatsappConfirmUrl lo usa aqui mismo.
-import { WHATSAPP_NUMBER } from '../../shared/contact-info';
-export { WHATSAPP_NUMBER };
+// Navidad usa su propio WhatsApp (distinto al general del estudio).
+import { WHATSAPP_NUMBER_NAVIDAD } from '../../shared/contact-info';
+export { WHATSAPP_NUMBER_NAVIDAD };
 
 export type PetSize = (typeof PET_SIZES)[number] | '';
 
@@ -215,5 +215,5 @@ export function whatsappConfirmUrl(form: ChristmasForm): string {
     'Les envío mi comprobante del apartado para confirmar mi lugar.',
   ].join(' ');
 
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(texto)}`;
+  return `https://wa.me/${WHATSAPP_NUMBER_NAVIDAD}?text=${encodeURIComponent(texto)}`;
 }

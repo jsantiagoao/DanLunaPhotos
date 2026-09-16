@@ -126,8 +126,8 @@ describe('toBookingRequest', () => {
 });
 
 describe('whatsappConfirmUrl', () => {
-  it('escribe a Dan Luna', () => {
-    expect(whatsappConfirmUrl(valido())).toContain('wa.me/524424906891');
+  it('escribe al WhatsApp de navidad', () => {
+    expect(whatsappConfirmUrl(valido())).toContain('wa.me/525667704976');
   });
 
   it('el mensaje lleva el nombre de quien reserva', () => {

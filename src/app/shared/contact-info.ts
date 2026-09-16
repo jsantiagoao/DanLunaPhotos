@@ -13,6 +13,13 @@
 /** Solo digitos, formato wa.me (52 = Mexico). */
 export const WHATSAPP_NUMBER = '524424906891';
 
+/**
+ * WhatsApp especifico de la campana de navidad (numero distinto al general del estudio).
+ * Solo lo usa el flujo navideno: landing de navidad, correos de reservas navidenas y
+ * plantillas de WhatsApp de navidad. El resto del sitio usa WHATSAPP_NUMBER.
+ */
+export const WHATSAPP_NUMBER_NAVIDAD = '525667704976';
+
 /** E.164, el formato que espera schema.org en `telephone`. */
 export const WHATSAPP_E164 = '+524424906891';
 
