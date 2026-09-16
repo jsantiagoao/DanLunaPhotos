@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Contactar — Dan Luna Photos</title>
+  <style>
+    body { font-family: -apple-system, "Segoe UI", Roboto, sans-serif; background: #f7f2ec;
+           color: #4a3b32; display: flex; min-height: 100vh; margin: 0; align-items: center;
+           justify-content: center; text-align: center; padding: 24px; }
+    .card { max-width: 420px; }
+    h1 { color: #7B2E33; font-size: 1.4rem; margin-bottom: .5rem; }
+    a.btn { display: inline-block; margin-top: 1.2rem; background: #25D366; color: #fff;
+            text-decoration: none; padding: 14px 26px; border-radius: 999px; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Dan Luna Photos</h1>
+    <p>Te estamos llevando a WhatsApp para atender tu consulta…</p>
+    <p>Si no abre automáticamente, toca el botón:</p>
+    <a class="btn" id="waLink" href="#">Abrir WhatsApp</a>
+  </div>
+  <script>
+    // WhatsApp de atención. Editable aquí sin reaprobar la plantilla.
+    var PHONE = '524424906891';
+    var p = new URLSearchParams(location.search);
+    var nombre = (p.get('nombre') || '').trim();
+    var fecha = (p.get('fecha') || '').trim();
+    var hora = (p.get('hora') || '').trim();
+
+    var msg = 'Hola';
+    if (nombre) msg += ', mi nombre es ' + nombre;
+    msg += '. Tengo una duda sobre mi sesión navideña NOËL TALE confirmada';
+    if (fecha) {
+      msg += ' para el ' + fecha;
+      if (hora) msg += ' a las ' + hora;
+    }
+    msg += '.';
+
+    var url = 'https://wa.me/' + PHONE + '?text=' + encodeURIComponent(msg);
+    document.getElementById('waLink').href = url;
+    location.replace(url);
+  </script>
+</body>
+</html>
