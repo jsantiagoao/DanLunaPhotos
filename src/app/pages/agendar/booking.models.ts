@@ -14,6 +14,8 @@ export interface CampaignStatus {
   /** 'YYYY-MM-DD', ultimo dia de preventa inclusive. */
   preventaEndsOn: string;
   spotsLeft: number;
+  /** Cupo total de la campaña (fijo, de la config). Para mostrar "solo N lugares". */
+  totalSlots?: number;
   apartado: number;
   sessionMinutes: number;
 }
