@@ -89,8 +89,10 @@
             @if (c.preventaActive) {
               <p class="summary__meta">
                 Precio de preventa hasta el {{ preventaHasta() }}
-                @if (c.totalSlots) { · solo {{ c.totalSlots }} lugares }
               </p>
+              @if (c.totalSlots) {
+                <p class="summary__meta summary__meta--slots">solo {{ c.totalSlots }} lugares</p>
+              }
             } @else {
               <p class="summary__meta">Precio por sesión</p>
             }
