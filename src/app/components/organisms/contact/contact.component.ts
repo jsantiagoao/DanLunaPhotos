@@ -3,6 +3,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
+import { MagneticDirective } from '../../../shared/motion/magnetic.directive';
 import {
   CITY, CONTACT_EMAIL, INSTAGRAM_HANDLE, INSTAGRAM_URL, WHATSAPP_DISPLAY, WHATSAPP_E164,
 } from '../../../shared/contact-info';
@@ -11,7 +12,7 @@ import {
   selector: 'app-contact',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, MagneticDirective],
   templateUrl: './contact.component.html',
   styleUrl: './contact.component.scss'
 })

@@ -1,4 +1,4 @@
-<nav class="navbar">
+<nav class="navbar" [class.navbar--scrolled]="scrolled()" [class.navbar--hidden]="hidden()">
   <div class="navbar__inner">
 
     <a class="navbar__logo" href="#inicio" (click)="scrollTo('#inicio'); $event.preventDefault()">
@@ -6,8 +6,9 @@
     </a>
 
     <ul id="navbar-menu" class="navbar__links" [class.navbar__links--open]="menuOpen()">
-      @for (link of links; track link.label) {
+      @for (link of links; track link.label; let i = $index) {
         <li
+          [style.--i]="i"
           class="navbar__item"
           [class.navbar__item--has-submenu]="link.submenu"
           [class.navbar__item--open]="link.submenu && activeSubmenu() === link.label"
@@ -23,8 +24,8 @@
             </button>
             <ul class="navbar__submenu" [class.navbar__submenu--visible]="activeSubmenu() === link.label">
               <div class="navbar__submenu-content">
-                @for (subitem of link.submenu; track subitem.label) {
-                  <li>
+                @for (subitem of link.submenu; track subitem.label; let j = $index) {
+                  <li [style.--i]="j">
                     @if (subitem.external) {
                       <a [href]="subitem.href" target="_blank" rel="noopener" (click)="closeMenu()">
                         {{ subitem.label }}
@@ -46,7 +47,7 @@
         </li>
       }
       <!-- En móvil el CTA del header se oculta: se repite dentro del menú. -->
-      <li class="navbar__item navbar__item--cta">
+      <li class="navbar__item navbar__item--cta" [style.--i]="links.length">
         <a class="navbar__mobile-cta" [href]="bookingUrl" target="_blank" rel="noopener" (click)="closeMenu()">
           Reservar sesión
         </a>
@@ -54,7 +55,7 @@
     </ul>
 
     <div class="navbar__right">
-      <a class="navbar__cta" [href]="bookingUrl" target="_blank" rel="noopener">
+      <a class="navbar__cta dl-shine" dlMagnetic [magneticStrength]="6" [href]="bookingUrl" target="_blank" rel="noopener">
         Reservar sesión
       </a>
     </div>

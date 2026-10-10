@@ -57,7 +57,7 @@
           </p>
         }
 
-        <button type="submit" class="contact__submit" [disabled]="sending()">
+        <button type="submit" class="contact__submit dl-shine" dlMagnetic [magneticStrength]="8" [disabled]="sending()">
           {{ sending() ? 'Enviando…' : 'Enviar mensaje →' }}
         </button>
       </form>

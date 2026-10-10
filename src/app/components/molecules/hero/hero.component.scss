@@ -1,3 +1,6 @@
+// Curva de salida suave para la entrada del hero.
+$hero-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+
   .hero {
   position: relative;
   width: 100%;
@@ -68,6 +71,24 @@
   // La etiqueta vive dentro del H1 pero conserva su aspecto de "badge".
   &__headline-main { display: block; }
 
+  // Entrada al cargar: etiqueta, cada linea del titulo (sube desde una mascara),
+  // subtitulo y boton aparecen en secuencia sobre la foto (~1.1 s en total).
+  &__badge { animation: heroFadeUp 0.7s $hero-ease 0.15s both; }
+  &__line {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.08em; // que la mascara no corte los descendentes (g, p)
+    > span { display: inline-block; animation: heroLineUp 0.9s $hero-ease both; }
+    &:nth-child(1) > span { animation-delay: 0.3s; }
+    &:nth-child(2) > span { animation-delay: 0.45s; }
+  }
+  &__sub { animation: heroFadeUp 0.8s $hero-ease 0.7s both; }
+  &__ctas { animation: heroFadeUp 0.8s $hero-ease 0.85s both; }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__badge, &__line > span, &__sub, &__ctas { animation: none; }
+  }
+
   &__headline {
     font-family: var(--font-serif);
     font-size: 80px;
@@ -100,7 +121,7 @@
     font-family: var(--font-sans);
     font-size: 16px;
     font-weight: 600;
-    transition: opacity 0.2s;
+    transition: opacity 0.2s, transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
 
     &--primary {
       background-color: var(--color-gold);
@@ -190,4 +211,13 @@
 @keyframes heroKenBurns {
   from { transform: scale(1) translate(0, 0); }
   to   { transform: scale(1.08) translate(-1.5%, -1%); }
+}
+
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes heroLineUp {
+  from { transform: translateY(105%); }
+  to   { transform: none; }
 }

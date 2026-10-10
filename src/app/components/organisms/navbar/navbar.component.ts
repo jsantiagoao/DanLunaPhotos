@@ -3,12 +3,14 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MAIN_MENU } from './navbar-menu';
 import { whatsappUrl } from '../../../shared/contact-info';
+import { headerState } from '../../../shared/motion/scroll-math';
+import { MagneticDirective } from '../../../shared/motion/magnetic.directive';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule],
+  imports: [CommonModule, MagneticDirective],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss'
 })
@@ -17,6 +19,12 @@ export class NavbarComponent {
   private host = inject<ElementRef<HTMLElement>>(ElementRef);
   menuOpen = signal(false);
   activeSubmenu = signal<string | null>(null);
+
+  /** Header compacto (sombra, fondo translúcido) al dejar la parte alta de la página. */
+  scrolled = signal(false);
+  /** Oculto al bajar, visible al subir: deja más pantalla a las fotos. */
+  hidden = signal(false);
+  private lastY = 0;
 
   readonly links = MAIN_MENU;
   readonly bookingUrl = whatsappUrl('Hola, me gustaría reservar una sesión fotográfica. ¿Podrían darme más información?');
@@ -68,6 +76,15 @@ export class NavbarComponent {
   @HostListener('document:keydown.escape')
   onEscape(): void {
     if (this.menuOpen() || this.activeSubmenu()) this.closeMenu();
+  }
+
+  @HostListener('window:scroll')
+  onScroll(): void {
+    const y = window.scrollY;
+    const state = headerState(this.lastY, y, this.menuOpen(), this.hidden());
+    this.lastY = y;
+    if (state.scrolled !== this.scrolled()) this.scrolled.set(state.scrolled);
+    if (state.hidden !== this.hidden()) this.hidden.set(state.hidden);
   }
 
   @HostListener('window:resize', ['$event'])

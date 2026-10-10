@@ -71,4 +71,31 @@ describe('NavbarComponent', () => {
       expect(cmp.menuOpen()).toBe(false);
     });
   });
+
+  describe('header al hacer scroll', () => {
+    function scrollTo(y: number) {
+      Object.defineProperty(window, 'scrollY', { value: y, configurable: true });
+    }
+
+    afterEach(() => scrollTo(0));
+
+    it('should_compact_the_header_after_leaving_the_top', () => {
+      const { el, cmp, fixture } = setup();
+      scrollTo(120);
+      cmp.onScroll();
+      fixture.detectChanges();
+      expect(el.querySelector('.navbar')!.classList).toContain('navbar--scrolled');
+    });
+
+    it('should_hide_on_scroll_down_and_show_on_scroll_up', () => {
+      const { el, cmp, fixture } = setup();
+      scrollTo(600); cmp.onScroll();
+      scrollTo(700); cmp.onScroll();
+      fixture.detectChanges();
+      expect(el.querySelector('.navbar')!.classList).toContain('navbar--hidden');
+      scrollTo(650); cmp.onScroll();
+      fixture.detectChanges();
+      expect(el.querySelector('.navbar')!.classList).not.toContain('navbar--hidden');
+    });
+  });
 });

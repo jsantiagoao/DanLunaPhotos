@@ -133,6 +133,12 @@ describe('ContactComponent', () => {
       });
     });
 
+    it('should_make_the_submit_button_magnetic_and_shiny', () => {
+      const submit = render().querySelector('.contact__submit')!;
+      expect(submit.classList).toContain('dl-magnetic');
+      expect(submit.classList).toContain('dl-shine');
+    });
+
     it('should_enable_browser_autocomplete_for_name_and_email', () => {
       const el = render();
       expect(el.querySelector('input[formControlName="nombre"]')?.getAttribute('autocomplete')).toBe('name');

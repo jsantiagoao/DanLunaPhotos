@@ -26,4 +26,15 @@ describe('HeroComponent', () => {
   it('should_make_the_booking_button_the_primary_action', () => {
     expect(render().querySelector('.hero__cta')!.classList).toContain('hero__cta--primary');
   });
+
+  it('should_split_the_headline_in_lines_for_the_entrance_animation', () => {
+    const lines = Array.from(render().querySelectorAll('.hero__line')).map((l) => l.textContent?.trim());
+    expect(lines).toEqual(['Cada momento,', 'un recuerdo.']);
+  });
+
+  it('should_make_the_booking_button_magnetic_and_shiny', () => {
+    const cta = render().querySelector('.hero__cta')!;
+    expect(cta.classList).toContain('dl-magnetic');
+    expect(cta.classList).toContain('dl-shine');
+  });
 });

@@ -114,3 +114,29 @@ button {
 
 /* Al saltar a una sección desde el menú, el header fijo tapaba su título. */
 #inicio, #portfolio, #sobre-mi, #testimonios, #contacto { scroll-margin-top: var(--nav-height); }
+
+/* ─── Efectos de la landing ─────────────────────────────────────────────────
+   Solo transform/opacity (no fuerzan recálculo de layout) y se apagan con
+   prefers-reduced-motion. */
+
+/* Botón magnético (MagneticDirective): vuelve suave a su sitio al soltar. */
+.dl-magnetic { transition: transform 0.35s cubic-bezier(0.22, 0.61, 0.36, 1); will-change: transform; }
+
+/* Brillo que cruza los botones de reserva cada pocos segundos. */
+.dl-shine { position: relative; overflow: hidden; isolation: isolate; }
+.dl-shine::after {
+  content: '';
+  position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(110deg, transparent 30%, rgba(255, 255, 255, 0.38) 48%, transparent 66%);
+  transform: translateX(-120%);
+  animation: dl-shine 4.5s cubic-bezier(0.22, 0.61, 0.36, 1) 1.8s infinite;
+}
+@keyframes dl-shine {
+  0% { transform: translateX(-120%); }
+  28%, 100% { transform: translateX(120%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dl-magnetic { transition: none; }
+  .dl-shine::after { animation: none; display: none; }
+}
