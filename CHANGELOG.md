@@ -6,6 +6,39 @@ Versionado semántico según [SemVer](https://semver.org/lang/es/).
 
 ---
 
+## [1.3.0] - 2026-10-10
+
+### Added
+- Efectos en la landing sin cambiar el diseño: submenús que se despliegan con fundido y
+  opciones escalonadas, subrayado dorado en el menú, panel móvil y submenús móviles con
+  altura animada.
+- Header que se compacta al bajar (fondo translúcido, sombra, logo menor), se oculta al
+  seguir bajando y reaparece al subir.
+- Entrada del hero en secuencia (etiqueta, líneas del título, subtítulo y botón).
+- Retrato de "Sobre mí" con cortina al entrar en pantalla y parallax dentro del marco.
+- Botones de reserva y "Enviar mensaje" con brillo periódico y efecto magnético.
+- Footer con enlaces a bodas, bautizo, Navidad, "Fotógrafa en Querétaro" y blog.
+- Botón "Reservar sesión" dentro del menú móvil; el menú se cierra tocando fuera o con Escape.
+- Enlace "Ver sesiones de…" a las páginas de Bodas y Bautizos desde Sesiones Destacadas.
+
+### Changed
+- H1 del hero con "Fotógrafa profesional en Querétaro" (SEO local) sin cambio visual.
+- Opciones del menú sin página propia abren WhatsApp con el servicio ya escrito.
+- Mensaje general en el botón flotante de WhatsApp.
+- Hero con imagen responsiva (en móvil 77 KB en lugar de 298 KB).
+- "Fotógrafo" → "Fotógrafa" en "Sobre mí".
+- Sitemap con `/sesiones-navidad` y fechas actualizadas.
+
+### Fixed
+- Desbordamiento horizontal en móvil (página de 451 px en pantalla de 375) que dejaba
+  los botones flotantes fuera de la pantalla.
+- 10 opciones del menú apuntaban a secciones inexistentes y regresaban al inicio.
+- JSON-LD del negocio duplicado tras la hidratación.
+- Teléfono, correo e Instagram de contacto ahora son enlaces; formulario con etiquetas
+  accesibles y autocompletado.
+- Las secciones prerenderizadas no animaban su entrada al hacer scroll.
+- El header ya no tapa el título de la sección al navegar desde el menú.
+
 ## [1.2.0] - 2026-09-03
 
 ### Changed
