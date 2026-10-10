@@ -72,6 +72,52 @@
       color: var(--color-white);
     }
   }
+  &__nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 24px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(45, 36, 32, 0.08);
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      font-family: var(--font-sans);
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--color-dark);
+      transition: color 0.2s;
+      &:hover { color: var(--color-gold); }
+    }
+  }
+
+  &__contact {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 4px 20px;
+    font-style: normal;
+    font-family: var(--font-sans);
+    font-size: 14px;
+    color: #6f6e6d;
+
+    a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      color: #6f6e6d;
+      &:hover { color: var(--color-gold); }
+    }
+  }
+
+  &__copy {
+    font-family: var(--font-sans);
+    font-size: 13px;
+    color: #8a8178;
+  }
 }
 
 @media (max-width: 1199px) {
@@ -91,6 +137,8 @@
 @media (max-width: 600px) {
   .footer {
     padding: 56px 40px;
+    // Espacio final para que los botones flotantes (WhatsApp/Instagram) no tapen el contacto.
+    padding-bottom: 140px;
     &__quote, &__phrase, &__caring { font-size: 16px; }
     &__logo img { height: 64px; }
   }
@@ -98,7 +146,7 @@
 
 @media (max-width: 479px) {
   .footer {
-    padding: 48px 24px;
+    padding: 48px 24px 140px;
     &__quote, &__phrase, &__caring { font-size: 15px; }
     &__logo img { height: 56px; }
     &__social-btn { width: 44px; height: 44px; }

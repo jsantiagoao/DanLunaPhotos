@@ -151,6 +151,8 @@
     &:hover { opacity: 0.85; }
   }
 
+  &__item--cta { display: none; }
+
   &__hamburger {
     display: none;
     flex-direction: column;
@@ -274,6 +276,22 @@
 
     &__right { display: none; }
     &__hamburger { display: flex; }
+
+    // CTA de reserva dentro del menú móvil (el del header se oculta en esta medida).
+    &__item--cta { display: block; padding: 16px 0 8px; border-bottom: none; }
+    &__mobile-cta {
+      display: flex; align-items: center; justify-content: center;
+      min-height: 48px; border-radius: 28px;
+      background-color: var(--color-gold); color: var(--color-cream);
+      font-family: var(--font-sans); font-size: 16px; font-weight: 600;
+    }
+
+    // Hamburguesa → X cuando el menú está abierto.
+    &__hamburger--open span {
+      &:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+      &:nth-child(2) { opacity: 0; }
+      &:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    }
   }
 }
 

@@ -105,4 +105,38 @@ describe('ContactComponent', () => {
     expect(value('WhatsApp')).toBe(WHATSAPP_DISPLAY);
     expect(value('Instagram')).toBe(INSTAGRAM_HANDLE);
   });
+
+  describe('accesibilidad y uso en móvil', () => {
+    function render() {
+      TestBed.resetTestingModule();
+      TestBed.configureTestingModule({ imports: [ContactComponent], providers: [provideHttpClient()] });
+      const fixture = TestBed.createComponent(ContactComponent);
+      fixture.detectChanges();
+      return fixture.nativeElement as HTMLElement;
+    }
+
+    it('should_make_phone_email_and_instagram_tappable_links', () => {
+      // Regresión: eran texto plano; en celular no se podía llamar ni escribir.
+      const hrefs = Array.from(render().querySelectorAll<HTMLAnchorElement>('.contact__info-value'))
+        .map((a) => a.getAttribute('href'));
+      expect(hrefs).toContain('tel:+524424906891');
+      expect(hrefs).toContain('mailto:hola@danlunaphoto.com');
+      expect(hrefs).toContain('https://www.instagram.com/danlunaphotos');
+    });
+
+    it('should_label_every_form_field', () => {
+      const el = render();
+      el.querySelectorAll('input, select, textarea').forEach((field) => {
+        const label = el.querySelector(`label[for="${field.id}"]`);
+        expect(field.id).toBeTruthy();
+        expect(label).not.toBeNull();
+      });
+    });
+
+    it('should_enable_browser_autocomplete_for_name_and_email', () => {
+      const el = render();
+      expect(el.querySelector('input[formControlName="nombre"]')?.getAttribute('autocomplete')).toBe('name');
+      expect(el.querySelector('input[formControlName="email"]')?.getAttribute('autocomplete')).toBe('email');
+    });
+  });
 });

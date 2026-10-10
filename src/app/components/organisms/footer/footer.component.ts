@@ -1,13 +1,36 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import {
+  CITY, CONTACT_EMAIL, FACEBOOK_URL, INSTAGRAM_URL, WHATSAPP_DISPLAY, WHATSAPP_E164,
+} from '../../../shared/contact-info';
+
+/** Enlaces internos del pie: páginas que la home no enlazaba (SEO y navegación). */
+export const FOOTER_LINKS = [
+  { label: 'Fotografía de bodas', route: '/fotografia-bodas-queretaro' },
+  { label: 'Fotografía de bautizo', route: '/fotografia-bautizo-queretaro' },
+  { label: 'Sesiones de Navidad', route: '/sesiones-navidad' },
+  { label: 'Fotógrafa en Querétaro', route: '/fotografa-en-queretaro' },
+  { label: 'Blog', route: '/blog' },
+];
 
 @Component({
   selector: 'app-footer',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink],
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.scss'
 })
 export class FooterComponent implements OnInit {
+  readonly links = FOOTER_LINKS;
+  readonly facebookUrl = FACEBOOK_URL;
+  readonly instagramUrl = INSTAGRAM_URL;
+  readonly phoneDisplay = WHATSAPP_DISPLAY;
+  readonly phoneHref = `tel:${WHATSAPP_E164}`;
+  readonly email = CONTACT_EMAIL;
+  readonly city = CITY;
+  readonly year = new Date().getFullYear();
+
   randomPhrase: string = '';
   randomClosing: string = '';
 

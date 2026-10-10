@@ -105,3 +105,12 @@ button {
     transition: none;
   }
 }
+
+/* Texto solo para lectores de pantalla (p. ej. etiquetas de formulario con placeholder visible). */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+/* Al saltar a una sección desde el menú, el header fijo tapaba su título. */
+#inicio, #portfolio, #sobre-mi, #testimonios, #contacto { scroll-margin-top: var(--nav-height); }

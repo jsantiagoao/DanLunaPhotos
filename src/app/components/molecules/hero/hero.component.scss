@@ -58,10 +58,15 @@
       font-family: var(--font-sans);
       font-size: 12px;
       font-weight: 600;
+      line-height: 1.4;
       color: var(--color-beige);
       letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
   }
+
+  // La etiqueta vive dentro del H1 pero conserva su aspecto de "badge".
+  &__headline-main { display: block; }
 
   &__headline {
     font-family: var(--font-serif);
@@ -76,7 +81,7 @@
     font-family: var(--font-sans);
     font-size: 19px;
     font-weight: 400;
-    color: rgba(234, 231, 225, 0.565);
+    color: rgba(234, 231, 225, 0.85); // antes 0.565: poco legible sobre la foto
     line-height: 1.6;
     margin-bottom: 48px;
   }

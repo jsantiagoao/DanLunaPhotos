@@ -1,12 +1,8 @@
-import { Component, HostListener, signal, inject, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ElementRef, HostListener, signal, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-
-interface MenuItem {
-  label: string;
-  href?: string;
-  submenu?: { label: string; href: string }[];
-}
+import { MAIN_MENU } from './navbar-menu';
+import { whatsappUrl } from '../../../shared/contact-info';
 
 @Component({
   selector: 'app-navbar',
@@ -18,46 +14,12 @@ interface MenuItem {
 })
 export class NavbarComponent {
   private router = inject(Router);
+  private host = inject<ElementRef<HTMLElement>>(ElementRef);
   menuOpen = signal(false);
   activeSubmenu = signal<string | null>(null);
 
-  readonly links: MenuItem[] = [
-    {
-      label: 'Sesiones al Aire Libre',
-      submenu: [
-        { label: 'En Pareja', href: '#pareja' },
-        { label: 'Familiares', href: '#familia' },
-        { label: 'Smash the Cake', href: '#smash-cake' }
-      ]
-    },
-    {
-      label: 'Estudio Fotográfico',
-      submenu: [
-        { label: 'Día de las Madres', href: '/dia-de-las-madres' },
-        { label: 'Navidad', href: '/sesiones-navidad' },
-        { label: 'Personalizadas', href: '#personalizadas' }
-      ]
-    },
-    {
-      label: 'Eventos y Celebraciones',
-      submenu: [
-        { label: 'Bodas', href: '/fotografia-bodas-queretaro' },
-        { label: 'Bautizos', href: '/fotografia-bautizo-queretaro' },
-        { label: 'Primera Comunión/Presentación', href: '#primera-comunion' },
-        { label: 'Fiestas/Piñatas', href: '#fiestas' },
-        { label: 'Graduaciones', href: '#graduaciones' }
-      ]
-    },
-    {
-      label: 'Fotografía Comercial',
-      submenu: [
-        { label: 'Deportes', href: '#deportes' },
-        { label: 'Productos', href: '#productos' },
-        { label: 'Perfil Profesional', href: '#perfil' }
-      ]
-    },
-    { label: 'Contáctame', href: '#contacto' }
-  ];
+  readonly links = MAIN_MENU;
+  readonly bookingUrl = whatsappUrl('Hola, me gustaría reservar una sesión fotográfica. ¿Podrían darme más información?');
 
   toggleMenu(): void {
     const next = !this.menuOpen();
@@ -87,6 +49,25 @@ export class NavbarComponent {
         this.router.navigate(['/'], { fragment: href.replace('#', '') });
       }
     }
+  }
+
+  /** Cierra el menú (y su bloqueo de scroll) sin navegar: enlaces externos a WhatsApp. */
+  closeMenu(): void {
+    this.menuOpen.set(false);
+    this.activeSubmenu.set(null);
+    document.body.classList.remove('menu-open');
+  }
+
+  /** En móvil, tocar fuera del navbar cierra el menú. */
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (!this.menuOpen()) return;
+    if (!this.host.nativeElement.contains(event.target as Node)) this.closeMenu();
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    if (this.menuOpen() || this.activeSubmenu()) this.closeMenu();
   }
 
   @HostListener('window:resize', ['$event'])

@@ -53,4 +53,31 @@ describe('SeoService', () => {
     service.clearJsonLd();
     expect(doc.querySelector('script[type="application/ld+json"]')).toBeNull();
   });
+
+  it('should_reuse_the_jsonld_rendered_by_the_server_instead_of_duplicating_it', () => {
+    // Regresión: el HTML prerenderizado ya trae el JSON-LD; al hidratar, el cliente
+    // agregaba un segundo <script> idéntico y Google veía el negocio dos veces.
+    const fromServer = doc.createElement('script');
+    fromServer.type = 'application/ld+json';
+    fromServer.id = 'seo-jsonld';
+    fromServer.text = '{"@type":"LocalBusiness"}';
+    doc.head.appendChild(fromServer);
+
+    service.apply({ title: 't', description: 'd', url: 'https://x.com', jsonLd: { '@type': 'LocalBusiness', name: 'Dan Luna Photo' } });
+
+    const scripts = doc.querySelectorAll('script[type="application/ld+json"]');
+    expect(scripts.length).toBe(1);
+    expect(scripts[0].textContent).toContain('Dan Luna Photo');
+  });
+
+  it('should_remove_the_server_jsonld_on_clear', () => {
+    const fromServer = doc.createElement('script');
+    fromServer.type = 'application/ld+json';
+    fromServer.id = 'seo-jsonld';
+    doc.head.appendChild(fromServer);
+
+    service.clearJsonLd();
+
+    expect(doc.getElementById('seo-jsonld')).toBeNull();
+  });
 });

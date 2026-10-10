@@ -90,7 +90,7 @@
       appearance: none;
       box-sizing: border-box;
 
-      &::placeholder { color: #D8D2CA; }
+      &::placeholder { color: #8A8178; } // contraste legible (antes #D8D2CA casi invisible)
       &:focus        { border-color: var(--color-gold); }
     }
 
@@ -199,7 +199,7 @@
 
   &__info-label {
     font-family: var(--font-sans);
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     color: var(--color-gold);
     letter-spacing: 0.08em;
@@ -213,6 +213,12 @@
     color: var(--color-dark);
     overflow-wrap: break-word;
     word-break: break-all;
+    // Como enlace (tel/mailto/Instagram): área táctil cómoda y pista visual al pasar.
+    @at-root a#{&} {
+      display: inline-flex; align-items: center; min-height: 44px;
+      text-decoration: underline; text-decoration-color: rgba(173, 138, 106, 0.4); text-underline-offset: 4px;
+      &:hover { color: var(--color-gold); }
+    }
     min-width: 0;
   }
 }
