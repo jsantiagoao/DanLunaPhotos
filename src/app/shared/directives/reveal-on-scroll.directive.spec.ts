@@ -93,4 +93,41 @@ describe('RevealOnScrollDirective', () => {
     fixture.destroy();
     expect(observer.disconnected).toBe(true);
   });
+
+  describe('después del prerender (hidratación)', () => {
+    // El servidor deja class="reveal--visible" para que el HTML se vea sin JS; al hidratar
+    // esa clase se conservaba y ninguna sección animaba su entrada.
+    @Component({
+      standalone: true,
+      imports: [RevealOnScrollDirective],
+      template: `<div appReveal class="reveal--visible" data-testid="host">contenido</div>`,
+    })
+    class PrerenderedHost {}
+
+    function setupPrerendered(top: number) {
+      (globalThis as any).IntersectionObserver = MockIntersectionObserver as any;
+      window.matchMedia = ((q: string) => ({ matches: false, media: q })) as any;
+      jest.spyOn(HTMLElement.prototype, 'getBoundingClientRect')
+        .mockReturnValue({ top, bottom: top + 500, left: 0, right: 0, width: 0, height: 500, x: 0, y: top, toJSON: () => ({}) });
+      TestBed.configureTestingModule({ imports: [PrerenderedHost], providers: [{ provide: PLATFORM_ID, useValue: 'browser' }] });
+      const fixture = TestBed.createComponent(PrerenderedHost);
+      fixture.detectChanges();
+      return fixture.nativeElement.querySelector('[data-testid="host"]') as HTMLElement;
+    }
+
+    afterEach(() => jest.restoreAllMocks());
+
+    it('should_hide_again_a_prerendered_section_that_is_below_the_viewport', () => {
+      const host = setupPrerendered(window.innerHeight + 300);
+      expect(host.classList.contains('reveal--visible')).toBe(false);
+      MockIntersectionObserver.last!.trigger(true, host);
+      expect(host.classList.contains('reveal--visible')).toBe(true);
+    });
+
+    it('should_keep_visible_a_prerendered_section_already_on_screen', () => {
+      // Recargar a media página: lo que ya se ve no debe parpadear.
+      const host = setupPrerendered(100);
+      expect(host.classList.contains('reveal--visible')).toBe(true);
+    });
+  });
 });
