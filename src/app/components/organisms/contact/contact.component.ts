@@ -3,15 +3,16 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
+import { MagneticDirective } from '../../../shared/motion/magnetic.directive';
 import {
-  CITY, CONTACT_EMAIL, INSTAGRAM_HANDLE, WHATSAPP_DISPLAY,
+  CITY, CONTACT_EMAIL, INSTAGRAM_HANDLE, INSTAGRAM_URL, WHATSAPP_DISPLAY, WHATSAPP_E164,
 } from '../../../shared/contact-info';
 
 @Component({
   selector: 'app-contact',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, MagneticDirective],
   templateUrl: './contact.component.html',
   styleUrl: './contact.component.scss'
 })
@@ -43,11 +44,12 @@ export class ContactComponent {
     'Otro'
   ];
 
-  readonly infoItems = [
-    { label: 'WhatsApp',   value: WHATSAPP_DISPLAY  },
-    { label: 'Email',      value: CONTACT_EMAIL     },
-    { label: 'Instagram',  value: INSTAGRAM_HANDLE  },
-    { label: 'Ciudad',     value: CITY              }
+  /** Con `href` se pintan como enlace: en celular se toca para llamar, escribir o abrir Instagram. */
+  readonly infoItems: { label: string; value: string; href?: string; external?: boolean }[] = [
+    { label: 'WhatsApp',   value: WHATSAPP_DISPLAY, href: `tel:${WHATSAPP_E164}` },
+    { label: 'Email',      value: CONTACT_EMAIL,    href: `mailto:${CONTACT_EMAIL}` },
+    { label: 'Instagram',  value: INSTAGRAM_HANDLE, href: INSTAGRAM_URL, external: true },
+    { label: 'Ciudad',     value: CITY }
   ];
 
   /** Para el enlace de rescate cuando falla el envio. */

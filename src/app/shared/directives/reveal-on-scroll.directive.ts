@@ -64,6 +64,17 @@ export class RevealOnScrollDirective implements OnInit, OnDestroy {
       return;
     }
 
+    // El HTML prerenderizado trae `reveal--visible` (puesto en el servidor) y la
+    // hidratación lo conserva: sin esto ninguna sección animaba su entrada. Lo que
+    // ya está en pantalla se queda visible (sin parpadeo); lo demás se oculta hasta verse.
+    if (node.classList.contains('reveal--visible')) {
+      if (node.getBoundingClientRect().top < window.innerHeight) {
+        this.reveal(node);
+        return;
+      }
+      node.classList.remove('reveal--visible');
+    }
+
     this.observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {

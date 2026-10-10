@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, PLATFORM_ID, inject, signal, computed } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { INSTAGRAM_URL } from '../../../shared/contact-info';
 import { AppImageComponent } from '../../../shared/ui/app-image/app-image.component';
 
@@ -8,6 +9,8 @@ export interface GalleryCard {
   name: string;
   count: string;
   image: string;
+  /** Página propia de la sesión, si existe (enlace interno: SEO y navegación). */
+  route?: string;
 }
 
 /** Posición visual de una card respecto a la activa en el coverflow 3D. */
@@ -27,15 +30,15 @@ export interface PositionedCard {
 @Component({
   selector: 'app-gallery',
   standalone: true,
-  imports: [CommonModule, AppImageComponent],
+  imports: [CommonModule, RouterLink, AppImageComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './gallery.component.html',
   styleUrl: './gallery.component.scss'
 })
 export class GalleryComponent implements OnInit, OnDestroy {
   readonly cards: GalleryCard[] = [
-    { num: '01', name: 'Bautizos',        count: 'Momentos sagrados, recuerdos eternos', image: 'assets/images/gallery/bautizo.jpg' },
-    { num: '02', name: 'Bodas',           count: 'Fotografías para revivir tu gran día', image: 'assets/images/gallery/boda.jpg' },
+    { num: '01', name: 'Bautizos',        count: 'Momentos sagrados, recuerdos eternos', image: 'assets/images/gallery/bautizo.jpg', route: '/fotografia-bautizo-queretaro' },
+    { num: '02', name: 'Bodas',           count: 'Fotografías para revivir tu gran día', image: 'assets/images/gallery/boda.jpg', route: '/fotografia-bodas-queretaro' },
     { num: '03', name: 'Smash the Cake',  count: 'La primera gran fiesta de tu bebé',    image: 'assets/images/gallery/smash-the-cake.jpg' },
     { num: '04', name: 'Sesión familiar', count: 'Amor en familia',                      image: 'assets/images/gallery/sesion-familiar.jpg' }
   ];

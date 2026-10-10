@@ -1,13 +1,14 @@
-<nav class="navbar">
+<nav class="navbar" [class.navbar--scrolled]="scrolled()" [class.navbar--hidden]="hidden()">
   <div class="navbar__inner">
 
     <a class="navbar__logo" href="#inicio" (click)="scrollTo('#inicio'); $event.preventDefault()">
-      <img src="assets/images/logo-light.png" alt="Dan Luna Photo" />
+      <img src="assets/images/logo-light.png" alt="Dan Luna Photo" width="422" height="150" />
     </a>
 
-    <ul class="navbar__links" [class.navbar__links--open]="menuOpen()">
-      @for (link of links; track link.label) {
+    <ul id="navbar-menu" class="navbar__links" [class.navbar__links--open]="menuOpen()">
+      @for (link of links; track link.label; let i = $index) {
         <li
+          [style.--i]="i"
           class="navbar__item"
           [class.navbar__item--has-submenu]="link.submenu"
           [class.navbar__item--open]="link.submenu && activeSubmenu() === link.label"
@@ -23,11 +24,17 @@
             </button>
             <ul class="navbar__submenu" [class.navbar__submenu--visible]="activeSubmenu() === link.label">
               <div class="navbar__submenu-content">
-                @for (subitem of link.submenu; track subitem.label) {
-                  <li>
-                    <a [href]="subitem.href" (click)="scrollTo(subitem.href); $event.preventDefault()">
-                      {{ subitem.label }}
-                    </a>
+                @for (subitem of link.submenu; track subitem.label; let j = $index) {
+                  <li [style.--i]="j">
+                    @if (subitem.external) {
+                      <a [href]="subitem.href" target="_blank" rel="noopener" (click)="closeMenu()">
+                        {{ subitem.label }}
+                      </a>
+                    } @else {
+                      <a [href]="subitem.href" (click)="scrollTo(subitem.href); $event.preventDefault()">
+                        {{ subitem.label }}
+                      </a>
+                    }
                   </li>
                 }
               </div>
@@ -39,20 +46,22 @@
           }
         </li>
       }
+      <!-- En móvil el CTA del header se oculta: se repite dentro del menú. -->
+      <li class="navbar__item navbar__item--cta" [style.--i]="links.length">
+        <a class="navbar__mobile-cta" [href]="bookingUrl" target="_blank" rel="noopener" (click)="closeMenu()">
+          Reservar sesión
+        </a>
+      </li>
     </ul>
 
     <div class="navbar__right">
-      <a
-        class="navbar__cta"
-        href="https://wa.me/524424906891?text=Hola%2C%20me%20gustar%C3%ADa%20reservar%20una%20sesi%C3%B3n%20fotogr%C3%A1fica.%20%C2%BFPodr%C3%ADan%20darme%20m%C3%A1s%20informaci%C3%B3n%3F"
-        target="_blank"
-        rel="noopener"
-      >
+      <a class="navbar__cta dl-shine" dlMagnetic [magneticStrength]="6" [href]="bookingUrl" target="_blank" rel="noopener">
         Reservar sesión
       </a>
     </div>
 
-    <button class="navbar__hamburger" (click)="toggleMenu()" aria-label="Menú">
+    <button class="navbar__hamburger" [class.navbar__hamburger--open]="menuOpen()" (click)="toggleMenu()"
+            aria-label="Menú" aria-controls="navbar-menu" [attr.aria-expanded]="menuOpen()">
       <span></span><span></span><span></span>
     </button>
 

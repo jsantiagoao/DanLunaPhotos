@@ -17,15 +17,18 @@
       <form class="contact__form" [formGroup]="form" (ngSubmit)="onSubmit()">
         <div class="contact__fields">
           <div class="contact__field" [class.contact__field--error]="hasError('nombre')">
-            <input formControlName="nombre" type="text" placeholder="Nombre" />
+            <label class="sr-only" for="contact-nombre">Nombre</label>
+            <input id="contact-nombre" formControlName="nombre" type="text" placeholder="Nombre" autocomplete="name" />
           </div>
 
           <div class="contact__field" [class.contact__field--error]="hasError('email')">
-            <input formControlName="email" type="email" placeholder="Email" />
+            <label class="sr-only" for="contact-email">Email</label>
+            <input id="contact-email" formControlName="email" type="email" placeholder="Email" autocomplete="email" />
           </div>
 
           <div class="contact__field">
-            <select formControlName="tipo">
+            <label class="sr-only" for="contact-tipo">Tipo de sesión</label>
+            <select id="contact-tipo" formControlName="tipo">
               <option value="" disabled selected>Tipo de sesión ▾</option>
               @for (type of sessionTypes; track type) {
                 <option [value]="type">{{ type }}</option>
@@ -34,12 +37,13 @@
           </div>
 
           <div class="contact__field contact__field--textarea" [class.contact__field--error]="hasError('mensaje')">
-            <textarea formControlName="mensaje" placeholder="Mensaje..." rows="5"></textarea>
+            <label class="sr-only" for="contact-mensaje">Mensaje</label>
+            <textarea id="contact-mensaje" formControlName="mensaje" placeholder="Mensaje..." rows="5"></textarea>
           </div>
 
           <div class="contact__field contact__field--captcha" [class.contact__field--error]="hasError('captcha') || captchaError()">
-            <label class="contact__captcha-label">{{ captchaQuestion() }}</label>
-            <input formControlName="captcha" type="number" placeholder="Tu respuesta" />
+            <label class="contact__captcha-label" for="contact-captcha">{{ captchaQuestion() }}</label>
+            <input id="contact-captcha" formControlName="captcha" type="number" inputmode="numeric" placeholder="Tu respuesta" />
             @if (captchaError()) {
               <p class="contact__field-msg" role="alert">Esa no era. Te dejamos otra operación.</p>
             }
@@ -53,7 +57,7 @@
           </p>
         }
 
-        <button type="submit" class="contact__submit" [disabled]="sending()">
+        <button type="submit" class="contact__submit dl-shine" dlMagnetic [magneticStrength]="8" [disabled]="sending()">
           {{ sending() ? 'Enviando…' : 'Enviar mensaje →' }}
         </button>
       </form>
@@ -69,7 +73,12 @@
         @for (item of infoItems; track item.label) {
           <div class="contact__info-item">
             <span class="contact__info-label">{{ item.label }}</span>
-            <span class="contact__info-value">{{ item.value }}</span>
+            @if (item.href) {
+              <a class="contact__info-value" [href]="item.href"
+                 [attr.target]="item.external ? '_blank' : null" [attr.rel]="item.external ? 'noopener' : null">{{ item.value }}</a>
+            } @else {
+              <span class="contact__info-value">{{ item.value }}</span>
+            }
           </div>
         }
       </div>

@@ -36,6 +36,9 @@
       <span class="gallery__caption-num">{{ activeCard().num }}</span>
       <span class="gallery__caption-name">{{ activeCard().name }}</span>
       <span class="gallery__caption-desc">{{ activeCard().count }}</span>
+      @if (activeCard().route; as route) {
+        <a class="gallery__caption-link" [routerLink]="route">Ver sesiones de {{ activeCard().name }} →</a>
+      }
     </div>
 
     <div class="gallery__dots" role="tablist" aria-label="Seleccionar sesión">

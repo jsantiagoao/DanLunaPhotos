@@ -1,6 +1,11 @@
 .gallery {
   background-color: var(--color-cream);
   padding: var(--section-padding);
+  // Las cards laterales del coverflow salen del ancho de la pantalla: en móvil la página
+  // medía 451px en una pantalla de 375 (scroll lateral y botones flotantes fuera de vista).
+  // `clip` recorta sin crear contenedor de scroll; `hidden` queda de respaldo.
+  overflow-x: hidden;
+  overflow-x: clip;
 
   &__inner {
     max-width: var(--max-width);
@@ -183,6 +188,15 @@
     color: var(--color-dark);
   }
 
+  &__caption-link {
+    margin-top: 6px;
+    display: inline-flex; align-items: center; min-height: 44px;
+    font-family: var(--font-sans); font-size: 15px; font-weight: 600;
+    color: var(--color-gold);
+    text-decoration: underline; text-decoration-color: rgba(173, 138, 106, 0.4); text-underline-offset: 4px;
+    &:hover { opacity: 0.8; }
+  }
+
   &__caption-desc {
     font-family: var(--font-sans);
     font-size: 15px;
@@ -195,23 +209,41 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 0;
   }
 
+  // El punto visible sigue midiendo 9px; el botón mide 44px de alto para que se pueda
+  // tocar con el dedo (antes el área táctil era de 9×9px).
   &__dot {
-    width: 9px;
-    height: 9px;
+    position: relative;
+    width: 28px;
+    height: 44px;
     border: none;
-    border-radius: 50%;
-    background-color: rgba(45, 36, 32, 0.22);
+    background: none;
     cursor: pointer;
     padding: 0;
-    transition: background-color 0.3s, transform 0.3s, width 0.3s;
+    transition: width 0.3s;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background-color: rgba(45, 36, 32, 0.22);
+      transform: translate(-50%, -50%);
+      transition: background-color 0.3s, width 0.3s;
+    }
 
     &--active {
-      background-color: var(--color-gold);
-      width: 26px;
-      border-radius: 5px;
+      width: 40px;
+      &::after {
+        background-color: var(--color-gold);
+        width: 26px;
+        border-radius: 5px;
+      }
     }
   }
 }
@@ -254,7 +286,8 @@
       &--left  { transform: translateX(-46%) translateZ(-160px) rotateY(22deg)  scale(0.82); }
       &--right { transform: translateX(46%)  translateZ(-160px) rotateY(-22deg) scale(0.82); }
     }
-    &__nav { width: 42px; height: 42px; font-size: 22px; }
+    // En móvil las flechas tapaban las fotos: se navega deslizando o con los puntos.
+    &__nav { display: none; }
     &__caption-name { font-size: 22px; }
   }
 }

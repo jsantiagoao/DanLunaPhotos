@@ -4,42 +4,49 @@
 
   <url>
     <loc>https://danlunaphoto.com/</loc>
-    <lastmod>2026-06-22</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
 
   <url>
     <loc>https://danlunaphoto.com/fotografa-en-queretaro</loc>
-    <lastmod>2026-06-22</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://danlunaphoto.com/fotografia-bautizo-queretaro</loc>
-    <lastmod>2026-06-22</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
     <loc>https://danlunaphoto.com/fotografia-bodas-queretaro</loc>
-    <lastmod>2026-06-22</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
 
   <url>
+    <loc>https://danlunaphoto.com/sesiones-navidad</loc>
+    <lastmod>2026-10-10</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
     <loc>https://danlunaphoto.com/agendar</loc>
-    <lastmod>2026-06-22</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://danlunaphoto.com/blog</loc>
-    <lastmod>2026-06-22</lastmod>
+    <lastmod>2026-10-10</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>

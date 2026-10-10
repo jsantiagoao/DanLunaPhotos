@@ -13,6 +13,9 @@
   &__photo-wrap {
     flex-shrink: 0;
     width: 520px;
+    // Marco: recorta la foto ampliada para que el parallax no muestre bordes.
+    overflow: hidden;
+    border-radius: 20px;
   }
 
   &__photo {
@@ -20,6 +23,9 @@
     height: 640px;
     object-fit: cover;
     border-radius: 20px;
+    // --parallax lo escribe ParallaxDirective (px). La escala da margen al desplazamiento.
+    transform: translateY(var(--parallax, 0px)) scale(1.15);
+    will-change: transform;
   }
 
   &__content {
@@ -142,4 +148,19 @@
     &__photo { height: 320px; }
     &__name { font-size: 28px; }
   }
+}
+
+// Cortina: solo cuando appReveal controla la sección (clase .reveal). Sin JS o en SSR
+// la foto se ve completa desde el inicio.
+:host(.reveal) .about__photo-wrap {
+  clip-path: inset(0 0 100% 0 round 20px);
+  transition: clip-path 1.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.15s;
+}
+:host(.reveal.reveal--visible) .about__photo-wrap {
+  clip-path: inset(0 0 0 0 round 20px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host(.reveal) .about__photo-wrap { clip-path: none; transition: none; }
+  .about__photo { transform: none; }
 }

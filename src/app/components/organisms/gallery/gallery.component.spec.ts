@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { GalleryComponent } from './gallery.component';
 
 describe('GalleryComponent', () => {
@@ -103,6 +104,31 @@ describe('GalleryComponent', () => {
       component.onTouchStart({ changedTouches: [{ clientX: 150 }] } as unknown as TouchEvent);
       component.onTouchEnd({ changedTouches: [{ clientX: 158 }] } as unknown as TouchEvent);
       expect(component.currentIndex()).toBe(2);
+    });
+  });
+
+  describe('enlace interno a la página de cada sesión (SEO + navegación)', () => {
+    function render(index: number) {
+      TestBed.resetTestingModule();
+      TestBed.configureTestingModule({ imports: [GalleryComponent], providers: [provideRouter([])] });
+      const fixture = TestBed.createComponent(GalleryComponent);
+      fixture.componentInstance.currentIndex.set(index);
+      fixture.detectChanges();
+      return fixture.nativeElement as HTMLElement;
+    }
+
+    it('should_link_bodas_to_its_dedicated_page', () => {
+      const link = render(1).querySelector<HTMLAnchorElement>('.gallery__caption-link');
+      expect(link?.getAttribute('href')).toBe('/fotografia-bodas-queretaro');
+    });
+
+    it('should_link_bautizos_to_its_dedicated_page', () => {
+      const link = render(0).querySelector<HTMLAnchorElement>('.gallery__caption-link');
+      expect(link?.getAttribute('href')).toBe('/fotografia-bautizo-queretaro');
+    });
+
+    it('should_not_show_a_link_for_sessions_without_a_page', () => {
+      expect(render(2).querySelector('.gallery__caption-link')).toBeNull();
     });
   });
 });

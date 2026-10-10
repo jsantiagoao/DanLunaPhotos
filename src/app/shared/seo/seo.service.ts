@@ -25,6 +25,9 @@ export interface SeoConfig {
  * llaman a `seo.apply({...})` con su configuracion y `seo.clearJsonLd()` en
  * ngOnDestroy. Unica responsabilidad: gestionar metadatos del documento.
  */
+/** Id del <script> JSON-LD de la página. */
+const JSON_LD_ID = 'seo-jsonld';
+
 @Injectable({ providedIn: 'root' })
 export class SeoService {
   private jsonLdScript: HTMLScriptElement | null = null;
@@ -77,19 +80,26 @@ export class SeoService {
     link.setAttribute('href', url);
   }
 
+  /**
+   * Un solo <script> con id fijo: el HTML prerenderizado ya lo trae, así que al
+   * hidratar se reutiliza en vez de agregar un duplicado.
+   */
   private setJsonLd(data: unknown): void {
-    this.clearJsonLd();
-    this.jsonLdScript = this.document.createElement('script');
-    this.jsonLdScript.type = 'application/ld+json';
-    this.jsonLdScript.text = JSON.stringify(data);
-    this.document.head.appendChild(this.jsonLdScript);
+    let script = this.document.getElementById(JSON_LD_ID) as HTMLScriptElement | null;
+    if (!script) {
+      script = this.document.createElement('script');
+      script.type = 'application/ld+json';
+      script.id = JSON_LD_ID;
+      this.document.head.appendChild(script);
+    }
+    script.text = JSON.stringify(data);
+    this.jsonLdScript = script;
   }
 
-  /** Retira el JSON-LD inyectado. Llamar en ngOnDestroy de la pagina. */
+  /** Retira el JSON-LD inyectado (también el que dejó el servidor). Llamar en ngOnDestroy de la pagina. */
   clearJsonLd(): void {
-    if (this.jsonLdScript && this.jsonLdScript.parentNode) {
-      this.jsonLdScript.parentNode.removeChild(this.jsonLdScript);
-    }
+    const script = this.jsonLdScript ?? this.document.getElementById(JSON_LD_ID);
+    script?.parentNode?.removeChild(script);
     this.jsonLdScript = null;
   }
 }

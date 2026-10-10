@@ -1,16 +1,17 @@
 <section class="about">
   <div class="about__inner">
 
-    <div class="about__photo-wrap">
+    <!-- El retrato se descubre con una cortina al entrar en pantalla y flota con parallax dentro del marco. -->
+    <div class="about__photo-wrap" dlParallax [parallaxStrength]="0.04">
       <app-image class="about__photo" profile="portrait"
            src="assets/images/Daniela_Luna_Fotografa-1024x776.jpg"
-           alt="Dan Luna — Fotógrafo profesional" />
+           alt="Dan Luna, fotógrafa profesional en Querétaro" />
     </div>
 
     <div class="about__content">
       <p class="about__overline">SOBRE MÍ</p>
       <h2 class="about__name">Dan Luna</h2>
-      <p class="about__role">Arquitecta / Fotógrafo profesional</p>
+      <p class="about__role">Arquitecta / Fotógrafa profesional</p>
       <div class="about__divider"></div>
 
       <p class="about__bio">
