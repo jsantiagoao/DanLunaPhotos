@@ -30,11 +30,9 @@
       }
     </nav>
 
-    <!-- Nombre, ciudad, teléfono y correo (NAP): señal de negocio local para buscadores. -->
+    <!-- Nombre y ciudad: señal de negocio local para buscadores (sin teléfono ni correo, por decisión de Daniela). -->
     <address class="footer__contact">
       <span>Dan Luna Photo · {{ city }}</span>
-      <a [href]="phoneHref">{{ phoneDisplay }}</a>
-      <a [href]="'mailto:' + email">{{ email }}</a>
     </address>
 
     <p class="footer__copy">© {{ year }} Dan Luna Photo</p>

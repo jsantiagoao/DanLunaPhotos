@@ -19,10 +19,12 @@ describe('FooterComponent', () => {
     ]));
   });
 
-  it('should_show_tappable_phone_and_email', () => {
-    const hrefs = Array.from(render().querySelectorAll<HTMLAnchorElement>('.footer__contact a')).map((a) => a.getAttribute('href'));
-    expect(hrefs).toContain('tel:+524424906891');
-    expect(hrefs).toContain('mailto:hola@danlunaphoto.com');
+  it('should_not_show_phone_or_email', () => {
+    // Por decisión de Daniela, el pie no muestra teléfono ni correo.
+    const el = render();
+    expect(el.querySelector('a[href^="tel:"], a[href^="mailto:"]')).toBeNull();
+    expect(el.textContent).not.toContain('+52 442 490 6891');
+    expect(el.textContent).not.toContain('hola@danlunaphoto.com');
   });
 
   it('should_use_the_facebook_url_without_tracking_parameters', () => {
