@@ -10,6 +10,7 @@ import {
   DEFAULT_DESIGN,
 } from './gallery.models';
 import { filterPhotos, neighbourPhoto } from './gallery-filter.logic';
+import { downloadErrorAction } from './download-error.logic';
 
 @Component({
   selector: 'app-gallery-view',
@@ -144,8 +145,19 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
         if (res.downloadUrl) window.open(res.downloadUrl, '_blank');
         else alert(res.message || 'Tu descarga se está preparando.');
       },
-      error: () => alert('Error al generar descarga'),
+      error: (e) => this.onDownloadError(e),
     });
+  }
+
+  /** Sesión vencida → de vuelta al acceso; cualquier otro error, el mensaje del servidor. */
+  private onDownloadError(e: { status?: number; error?: { message?: string } }) {
+    const action = downloadErrorAction(e?.status ?? 0, e?.error?.message);
+    if (action.type === 'relogin') {
+      sessionStorage.removeItem(`gallery_token_${this.slug}`);
+      this.router.navigate(['/galeria', this.slug]);
+    } else {
+      alert(action.message);
+    }
   }
 
   shareGallery() {
@@ -170,7 +182,7 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
       next: (res) => {
         if (res.downloadUrl) window.open(res.downloadUrl, '_blank');
       },
-      error: () => alert('Error al generar descarga'),
+      error: (e) => this.onDownloadError(e),
     });
   }
 }
