@@ -6,6 +6,13 @@ Versionado semántico según [SemVer](https://semver.org/lang/es/).
 
 ---
 
+## [1.3.1] - 2026-10-20
+
+### Fixed
+- Galería del cliente: si la sesión venció (12 h o cambio de contraseña/PIN), descargar lleva
+  de vuelta al acceso en lugar de mostrar un error genérico; otros errores muestran el
+  mensaje del servidor.
+
 ## [1.3.0] - 2026-10-10
 
 ### Added
