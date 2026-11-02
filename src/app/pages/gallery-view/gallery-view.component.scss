@@ -20,7 +20,8 @@
     .cover-contorno::before { background: rgba(0,0,0,0.5); }
     .cover-contorno .cover-fs-overlay::before { content: ''; position: absolute; inset: 2rem; border: 1px solid currentColor; opacity: 0.4; z-index: -1; }
     .cover-logo-icon { margin-bottom: 0.5rem; }
-    .cover-logo-img { width: 50px; height: 50px; object-fit: contain; opacity: 0.9; }
+    /* Máscara con transparencia real: el logo toma el color del texto de la portada. */
+    .cover-logo-img { display: block; width: 110px; height: 40px; background: currentColor; -webkit-mask: url('/assets/images/logo-mark.png') center / contain no-repeat; mask: url('/assets/images/logo-mark.png') center / contain no-repeat; }
     .cover-novela .cover-title, .cover-diario .cover-title, .cover-novela .cover-brand, .cover-diario .cover-brand { text-shadow: none; }
     .cover-brand { text-shadow: 0 1px 8px rgba(0,0,0,0.6); font-size: clamp(0.6rem, 1vw, 0.75rem); letter-spacing: 3px; text-transform: uppercase; opacity: 1; margin-bottom: 3rem; font-weight: 300; color: inherit; }
     .cover-title { margin: 0; letter-spacing: 6px; text-transform: uppercase; text-shadow: 0 2px 24px rgba(0,0,0,0.65), 0 1px 3px rgba(0,0,0,0.5); color: inherit; }
