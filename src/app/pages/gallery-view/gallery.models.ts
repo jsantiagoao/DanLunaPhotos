@@ -7,7 +7,7 @@
  */
 
 export type GalleryTheme = 'light' | 'dark';
-export type GridLayout = 'masonry' | 'grid' | 'horizontal';
+export type GridLayout = 'masonry' | 'grid' | 'horizontal' | 'single';
 export type Typography = 'serif' | 'sans';
 export type Spacing = 'compact' | 'normal' | 'wide';
 export type CoverStyle = 'full-width' | 'centered' | 'split';
@@ -19,6 +19,7 @@ export interface GalleryDesign {
   spacing: Spacing;
   coverStyle: CoverStyle;
   highlightColor?: string;
+  displayName?: string;
 }
 
 export interface FocalPoint {

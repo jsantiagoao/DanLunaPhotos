@@ -11,6 +11,7 @@ import {
 } from './gallery.models';
 import { filterPhotos, neighbourPhoto } from './gallery-filter.logic';
 import { downloadErrorAction } from './download-error.logic';
+import { galleryDisplayTitle, gridImageUrl } from './gallery-delivery.logic';
 
 @Component({
   selector: 'app-gallery-view',
@@ -36,13 +37,20 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
   selectedIds: string[] = [];
   showFavoritesOnly = false;
   showDownloadScreen = false;
-  downloadEmail = '';
-  downloadPin = '';
+  preparingDownload = false;
   slideshowActive = false;
   slideshowPhotos: GalleryPhoto[] = [];
   slideshowIndex = 0;
   lightboxWebLoaded = false;
   private slideshowInterval: ReturnType<typeof setInterval> | null = null;
+
+  get displayTitle(): string {
+    return galleryDisplayTitle(this.gallery);
+  }
+
+  gridImage(photo: GalleryPhoto): string {
+    return gridImageUrl(photo, this.design.gridLayout);
+  }
 
   ngOnInit() {
     this.slug = this.route.snapshot.paramMap.get('slug') || '';
@@ -138,14 +146,18 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
   }
 
   confirmDownload() {
-    if (!this.downloadEmail) return;
-    this.api.requestDownload(this.slug, this.token, { email: this.downloadEmail }).subscribe({
+    this.preparingDownload = true;
+    this.api.requestDownload(this.slug, this.token, {}).subscribe({
       next: (res) => {
+        this.preparingDownload = false;
         this.showDownloadScreen = false;
         if (res.downloadUrl) window.open(res.downloadUrl, '_blank');
         else alert(res.message || 'Tu descarga se está preparando.');
       },
-      error: (e) => this.onDownloadError(e),
+      error: (e) => {
+        this.preparingDownload = false;
+        this.onDownloadError(e);
+      },
     });
   }
 
@@ -163,7 +175,7 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
   shareGallery() {
     const url = `https://danlunaphoto.com/galeria/${this.slug}`;
     if (navigator.share) {
-      navigator.share({ title: this.gallery.title, url });
+      navigator.share({ title: this.displayTitle, url });
     } else {
       navigator.clipboard.writeText(url);
       alert('Link copiado');

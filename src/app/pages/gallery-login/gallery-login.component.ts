@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { GalleryInfoResponse, GalleryAuthResponse } from '../gallery-view/gallery.models';
+import { galleryAccessMessage, galleryDisplayTitle } from '../gallery-view/gallery-delivery.logic';
 
 @Component({
   selector: 'app-gallery-login',
@@ -15,11 +16,15 @@ import { GalleryInfoResponse, GalleryAuthResponse } from '../gallery-view/galler
       <div class="overlay">
         <div class="login-card">
           <h1>{{ title || 'Galería' }}</h1>
-          <p>Ingresa tus credenciales para ver las fotos</p>
-          <div class="field"><input type="password" [(ngModel)]="password" placeholder="Contraseña" (keydown.enter)="login()" /></div>
-          <div class="field"><input type="text" [(ngModel)]="pin" placeholder="PIN" maxlength="6" (keydown.enter)="login()" /></div>
-          @if (error()) { <p class="error">{{ error() }}</p> }
-          <button class="btn-login" (click)="login()" [disabled]="loading()">{{ loading() ? 'Verificando...' : 'Entrar' }}</button>
+          @if (unavailable(); as message) {
+            <p class="unavailable" role="alert">{{ message }}</p>
+          } @else {
+            <p>Ingresa tus credenciales para ver las fotos</p>
+            <div class="field"><input type="password" [(ngModel)]="password" placeholder="Contraseña" aria-label="Contraseña" (keydown.enter)="login()" /></div>
+            <div class="field"><input type="text" [(ngModel)]="pin" placeholder="PIN" aria-label="PIN" maxlength="6" (keydown.enter)="login()" /></div>
+            @if (error()) { <p class="error" role="alert">{{ error() }}</p> }
+            <button class="btn-login" (click)="login()" [disabled]="loading()">{{ loading() ? 'Verificando...' : 'Entrar' }}</button>
+          }
           <span class="brand">Dan Luna Photo</span>
         </div>
       </div>
@@ -37,6 +42,7 @@ import { GalleryInfoResponse, GalleryAuthResponse } from '../gallery-view/galler
     .btn-login { width: 100%; background: #AD8A6A; color: #fff; border: none; padding: 0.85rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
     .btn-login:hover { background: #2D2420; }
     .btn-login:disabled { opacity: 0.6; cursor: not-allowed; }
+    .unavailable { color: #2D2420; font-size: 1rem; line-height: 1.5; margin: 0; }
     .error { color: #dc3545; font-size: 0.85rem; margin: 0 0 1rem; }
     .brand { display: block; margin-top: 2rem; font-family: 'Fraunces', serif; color: #AD8A6A; font-size: 0.9rem; }
   `]
@@ -52,6 +58,8 @@ export class GalleryLoginComponent {
   coverUrl = '';
   error = signal('');
   loading = signal(false);
+  /** Mensaje cuando la galería no se puede abrir: en ese caso no se ofrece un acceso inútil. */
+  unavailable = signal<string | null>(null);
 
   slug = '';
 
@@ -59,8 +67,8 @@ export class GalleryLoginComponent {
     this.slug = this.route.snapshot.paramMap.get('slug') || '';
     // Load gallery info (cover + title)
     this.http.get<GalleryInfoResponse>(`${environment.apiUrl}/gallery/${this.slug}`).subscribe({
-      next: (data) => { this.title = data.title; this.coverUrl = data.coverUrl; },
-      error: () => {}
+      next: (data) => { this.title = galleryDisplayTitle(data); this.coverUrl = data.coverUrl; },
+      error: (e) => this.unavailable.set(galleryAccessMessage(e?.status ?? 0)),
     });
   }
 

@@ -6,6 +6,15 @@ Versionado semántico según [SemVer](https://semver.org/lang/es/).
 
 ---
 
+## [1.4.0] - 2026-11-02
+
+### Fixed
+- La clienta ve el nombre de galería configurado en Studio, en el acceso y en el visor.
+- La descarga ya no pide un PIN y un correo que no se usaban, y su pantalla se lee en tema oscuro.
+- Con descargas apagadas ya no aparecen el botón de descarga ni la selección.
+- "Una columna" tiene su diseño propio y usa la foto en calidad web.
+- Un enlace no disponible o vencido lo explica en vez de ofrecer un acceso inútil.
+
 ## [1.3.1] - 2026-10-20
 
 ### Fixed
