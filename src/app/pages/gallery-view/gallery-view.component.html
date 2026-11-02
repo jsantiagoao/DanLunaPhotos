@@ -27,12 +27,12 @@
       }
     </div>
     <div class="nav-actions">
-      <button class="na-btn" [class.active]="showFavoritesOnly" (click)="showFavoritesOnly = !showFavoritesOnly" title="Favoritas">♥</button>
+      <button class="na-btn" [class.active]="showFavoritesOnly" [attr.aria-pressed]="showFavoritesOnly" (click)="showFavoritesOnly = !showFavoritesOnly" title="Favoritas" aria-label="Ver solo favoritas"><app-gallery-icon name="heart" /></button>
       @if (gallery.downloads?.enabled) {
-        <button class="na-btn" (click)="showDownloadScreen = true" title="Descargar">⬇</button>
+        <button class="na-btn" (click)="showDownloadScreen = true" title="Descargar" aria-label="Descargar fotos"><app-gallery-icon name="download" /></button>
       }
-      <button class="na-btn" (click)="shareGallery()" title="Compartir">↗</button>
-      <button class="na-btn" (click)="startSlideshow()" title="Slideshow">▶</button>
+      <button class="na-btn" (click)="shareGallery()" title="Compartir" aria-label="Compartir galería"><app-gallery-icon name="share" /></button>
+      <button class="na-btn" (click)="startSlideshow()" title="Presentación" aria-label="Ver presentación"><app-gallery-icon name="play" /></button>
     </div>
   </div>
 
@@ -49,7 +49,7 @@
           <p>Prepararemos un archivo ZIP con todas tus fotos en su calidad original. Puede tardar un momento si la galería es grande.</p>
           <button class="btn-download" [disabled]="preparingDownload" (click)="confirmDownload()">{{ preparingDownload ? 'PREPARANDO…' : 'DESCARGAR TODAS' }}</button>
         </div>
-        <button class="download-close" (click)="showDownloadScreen = false">✕</button>
+        <button class="download-close" (click)="showDownloadScreen = false" aria-label="Cerrar"><app-gallery-icon name="close" [size]="22" /></button>
       </div>
     </div>
   }
@@ -59,9 +59,9 @@
     @for (p of displayedPhotos(); track p._id) {
       <div class="photo-item" (click)="openLightbox(p)">
         <img [src]="gridImage(p)" [alt]="p.filename" loading="lazy" />
-        <button class="fav-btn" [class.active]="p.isFavorite" (click)="toggleFav(p); $event.stopPropagation()">♥</button>
+        <button class="fav-btn" [class.active]="p.isFavorite" [attr.aria-pressed]="!!p.isFavorite" aria-label="Marcar como favorita" (click)="toggleFav(p); $event.stopPropagation()"><app-gallery-icon name="heart" /></button>
         @if (gallery.downloads?.enabled) {
-          <input type="checkbox" class="select-check" [checked]="selectedIds.includes(p._id)" (click)="toggleSelect(p._id); $event.stopPropagation()" />
+          <input type="checkbox" class="select-check" aria-label="Seleccionar foto" [checked]="selectedIds.includes(p._id)" (click)="toggleSelect(p._id); $event.stopPropagation()" />
         }
       </div>
     }
@@ -70,8 +70,8 @@
   @if (selectedIds.length) {
     <div class="selection-bar">
       <span>{{ selectedIds.length }} seleccionadas</span>
-      <button (click)="downloadSelected()">⬇ Descargar selección</button>
-      <button (click)="selectedIds = []">✕</button>
+      <button (click)="downloadSelected()"><app-gallery-icon name="download" [size]="16" /> Descargar selección</button>
+      <button (click)="selectedIds = []" aria-label="Quitar selección"><app-gallery-icon name="close" [size]="16" /></button>
     </div>
   }
 
@@ -82,14 +82,14 @@
         <img class="lb-thumb" [src]="lb.thumbUrl" [class.loaded]="lightboxWebLoaded" />
         <img class="lb-web" [src]="lb.webUrl || lb.thumbUrl" (load)="lightboxWebLoaded = true" [class.loaded]="lightboxWebLoaded" />
         <div class="lb-actions">
-          <button (click)="prevPhoto()">‹</button>
-          <button class="fav-btn-lb" [class.active]="lb.isFavorite" (click)="toggleFav(lb)">♥</button>
+          <button (click)="prevPhoto()" aria-label="Foto anterior"><app-gallery-icon name="prev" [size]="22" /></button>
+          <button class="fav-btn-lb" [class.active]="lb.isFavorite" [attr.aria-pressed]="!!lb.isFavorite" aria-label="Marcar como favorita" (click)="toggleFav(lb)"><app-gallery-icon name="heart" [size]="20" /></button>
           @if (gallery.downloads?.enabled) {
-            <a [href]="lb.originalUrl" download class="dl-btn">⬇</a>
+            <a [href]="lb.originalUrl" download class="dl-btn" aria-label="Descargar esta foto"><app-gallery-icon name="download" [size]="20" /></a>
           }
-          <button (click)="nextPhoto()">›</button>
+          <button (click)="nextPhoto()" aria-label="Foto siguiente"><app-gallery-icon name="next" [size]="22" /></button>
         </div>
-        <button class="lb-close" (click)="lightboxPhoto.set(null)">✕</button>
+        <button class="lb-close" (click)="lightboxPhoto.set(null)" aria-label="Cerrar"><app-gallery-icon name="close" [size]="26" /></button>
       </div>
     </div>
   }
@@ -101,9 +101,9 @@
         <img [src]="photo.thumbUrl" [alt]="photo.filename" />
       }
       <div class="slideshow-controls" (click)="$event.stopPropagation()">
-        <button (click)="slideshowPrev()">‹</button>
-        <button (click)="slideshowActive = false">✕</button>
-        <button (click)="slideshowNext()">›</button>
+        <button (click)="slideshowPrev()" aria-label="Foto anterior"><app-gallery-icon name="prev" [size]="22" /></button>
+        <button (click)="slideshowActive = false" aria-label="Cerrar presentación"><app-gallery-icon name="close" [size]="22" /></button>
+        <button (click)="slideshowNext()" aria-label="Foto siguiente"><app-gallery-icon name="next" [size]="22" /></button>
       </div>
     </div>
   }

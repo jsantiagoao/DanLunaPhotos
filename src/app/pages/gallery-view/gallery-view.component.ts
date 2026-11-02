@@ -1,5 +1,6 @@
 import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { GalleryIconComponent } from '../../components/atoms/gallery-icon/gallery-icon.component';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GalleryApiService } from './gallery-api.service';
@@ -16,7 +17,7 @@ import { galleryDisplayTitle, gridImageUrl } from './gallery-delivery.logic';
 @Component({
   selector: 'app-gallery-view',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, GalleryIconComponent],
   templateUrl: './gallery-view.component.html',
   styleUrl: './gallery-view.component.scss',
 })

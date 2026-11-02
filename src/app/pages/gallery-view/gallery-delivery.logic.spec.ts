@@ -1,4 +1,4 @@
-import { galleryAccessMessage, galleryDisplayTitle, gridImageUrl } from './gallery-delivery.logic';
+import { galleryAccessMessage, galleryDisplayTitle, gridImageUrl, isClientGalleryUrl } from './gallery-delivery.logic';
 
 describe('gallery-delivery.logic', () => {
   describe('galleryDisplayTitle', () => {
@@ -24,6 +24,20 @@ describe('gallery-delivery.logic', () => {
     it('should_not_block_access_on_temporary_errors', () => {
       expect(galleryAccessMessage(500)).toBeNull();
       expect(galleryAccessMessage(0)).toBeNull();
+    });
+  });
+
+  describe('isClientGalleryUrl', () => {
+    it('should_recognize_the_private_gallery_pages', () => {
+      expect(isClientGalleryUrl('/galeria/boda-ana')).toBe(true);
+      expect(isClientGalleryUrl('/galeria/boda-ana/ver')).toBe(true);
+      expect(isClientGalleryUrl('/galeria/boda-ana?x=1')).toBe(true);
+    });
+
+    it('should_not_confuse_public_pages_of_the_site', () => {
+      expect(isClientGalleryUrl('/')).toBe(false);
+      expect(isClientGalleryUrl('/galerias')).toBe(false);
+      expect(isClientGalleryUrl('/paquetes/galeria')).toBe(false);
     });
   });
 

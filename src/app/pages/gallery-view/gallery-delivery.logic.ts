@@ -17,6 +17,11 @@ export function galleryAccessMessage(status: number): string | null {
   return null;
 }
 
+/** La galería es una entrega privada: ahí no van los botones flotantes del sitio. */
+export function isClientGalleryUrl(url: string): boolean {
+  return /^\/galeria(\/|$|\?)/.test(url);
+}
+
 /** Con una foto a todo el ancho, la miniatura de 800 px se vería borrosa. */
 export function gridImageUrl(photo: { thumbUrl: string; webUrl?: string }, gridLayout?: string): string {
   return gridLayout === 'single' ? photo.webUrl || photo.thumbUrl : photo.thumbUrl;

@@ -6,6 +6,13 @@ Versionado semántico según [SemVer](https://semver.org/lang/es/).
 
 ---
 
+## [1.5.0] - 2026-11-02
+
+### Changed
+- La galería de la clienta ya no muestra los botones flotantes del sitio.
+- El título se lee mejor sobre la portada.
+- Los símbolos de texto del visor son iconos con nombre accesible y tamaño táctil; favorita y selección se ven siempre en pantallas táctiles.
+
 ## [1.4.0] - 2026-11-02
 
 ### Fixed
