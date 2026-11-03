@@ -1,5 +1,6 @@
 import { Component, HostListener, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { firstValueFrom } from 'rxjs';
 import { GalleryIconComponent } from '../../components/atoms/gallery-icon/gallery-icon.component';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,7 +12,7 @@ import {
   DEFAULT_DESIGN,
 } from './gallery.models';
 import { filterPhotos, neighbourPhoto } from './gallery-filter.logic';
-import { downloadErrorAction } from './download-error.logic';
+import { GalleryDownload } from './gallery-download';
 import { galleryDisplayTitle, gridImageUrl, photoAspectRatio, resolveDesign, shareLink, swipeDirection, withPublishedInfo } from './gallery-delivery.logic';
 import { GallerySlideshow } from './gallery-slideshow';
 
@@ -39,7 +40,7 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
   selectedIds: string[] = [];
   showFavoritesOnly = false;
   showDownloadScreen = false;
-  preparingDownload = false;
+  download!: GalleryDownload;
   readonly slideshow = new GallerySlideshow<GalleryPhoto>();
   lightboxWebLoaded = false;
   /** Aviso integrado: reemplaza a alert(), que interrumpe y se ve ajeno a la galería. */
@@ -71,6 +72,8 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
 
     this.showGallery(JSON.parse(data));
     this.activeSet = this.gallery.sets?.[0] || '';
+    this.download = this.createDownload();
+    void this.download.resume();
 
     this.loadPhotos();
     this.refreshPublishedInfo();
@@ -98,6 +101,7 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.slideshow.stop();
+    this.download?.stop();
     if (this.noticeTimer) clearTimeout(this.noticeTimer);
   }
 
@@ -185,35 +189,48 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
     });
   }
 
-  downloadAll() {
-    this.showDownloadScreen = true;
+  private createDownload(): GalleryDownload {
+    return new GalleryDownload(
+      {
+        start: (photoIds) => firstValueFrom(this.api.requestDownload(this.slug, this.token, photoIds ? { photoIds } : {})),
+        check: (jobId) => firstValueFrom(this.api.checkDownload(this.slug, this.token, jobId)),
+      },
+      sessionStorage,
+      this.slug,
+      () => {
+        sessionStorage.removeItem(`gallery_token_${this.slug}`);
+        this.router.navigate(['/galeria', this.slug]);
+      },
+      // La URL trae Content-Disposition: attachment, así que el navegador descarga sin salir de la galería.
+      (url) => window.location.assign(url),
+    );
   }
 
-  confirmDownload() {
-    this.preparingDownload = true;
-    this.api.requestDownload(this.slug, this.token, {}).subscribe({
-      next: (res) => {
-        this.preparingDownload = false;
-        this.showDownloadScreen = false;
-        if (res.downloadUrl) window.open(res.downloadUrl, '_blank');
-        else this.showNotice(res.message || 'Tu descarga se está preparando.');
-      },
-      error: (e) => {
-        this.preparingDownload = false;
-        this.onDownloadError(e);
-      },
-    });
+  get downloadLabel(): string {
+    const state = this.download?.state;
+    if (state?.kind !== 'preparing') return '';
+    return state.processed ? `${state.processed} de ${state.total} fotos` : 'Empezando…';
   }
 
-  /** Sesión vencida → de vuelta al acceso; cualquier otro error, el mensaje del servidor. */
-  private onDownloadError(e: { status?: number; error?: { message?: string } }) {
-    const action = downloadErrorAction(e?.status ?? 0, e?.error?.message);
-    if (action.type === 'relogin') {
-      sessionStorage.removeItem(`gallery_token_${this.slug}`);
-      this.router.navigate(['/galeria', this.slug]);
-    } else {
-      this.showNotice(action.message);
-    }
+  get skippedPhotos(): number {
+    const state = this.download?.state;
+    return state?.kind === 'ready' ? state.skipped : 0;
+  }
+
+  get skippedLabel(): string {
+    return this.skippedPhotos === 1
+      ? 'Una foto no se pudo incluir. Escríbele a tu fotógrafa para recibirla.'
+      : `${this.skippedPhotos} fotos no se pudieron incluir. Escríbele a tu fotógrafa para recibirlas.`;
+  }
+
+  get downloadError(): string {
+    const state = this.download?.state;
+    return state?.kind === 'failed' ? state.message : '';
+  }
+
+  get downloadPercent(): number {
+    const state = this.download?.state;
+    return state?.kind === 'preparing' && state.total ? Math.round((state.processed / state.total) * 100) : 0;
   }
 
   async shareGallery() {
@@ -235,11 +252,6 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
 
   downloadSelected() {
     if (!this.selectedIds.length) return;
-    this.api.requestDownload(this.slug, this.token, { photoIds: this.selectedIds }).subscribe({
-      next: (res) => {
-        if (res.downloadUrl) window.open(res.downloadUrl, '_blank');
-      },
-      error: (e) => this.onDownloadError(e),
-    });
+    void this.download.start([...this.selectedIds]);
   }
 }

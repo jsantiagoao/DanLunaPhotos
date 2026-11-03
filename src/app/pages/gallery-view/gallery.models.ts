@@ -63,7 +63,12 @@ export interface FavoriteResponse {
   favorite: boolean;
 }
 
-export interface DownloadResponse {
+export interface DownloadJob {
+  jobId: string;
+  status: 'pending' | 'building' | 'ready' | 'failed';
+  processed: number;
+  total: number;
+  skipped: number;
   downloadUrl?: string;
   message?: string;
 }

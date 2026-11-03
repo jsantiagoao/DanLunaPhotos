@@ -43,11 +43,21 @@ describe('GalleryApiService', () => {
     req.flush({ favorite: true });
   });
 
-  it('should_request_download_by_email', () => {
-    service.requestDownload(slug, token, { email: 'a@b.com' }).subscribe();
+  it('should_request_download_of_all_photos', () => {
+    service.requestDownload(slug, token, {}).subscribe();
     const req = httpMock.expectOne(`${base}/download`);
-    expect(req.request.body).toEqual({ email: 'a@b.com' });
-    req.flush({ message: 'ok' });
+    expect(req.request.body).toEqual({});
+    expect(req.request.headers.get('X-Gallery-Token')).toBe(token);
+    req.flush({ jobId: 'j1', status: 'pending', processed: 0, total: 3, skipped: 0 });
+  });
+
+  it('should_check_download_progress', () => {
+    service.checkDownload(slug, token, 'j1').subscribe();
+    const req = httpMock.expectOne(`${base}/download`);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual({ jobId: 'j1' });
+    expect(req.request.headers.get('X-Gallery-Token')).toBe(token);
+    req.flush({ jobId: 'j1', status: 'building', processed: 1, total: 3, skipped: 0 });
   });
 
   it('should_request_download_by_photo_ids', () => {

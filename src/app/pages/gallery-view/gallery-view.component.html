@@ -49,11 +49,33 @@
           <span class="download-brand">DAN LUNA PHOTOS</span>
         </div>
         <div class="download-body">
-          <h2>Descargar fotografías</h2>
-          <p>Prepararemos un archivo ZIP con todas tus fotos en su calidad original. Puede tardar un momento si la galería es grande.</p>
-          <button class="btn-download" [disabled]="preparingDownload" (click)="confirmDownload()">{{ preparingDownload ? 'PREPARANDO…' : 'DESCARGAR TODAS' }}</button>
-          @if (preparingDownload) {
-            <div class="download-progress" role="progressbar" aria-label="Preparando tu descarga"><span></span></div>
+          @switch (download.state.kind) {
+            @case ('preparing') {
+              <h2>Preparando tus fotos</h2>
+              <p>Puedes seguir viendo la galería: te avisamos aquí cuando esté listo. Si la galería es grande puede tardar unos minutos.</p>
+              <div class="download-progress" role="progressbar" aria-label="Preparando tu descarga" aria-valuemin="0" aria-valuemax="100" [attr.aria-valuenow]="downloadPercent"><span [style.width.%]="downloadPercent"></span></div>
+              <p class="download-count">{{ downloadLabel }}</p>
+              <button class="btn-download" (click)="showDownloadScreen = false">SEGUIR VIENDO LA GALERÍA</button>
+            }
+            @case ('ready') {
+              <h2>Tu descarga está lista</h2>
+              <p>Tus fotos en su calidad original, en un archivo ZIP.</p>
+              @if (skippedPhotos) {
+                <p class="download-warning" role="alert">{{ skippedLabel }}</p>
+              }
+              <button class="btn-download" (click)="download.save()">DESCARGAR ZIP</button>
+              <button class="btn-download-secondary" (click)="download.dismiss()">Preparar otra descarga</button>
+            }
+            @case ('failed') {
+              <h2>No se pudo preparar</h2>
+              <p class="download-warning" role="alert">{{ downloadError }}</p>
+              <button class="btn-download" (click)="download.retry()">INTENTAR DE NUEVO</button>
+            }
+            @default {
+              <h2>Descargar fotografías</h2>
+              <p>Prepararemos un archivo ZIP con todas tus fotos en su calidad original. Puedes seguir viendo la galería mientras tanto.</p>
+              <button class="btn-download" (click)="download.start()">DESCARGAR TODAS</button>
+            }
           }
         </div>
         <button class="download-close" (click)="showDownloadScreen = false" aria-label="Cerrar"><app-gallery-icon name="close" [size]="22" /></button>
@@ -74,10 +96,31 @@
     }
   </div>
 
+  @if (download && download.state.kind !== 'idle' && !showDownloadScreen) {
+    <div class="download-status" [class.above-selection]="selectedIds.length" role="status">
+      @switch (download.state.kind) {
+        @case ('preparing') {
+          <button class="download-status-text" (click)="showDownloadScreen = true">Preparando tu descarga · {{ downloadLabel }}</button>
+          <div class="download-progress" aria-hidden="true"><span [style.width.%]="downloadPercent"></span></div>
+        }
+        @case ('ready') {
+          <span class="download-status-text">Tu descarga está lista</span>
+          <button class="download-status-action" (click)="download.save()">Descargar</button>
+          <button class="download-status-close" (click)="download.dismiss()" aria-label="Descartar descarga"><app-gallery-icon name="close" [size]="16" /></button>
+        }
+        @case ('failed') {
+          <span class="download-status-text">No se pudo preparar tu descarga</span>
+          <button class="download-status-action" (click)="showDownloadScreen = true">Ver</button>
+          <button class="download-status-close" (click)="download.dismiss()" aria-label="Descartar aviso"><app-gallery-icon name="close" [size]="16" /></button>
+        }
+      }
+    </div>
+  }
+
   @if (selectedIds.length) {
     <div class="selection-bar">
       <span>{{ selectedIds.length }} seleccionadas</span>
-      <button (click)="downloadSelected()"><app-gallery-icon name="download" [size]="16" /> Descargar selección</button>
+      <button [disabled]="download.state.kind === 'preparing'" (click)="downloadSelected()"><app-gallery-icon name="download" [size]="16" /> Descargar selección</button>
       <button (click)="selectedIds = []" aria-label="Quitar selección"><app-gallery-icon name="close" [size]="16" /></button>
     </div>
   }

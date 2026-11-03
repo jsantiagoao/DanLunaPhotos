@@ -6,6 +6,16 @@ Versionado semántico según [SemVer](https://semver.org/lang/es/).
 
 ---
 
+## [1.8.0] - 2026-11-02
+
+### Changed
+- La descarga en ZIP se prepara en segundo plano y muestra el avance real. La clienta puede seguir viendo la galería o recargar sin perderla.
+- La descarga se inicia con un botón al estar lista, para que el navegador no la bloquee.
+- La descarga de una selección usa el mismo avance y los mismos avisos.
+
+### Fixed
+- Las galerías grandes ya no fallan al preparar el ZIP.
+
 ## [1.7.0] - 2026-11-02
 
 ### Changed

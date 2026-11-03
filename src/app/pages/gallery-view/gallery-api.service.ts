@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { GalleryPhoto, FavoriteResponse, DownloadResponse, GalleryInfoResponse } from './gallery.models';
+import { GalleryPhoto, FavoriteResponse, DownloadJob, GalleryInfoResponse } from './gallery.models';
 
 /**
  * Acceso a datos del visor de galeria (patron Repository/Facade).
@@ -15,7 +15,6 @@ import { GalleryPhoto, FavoriteResponse, DownloadResponse, GalleryInfoResponse }
  * de HttpClient directamente.
  */
 export interface DownloadRequest {
-  email?: string;
   photoIds?: string[];
 }
 
@@ -49,8 +48,14 @@ export class GalleryApiService {
     );
   }
 
-  requestDownload(slug: string, token: string, body: DownloadRequest): Observable<DownloadResponse> {
-    return this.http.post<DownloadResponse>(`${this.base(slug)}/download`, body, {
+  requestDownload(slug: string, token: string, body: DownloadRequest): Observable<DownloadJob> {
+    return this.http.post<DownloadJob>(`${this.base(slug)}/download`, body, {
+      headers: this.authHeaders(token),
+    });
+  }
+
+  checkDownload(slug: string, token: string, jobId: string): Observable<DownloadJob> {
+    return this.http.post<DownloadJob>(`${this.base(slug)}/download`, { jobId }, {
       headers: this.authHeaders(token),
     });
   }
