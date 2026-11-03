@@ -1,5 +1,5 @@
 import {
-  galleryAccessMessage, galleryDisplayTitle, gridImageUrl, isClientGalleryUrl, photoAspectRatio, shareLink, swipeDirection,
+  galleryAccessMessage, galleryDisplayTitle, gridImageUrl, isClientGalleryUrl, photoAspectRatio, resolveDesign, shareLink, swipeDirection, withPublishedInfo,
 } from './gallery-delivery.logic';
 
 describe('gallery-delivery.logic', () => {
@@ -76,15 +76,51 @@ describe('gallery-delivery.logic', () => {
     });
   });
 
+  describe('resolveDesign', () => {
+    it('should_keep_what_the_studio_chose', () => {
+      const design = resolveDesign({ typography: 'bold', gridLayout: 'single', coverStyle: 'vintage', highlightColor: '#D4AF37' });
+      expect(design).toMatchObject({ typography: 'bold', gridLayout: 'single', coverStyle: 'vintage', highlightColor: '#D4AF37' });
+    });
+
+    it('should_complete_a_partial_design_so_nothing_renders_without_a_class', () => {
+      expect(resolveDesign({ theme: 'dark' })).toMatchObject({ theme: 'dark', gridLayout: 'masonry', typography: 'serif', spacing: 'normal', coverStyle: 'centro' });
+    });
+
+    it('should_survive_an_empty_or_missing_design', () => {
+      expect(resolveDesign({}).typography).toBe('serif');
+      expect(resolveDesign(undefined).gridLayout).toBe('masonry');
+      expect(resolveDesign({ typography: null as never }).typography).toBe('serif');
+    });
+
+    it('should_not_invent_a_text_color_so_each_template_keeps_its_own', () => {
+      expect(resolveDesign({}).highlightColor).toBeUndefined();
+    });
+  });
+
+  describe('withPublishedInfo', () => {
+    const guardada = { title: 'Viejo', sets: ['Fiesta'], coverUrl: 'a.jpg', design: { typography: 'serif' as const }, downloads: { enabled: true } };
+
+    it('should_show_what_the_studio_published_after_the_client_logged_in', () => {
+      const fresca = withPublishedInfo(guardada, { title: 'Nuevo', coverUrl: 'b.jpg', coverFocalPoint: { x: 10, y: 20 }, design: { typography: 'bold' } });
+      expect(fresca).toMatchObject({ title: 'Nuevo', coverUrl: 'b.jpg', coverFocalPoint: { x: 10, y: 20 }, design: { typography: 'bold' } });
+    });
+
+    it('should_keep_what_only_comes_with_the_login', () => {
+      const fresca = withPublishedInfo(guardada, { title: 'Nuevo', coverUrl: 'b.jpg' });
+      expect(fresca.sets).toEqual(['Fiesta']);
+      expect(fresca.downloads).toEqual({ enabled: true });
+    });
+  });
+
   describe('photoAspectRatio', () => {
     it('should_reserve_the_real_proportion_of_the_photo', () => {
       expect(photoAspectRatio({ width: 6000, height: 4000 }, 'masonry')).toBe('6000 / 4000');
       expect(photoAspectRatio({ width: 6000, height: 4000 }, 'single')).toBe('6000 / 4000');
+      expect(photoAspectRatio({ width: 6000, height: 4000 }, 'horizontal')).toBe('6000 / 4000');
     });
 
     it('should_not_interfere_with_layouts_that_set_their_own_size', () => {
       expect(photoAspectRatio({ width: 6000, height: 4000 }, 'grid')).toBeNull();
-      expect(photoAspectRatio({ width: 6000, height: 4000 }, 'horizontal')).toBeNull();
     });
 
     it('should_do_nothing_without_dimensions', () => {

@@ -12,7 +12,7 @@ import {
 } from './gallery.models';
 import { filterPhotos, neighbourPhoto } from './gallery-filter.logic';
 import { downloadErrorAction } from './download-error.logic';
-import { galleryDisplayTitle, gridImageUrl, photoAspectRatio, shareLink, swipeDirection } from './gallery-delivery.logic';
+import { galleryDisplayTitle, gridImageUrl, photoAspectRatio, resolveDesign, shareLink, swipeDirection, withPublishedInfo } from './gallery-delivery.logic';
 import { GallerySlideshow } from './gallery-slideshow';
 
 @Component({
@@ -69,14 +69,31 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.gallery = JSON.parse(data);
-    this.design = this.gallery.design || DEFAULT_DESIGN;
-    this.coverUrl = this.gallery.coverUrl || '';
-    this.focalPoint = `${this.gallery.coverFocalPoint?.x ?? 50}% ${this.gallery.coverFocalPoint?.y ?? 50}%`;
+    this.showGallery(JSON.parse(data));
     this.activeSet = this.gallery.sets?.[0] || '';
 
     this.loadPhotos();
+    this.refreshPublishedInfo();
     this.api.trackView(this.slug).subscribe();
+  }
+
+  private showGallery(gallery: Gallery) {
+    this.gallery = gallery;
+    this.design = resolveDesign(gallery.design);
+    this.coverUrl = gallery.coverUrl || '';
+    this.focalPoint = `${gallery.coverFocalPoint?.x ?? 50}% ${gallery.coverFocalPoint?.y ?? 50}%`;
+  }
+
+  /** Si esto falla se queda lo guardado: quién decide si puede seguir viendo es loadPhotos. */
+  private refreshPublishedInfo() {
+    this.api.loadInfo(this.slug).subscribe({
+      next: (info) => {
+        const gallery = withPublishedInfo(this.gallery, info);
+        this.showGallery(gallery);
+        sessionStorage.setItem(`gallery_data_${this.slug}`, JSON.stringify(gallery));
+      },
+      error: () => undefined,
+    });
   }
 
   ngOnDestroy() {

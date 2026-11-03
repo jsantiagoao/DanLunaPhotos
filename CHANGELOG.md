@@ -6,6 +6,22 @@ Versionado semántico según [SemVer](https://semver.org/lang/es/).
 
 ---
 
+## [1.7.0] - 2026-11-02
+
+### Changed
+- La galería toma el diseño publicado al abrirse: un cambio del estudio se ve aunque la clienta ya hubiera entrado.
+- En teléfono, Masonry y 3 columnas se ven a 2 columnas; ya no son iguales a "Una columna".
+- La tipografía elegida también se ve en la barra de la galería.
+
+### Fixed
+- Las plantillas de portada colocan el título donde corresponde: Izquierda, Novela y Diario a la izquierda; Vintage y Divisor abajo; Marco, Sello y Contorno con su marco.
+- "3 columnas" muestra 3 columnas uniformes en cualquier pantalla ancha.
+- Filas conserva la proporción de cada foto y no estira la última fila.
+- El espaciado se aplica igual en vertical y horizontal, también en "Una columna".
+- Las fotos apaisadas ya no se salen de su columna en teléfono.
+- Las tipografías Ligera, Intensa y Sutil cargan su peso real.
+- Un diseño incompleto ya no deja la portada sin tipografía ni las fotos sin cuadrícula.
+
 ## [1.6.0] - 2026-11-02
 
 ### Added

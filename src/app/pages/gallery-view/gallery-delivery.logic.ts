@@ -1,4 +1,16 @@
 /** Reglas de lo que ve la clienta al recibir su galería. Sin Angular ni HTTP. */
+import { DEFAULT_DESIGN, Gallery, GalleryDesign, GalleryInfoResponse } from './gallery.models';
+
+/** Un diseño incompleto dejaría la portada sin tipografía y las fotos sin cuadrícula. */
+export function resolveDesign(design: Partial<GalleryDesign> | null | undefined): GalleryDesign {
+  const chosen = Object.entries(design ?? {}).filter(([, value]) => value !== null && value !== undefined && value !== '');
+  return { ...DEFAULT_DESIGN, ...Object.fromEntries(chosen) };
+}
+
+/** Lo publicado manda sobre lo guardado al entrar: el estudio pudo cambiar el diseño después. */
+export function withPublishedInfo(gallery: Gallery, info: GalleryInfoResponse): Gallery {
+  return { ...gallery, title: info.title, coverUrl: info.coverUrl, coverFocalPoint: info.coverFocalPoint, design: info.design };
+}
 
 interface TitledGallery {
   title?: string;
@@ -24,7 +36,7 @@ export function isClientGalleryUrl(url: string): boolean {
 
 /** Reserva el alto real de la foto antes de que cargue, para que la página no salte. */
 export function photoAspectRatio(photo: { width?: number; height?: number }, gridLayout?: string): string | null {
-  if (gridLayout === 'grid' || gridLayout === 'horizontal') return null;
+  if (gridLayout === 'grid') return null;
   return photo.width && photo.height ? `${photo.width} / ${photo.height}` : null;
 }
 

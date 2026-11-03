@@ -3,14 +3,18 @@
   <div class="cover-fullscreen" [class]="'cover-' + design.coverStyle"
        [style.background-image]="'url(' + coverUrl + ')'"
        [style.background-position]="focalPoint"
-       [style.--cover-text-color]="design.highlightColor || '#FFFFFF'">
+       [style.--cover-text-color]="design.highlightColor || null">
     <div class="cover-fs-overlay">
-      <div class="cover-logo-icon">
-        <span class="cover-logo-img" role="img" aria-label="Dan Luna"></span>
+      <div class="cover-heading">
+        <div class="cover-logo-icon">
+          <span class="cover-logo-img" role="img" aria-label="Dan Luna"></span>
+        </div>
+        <div class="cover-brand">DAN LUNA PHOTOS</div>
+        <h1 class="cover-title" [class]="'title-' + design.typography">{{ displayTitle }}</h1>
       </div>
-      <div class="cover-brand">DAN LUNA PHOTOS</div>
-      <h1 class="cover-title" [class]="'title-' + design.typography">{{ displayTitle }}</h1>
-      <p class="cover-date">{{ gallery.date || '' }}</p>
+      @if (gallery.date) {
+        <p class="cover-date">{{ gallery.date }}</p>
+      }
       <button class="cover-enter-btn" (click)="scrollToGallery()">VER GALERÍA</button>
     </div>
   </div>
@@ -18,7 +22,7 @@
   <!-- Sticky nav bar -->
   <div class="gallery-nav" id="gallery-nav">
     <div class="nav-title">
-      <span class="nav-name">{{ displayTitle }}</span>
+      <span class="nav-name" [class]="'nav-' + design.typography">{{ displayTitle }}</span>
       <span class="nav-brand">DAN LUNA PHOTOS</span>
     </div>
     <div class="nav-sets">

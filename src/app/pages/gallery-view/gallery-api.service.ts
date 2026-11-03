@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { GalleryPhoto, FavoriteResponse, DownloadResponse } from './gallery.models';
+import { GalleryPhoto, FavoriteResponse, DownloadResponse, GalleryInfoResponse } from './gallery.models';
 
 /**
  * Acceso a datos del visor de galeria (patron Repository/Facade).
@@ -29,6 +29,10 @@ export class GalleryApiService {
 
   private authHeaders(token: string): HttpHeaders {
     return new HttpHeaders({ 'X-Gallery-Token': token });
+  }
+
+  loadInfo(slug: string): Observable<GalleryInfoResponse> {
+    return this.http.get<GalleryInfoResponse>(this.base(slug));
   }
 
   loadPhotos(slug: string, token: string): Observable<GalleryPhoto[]> {

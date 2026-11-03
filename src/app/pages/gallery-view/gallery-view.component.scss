@@ -2,29 +2,40 @@
     .gallery.dark { background: #1a1a1a; color: #f0f0f0; }
 
     /* Cover Full Screen */
-    .cover-fullscreen { height: 100vh; background-size: cover; position: relative; display: flex; align-items: center; justify-content: center; background-color: #2D2420; transition: background-image 0.5s ease; }
+    .cover-fullscreen { box-sizing: border-box; height: 100vh; background-size: cover; position: relative; display: flex; align-items: center; justify-content: center; background-color: #2D2420; transition: background-image 0.5s ease; }
     .cover-fullscreen::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 75% 60% at center, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.42) 55%, rgba(0,0,0,0.28) 100%); }
-    .cover-fs-overlay { max-width: min(90vw, 1000px); text-align: center; color: var(--cover-text-color, #fff); display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
-    /* Cover styles */
-    .cover-izquierda .cover-fs-overlay { align-items: flex-start; text-align: left; padding-left: 4rem; }
+    .cover-fs-overlay { box-sizing: border-box; max-width: min(90%, 1000px); text-align: center; color: var(--cover-text-color, #fff); display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
+    .cover-heading { display: flex; flex-direction: column; align-items: inherit; max-width: 100%; }
+
+    /*
+     * Plantillas: el texto va donde lo pone cada una y la foto se encuadra con el punto focal.
+     * Estas reglas se repiten en cover-renderer.component.scss de Studio: lo que Dan Luna
+     * ve al diseñar tiene que ser lo que ve la clienta. Si cambias una, cambia la otra.
+     */
+    .cover-izquierda, .cover-novela, .cover-diario { justify-content: flex-start; }
+    .cover-izquierda .cover-fs-overlay, .cover-novela .cover-fs-overlay, .cover-diario .cover-fs-overlay { align-items: flex-start; text-align: left; padding-left: clamp(1.5rem, 5vw, 4rem); }
+    .cover-izquierda::before { background: rgba(0,0,0,0.42); }
+    .cover-izquierda .cover-fs-overlay { max-width: 60%; }
     .cover-novela::before { background: linear-gradient(90deg, rgba(255,255,255,0.92) 35%, transparent 55%); }
-    .cover-novela .cover-fs-overlay { color: var(--cover-text-color, #2D2420); align-items: flex-start; text-align: left; padding-left: 4rem; }
-    .cover-vintage::before { background: rgba(0,0,0,0.55); }
-    .cover-marco { padding: 1.5rem; }
-    .cover-marco::before { inset: 1.5rem; }
-    .cover-raya .cover-fs-overlay::after { content: ''; display: block; width: 200px; height: 1px; background: currentColor; opacity: 0.5; margin-top: 1.5rem; }
-    .cover-divisor .cover-fs-overlay { justify-content: flex-end; padding-bottom: 4rem; }
+    .cover-novela .cover-fs-overlay { max-width: 38%; color: var(--cover-text-color, #2D2420); }
     .cover-diario::before { background: linear-gradient(90deg, rgba(255,255,255,0.9) 30%, transparent 50%); }
-    .cover-diario .cover-fs-overlay { color: var(--cover-text-color, #2D2420); align-items: flex-start; text-align: left; padding-left: 4rem; }
+    .cover-diario .cover-fs-overlay { max-width: 34%; color: var(--cover-text-color, #2D2420); }
+    .cover-vintage, .cover-divisor { align-items: flex-end; padding-bottom: clamp(3rem, 10vh, 6rem); }
+    .cover-vintage::before { background: rgba(0,0,0,0.55); }
+    .cover-divisor::before { background: rgba(0,0,0,0.3); }
+    .cover-marco { border: clamp(12px, 4vmin, 40px) solid #f5f5f5; }
+    .cover-raya::before { background: rgba(0,0,0,0.45); }
+    .cover-raya .cover-heading::after { content: ''; display: block; width: 60%; height: 1px; background: currentColor; opacity: 0.5; margin: 1.25rem auto 0; }
     .cover-sello::before { background: rgba(0,0,0,0.3); }
-    .cover-contorno::before { background: rgba(0,0,0,0.5); }
-    .cover-contorno .cover-fs-overlay::before { content: ''; position: absolute; inset: 2rem; border: 1px solid currentColor; opacity: 0.4; z-index: -1; }
+    .cover-sello .cover-heading { padding: 1.5rem 2rem; border: 1px solid color-mix(in srgb, currentColor 55%, transparent); }
+    .cover-contorno::before { background: rgba(0,0,0,0.55); }
+    .cover-contorno .cover-fs-overlay { padding: 2.5rem 3rem; border: 1px solid color-mix(in srgb, currentColor 45%, transparent); }
     .cover-logo-icon { margin-bottom: 0.5rem; }
     /* Máscara con transparencia real: el logo toma el color del texto de la portada. */
     .cover-logo-img { display: block; width: 110px; height: 40px; background: currentColor; -webkit-mask: url('/assets/images/logo-mark.png') center / contain no-repeat; mask: url('/assets/images/logo-mark.png') center / contain no-repeat; }
     .cover-novela .cover-title, .cover-diario .cover-title, .cover-novela .cover-brand, .cover-diario .cover-brand { text-shadow: none; }
     .cover-brand { text-shadow: 0 1px 8px rgba(0,0,0,0.6); font-size: clamp(0.6rem, 1vw, 0.75rem); letter-spacing: 3px; text-transform: uppercase; opacity: 1; margin-bottom: 1.25rem; font-weight: 300; color: inherit; }
-    .cover-title { margin: 0; letter-spacing: 6px; text-transform: uppercase; text-shadow: 0 2px 24px rgba(0,0,0,0.65), 0 1px 3px rgba(0,0,0,0.5); color: inherit; }
+    .cover-title { max-width: 100%; overflow-wrap: break-word; margin: 0; letter-spacing: 6px; text-transform: uppercase; text-shadow: 0 2px 24px rgba(0,0,0,0.65), 0 1px 3px rgba(0,0,0,0.5); color: inherit; }
     .cover-title.title-serif { font-family: 'Fraunces', serif; font-size: clamp(2rem, 4.5vw, 3.75rem); font-weight: 300; }
     .cover-title.title-sans { font-family: 'DM Sans', sans-serif; font-size: clamp(1.75rem, 4vw, 3.25rem); font-weight: 700; letter-spacing: 4px; }
     .cover-title.title-modern { font-family: 'DM Sans', sans-serif; font-size: clamp(1.75rem, 4vw, 3.25rem); font-weight: 200; letter-spacing: 4px; }
@@ -41,6 +52,11 @@
     .nav-title { font-family: 'Fraunces', serif; font-size: 0.9rem; font-weight: 500; letter-spacing: 1px; text-transform: uppercase; color: #2D2420; min-width: 160px; white-space: nowrap; }
     .dark .nav-title { color: #f0f0f0; }
     .nav-name { display: block; }
+    .nav-name.nav-sans { font-family: 'DM Sans', sans-serif; font-weight: 700; }
+    .nav-name.nav-modern { font-family: 'DM Sans', sans-serif; font-weight: 200; }
+    .nav-name.nav-timeless { font-family: Georgia, serif; font-style: italic; }
+    .nav-name.nav-bold { font-family: 'DM Sans', sans-serif; font-weight: 900; }
+    .nav-name.nav-subtle { font-family: 'DM Sans', sans-serif; font-weight: 200; letter-spacing: 3px; }
     .nav-brand { display: block; font-size: 0.6rem; color: #999; letter-spacing: 1px; font-family: 'DM Sans', sans-serif; text-transform: uppercase; font-weight: 400; }
     .nav-sets { flex: 1; display: flex; gap: 1.5rem; justify-content: center; overflow-x: auto; }
     .nav-sets button { background: none; border: none; font-size: 0.8rem; color: #666; cursor: pointer; padding: 0.5rem 0; border-bottom: 2px solid transparent; transition: all 0.2s; white-space: nowrap; }
@@ -55,18 +71,24 @@
     .dark .na-btn { border-color: #444; color: #ccc; }
 
     /* Photo grid */
+    /* Mismas reglas en gallery-renderer.scss de Studio. */
     .photo-grid { padding: 0; }
-    .layout-masonry { column-count: 3; column-gap: 8px; }
-    .layout-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 8px; }
-    .layout-horizontal { display: flex; flex-wrap: wrap; gap: 8px; }
-    .layout-horizontal .photo-item { height: 250px; flex-grow: 1; }
-    .layout-horizontal .photo-item img { height: 100%; width: 100%; object-fit: cover; }
+    .spacing-compact { --grid-gap: 2px; }
+    .spacing-normal { --grid-gap: 8px; }
+    .spacing-wide { --grid-gap: 16px; }
+    .layout-masonry { column-count: 3; column-gap: var(--grid-gap); }
+    .layout-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--grid-gap); }
+    .layout-grid .photo-item { aspect-ratio: 1; }
+    .layout-horizontal { display: flex; flex-wrap: wrap; gap: var(--grid-gap); }
+    /* Sin esto, la última fila estira sus fotos hasta llenar el ancho. */
+    .layout-horizontal::after { content: ''; flex-grow: 999; }
+    .layout-horizontal .photo-item { height: 250px; flex-grow: 1; max-width: 100%; }
+    .layout-horizontal .photo-item img { object-fit: cover; }
     .layout-single { max-width: 1100px; margin: 0 auto; }
-    .spacing-compact { gap: 4px; column-gap: 4px; }
-    .spacing-normal { gap: 8px; column-gap: 8px; }
-    .spacing-wide { gap: 16px; column-gap: 16px; }
+    /* Sin alto mínimo: con aspect-ratio también impondría ancho y la foto apaisada se saldría de su columna. */
+    .photo-grid.layout-masonry .photo-item, .photo-grid.layout-single .photo-item { margin-bottom: var(--grid-gap); min-height: 0; }
 
-    .photo-item { position: relative; break-inside: avoid; margin-bottom: 8px; cursor: pointer; border-radius: 2px; overflow: hidden; background-color: rgba(168,136,108,0.14); min-height: 120px; }
+    .photo-item { position: relative; break-inside: avoid; cursor: pointer; border-radius: 2px; overflow: hidden; background-color: rgba(168,136,108,0.14); min-height: 120px; }
     .photo-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s; opacity: 0; animation: fadeIn 0.5s forwards; }
     .photo-item:hover img { transform: scale(1.02); }
     @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
@@ -151,12 +173,15 @@
       .selection-bar { bottom: 1rem; padding: 0.6rem 1rem; font-size: 0.8rem; }
       .download-card { width: calc(100% - 2rem); padding: 2rem 1.5rem; }
       .cover-fullscreen { padding-left: 1rem; padding-right: 1rem; }
-      .cover-izquierda .cover-fs-overlay, .cover-novela .cover-fs-overlay, .cover-diario .cover-fs-overlay { padding-left: 2rem; }
+      .cover-izquierda .cover-fs-overlay { max-width: 85%; }
+      .cover-novela::before { background: linear-gradient(90deg, rgba(255,255,255,0.92) 72%, transparent 100%); }
+      .cover-diario::before { background: linear-gradient(90deg, rgba(255,255,255,0.9) 68%, transparent 96%); }
+      .cover-novela .cover-fs-overlay { max-width: 72%; }
+      .cover-diario .cover-fs-overlay { max-width: 68%; }
+      .cover-contorno .cover-fs-overlay { padding: 2rem 1.25rem; }
+      .cover-sello .cover-heading { padding: 1.25rem 1rem; }
     }
     @media (max-width: 480px) {
-      .layout-masonry { columns: 1; }
-      .layout-grid { grid-template-columns: 1fr; }
-      .layout-horizontal { grid-template-columns: 1fr; }
       .nav-sets { gap: 0.5rem; }
       .nav-sets button { font-size: 0.7rem; padding: 0.3rem 0; }
       .cover-brand { margin-bottom: 1.5rem; }
