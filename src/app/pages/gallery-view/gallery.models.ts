@@ -7,10 +7,11 @@
  */
 
 export type GalleryTheme = 'light' | 'dark';
-export type GridLayout = 'masonry' | 'grid' | 'horizontal';
-export type Typography = 'serif' | 'sans';
+export type GridLayout = 'masonry' | 'grid' | 'horizontal' | 'single';
+export type Typography = 'serif' | 'sans' | 'modern' | 'timeless' | 'bold' | 'subtle';
 export type Spacing = 'compact' | 'normal' | 'wide';
-export type CoverStyle = 'full-width' | 'centered' | 'split';
+/** Catálogo de Studio. Las galerías viejas traen 'full-width': se ve como 'centro'. */
+export type CoverStyle = 'centro' | 'izquierda' | 'novela' | 'vintage' | 'marco' | 'raya' | 'divisor' | 'diario' | 'sello' | 'contorno' | 'full-width';
 
 export interface GalleryDesign {
   theme: GalleryTheme;
@@ -19,6 +20,7 @@ export interface GalleryDesign {
   spacing: Spacing;
   coverStyle: CoverStyle;
   highlightColor?: string;
+  displayName?: string;
 }
 
 export interface FocalPoint {
@@ -34,6 +36,8 @@ export interface GalleryPhoto {
   originalUrl?: string;
   set?: string;
   isFavorite?: boolean;
+  width?: number;
+  height?: number;
 }
 
 export interface Gallery {
@@ -42,7 +46,7 @@ export interface Gallery {
   sets: string[];
   coverUrl?: string;
   coverFocalPoint?: FocalPoint;
-  design?: GalleryDesign;
+  design?: Partial<GalleryDesign>;
   downloads?: { enabled: boolean };
 }
 
@@ -51,7 +55,7 @@ export const DEFAULT_DESIGN: GalleryDesign = {
   gridLayout: 'masonry',
   typography: 'serif',
   spacing: 'normal',
-  coverStyle: 'full-width',
+  coverStyle: 'centro',
 };
 
 /** Respuestas del backend. */
@@ -68,6 +72,8 @@ export interface DownloadResponse {
 export interface GalleryInfoResponse {
   title: string;
   coverUrl: string;
+  coverFocalPoint?: FocalPoint;
+  design?: Partial<GalleryDesign>;
 }
 
 /** Respuesta de autenticacion del visor: token + datos de la galeria. */

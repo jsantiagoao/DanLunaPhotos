@@ -6,6 +6,52 @@ Versionado semántico según [SemVer](https://semver.org/lang/es/).
 
 ---
 
+## [1.7.0] - 2026-11-02
+
+### Changed
+- La galería toma el diseño publicado al abrirse: un cambio del estudio se ve aunque la clienta ya hubiera entrado.
+- En teléfono, Masonry y 3 columnas se ven a 2 columnas; ya no son iguales a "Una columna".
+- La tipografía elegida también se ve en la barra de la galería.
+
+### Fixed
+- Las plantillas de portada colocan el título donde corresponde: Izquierda, Novela y Diario a la izquierda; Vintage y Divisor abajo; Marco, Sello y Contorno con su marco.
+- "3 columnas" muestra 3 columnas uniformes en cualquier pantalla ancha.
+- Filas conserva la proporción de cada foto y no estira la última fila.
+- El espaciado se aplica igual en vertical y horizontal, también en "Una columna".
+- Las fotos apaisadas ya no se salen de su columna en teléfono.
+- Las tipografías Ligera, Intensa y Sutil cargan su peso real.
+- Un diseño incompleto ya no deja la portada sin tipografía ni las fotos sin cuadrícula.
+
+## [1.6.0] - 2026-11-02
+
+### Added
+- El visor se usa con teclado y deslizando el dedo.
+
+### Changed
+- Pantallas de acceso y descarga rediseñadas, con la portada de la galería.
+- El título de la portada tiene un tamaño más sobrio y se queda donde lo pone la plantilla; la foto se encuadra con el punto focal.
+- La presentación avanza a ritmo constante y usa fotos en calidad web.
+- Los mensajes aparecen dentro de la página en lugar de ventanas del navegador.
+
+### Fixed
+- "Enlace copiado" solo aparece si de verdad se copió; si no, se muestra el enlace.
+
+## [1.5.0] - 2026-11-02
+
+### Changed
+- La galería de la clienta ya no muestra los botones flotantes del sitio.
+- El título se lee mejor sobre la portada.
+- Los símbolos de texto del visor son iconos con nombre accesible y tamaño táctil; favorita y selección se ven siempre en pantallas táctiles.
+
+## [1.4.0] - 2026-11-02
+
+### Fixed
+- La clienta ve el nombre de galería configurado en Studio, en el acceso y en el visor.
+- La descarga ya no pide un PIN y un correo que no se usaban, y su pantalla se lee en tema oscuro.
+- Con descargas apagadas ya no aparecen el botón de descarga ni la selección.
+- "Una columna" tiene su diseño propio y usa la foto en calidad web.
+- Un enlace no disponible o vencido lo explica en vez de ofrecer un acceso inútil.
+
 ## [1.3.1] - 2026-10-20
 
 ### Fixed

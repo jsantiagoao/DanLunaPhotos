@@ -1,5 +1,6 @@
-import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
+import { Component, HostListener, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { GalleryIconComponent } from '../../components/atoms/gallery-icon/gallery-icon.component';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GalleryApiService } from './gallery-api.service';
@@ -11,11 +12,13 @@ import {
 } from './gallery.models';
 import { filterPhotos, neighbourPhoto } from './gallery-filter.logic';
 import { downloadErrorAction } from './download-error.logic';
+import { galleryDisplayTitle, gridImageUrl, photoAspectRatio, resolveDesign, shareLink, swipeDirection, withPublishedInfo } from './gallery-delivery.logic';
+import { GallerySlideshow } from './gallery-slideshow';
 
 @Component({
   selector: 'app-gallery-view',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, GalleryIconComponent],
   templateUrl: './gallery-view.component.html',
   styleUrl: './gallery-view.component.scss',
 })
@@ -36,13 +39,25 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
   selectedIds: string[] = [];
   showFavoritesOnly = false;
   showDownloadScreen = false;
-  downloadEmail = '';
-  downloadPin = '';
-  slideshowActive = false;
-  slideshowPhotos: GalleryPhoto[] = [];
-  slideshowIndex = 0;
+  preparingDownload = false;
+  readonly slideshow = new GallerySlideshow<GalleryPhoto>();
   lightboxWebLoaded = false;
-  private slideshowInterval: ReturnType<typeof setInterval> | null = null;
+  /** Aviso integrado: reemplaza a alert(), que interrumpe y se ve ajeno a la galería. */
+  notice = signal<string | null>(null);
+  private noticeTimer: ReturnType<typeof setTimeout> | null = null;
+  private touchStart: { x: number; y: number } | null = null;
+
+  get displayTitle(): string {
+    return galleryDisplayTitle(this.gallery);
+  }
+
+  aspectRatio(photo: GalleryPhoto): string | null {
+    return photoAspectRatio(photo, this.design.gridLayout);
+  }
+
+  gridImage(photo: GalleryPhoto): string {
+    return gridImageUrl(photo, this.design.gridLayout);
+  }
 
   ngOnInit() {
     this.slug = this.route.snapshot.paramMap.get('slug') || '';
@@ -54,18 +69,36 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.gallery = JSON.parse(data);
-    this.design = this.gallery.design || DEFAULT_DESIGN;
-    this.coverUrl = this.gallery.coverUrl || '';
-    this.focalPoint = `${this.gallery.coverFocalPoint?.x ?? 50}% ${this.gallery.coverFocalPoint?.y ?? 50}%`;
+    this.showGallery(JSON.parse(data));
     this.activeSet = this.gallery.sets?.[0] || '';
 
     this.loadPhotos();
+    this.refreshPublishedInfo();
     this.api.trackView(this.slug).subscribe();
   }
 
+  private showGallery(gallery: Gallery) {
+    this.gallery = gallery;
+    this.design = resolveDesign(gallery.design);
+    this.coverUrl = gallery.coverUrl || '';
+    this.focalPoint = `${gallery.coverFocalPoint?.x ?? 50}% ${gallery.coverFocalPoint?.y ?? 50}%`;
+  }
+
+  /** Si esto falla se queda lo guardado: quién decide si puede seguir viendo es loadPhotos. */
+  private refreshPublishedInfo() {
+    this.api.loadInfo(this.slug).subscribe({
+      next: (info) => {
+        const gallery = withPublishedInfo(this.gallery, info);
+        this.showGallery(gallery);
+        sessionStorage.setItem(`gallery_data_${this.slug}`, JSON.stringify(gallery));
+      },
+      error: () => undefined,
+    });
+  }
+
   ngOnDestroy() {
-    if (this.slideshowInterval) clearInterval(this.slideshowInterval);
+    this.slideshow.stop();
+    if (this.noticeTimer) clearTimeout(this.noticeTimer);
   }
 
   scrollToGallery() {
@@ -83,25 +116,44 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
     return filterPhotos(this.photos(), this.activeSet, this.showFavoritesOnly);
   }
 
-  /** Foto actual del slideshow. Puede ser undefined si la lista esta vacia o el
-      indice se salio de rango; el tipo lo refleja para forzar acceso seguro. */
-  get currentSlideshowPhoto(): GalleryPhoto | undefined {
-    return this.slideshowPhotos[this.slideshowIndex];
-  }
-
   startSlideshow() {
-    this.slideshowPhotos = this.displayedPhotos();
-    this.slideshowIndex = 0;
-    this.slideshowActive = true;
-    this.slideshowInterval = setInterval(() => this.slideshowNext(), 4000);
+    this.slideshow.start(this.displayedPhotos());
   }
 
-  slideshowNext() {
-    this.slideshowIndex = (this.slideshowIndex + 1) % this.slideshowPhotos.length;
+  @HostListener('document:keydown', ['$event'])
+  onKeydown(event: KeyboardEvent) {
+    const key = event.key;
+    if (this.slideshow.active) {
+      if (key === 'Escape') this.slideshow.stop();
+      else if (key === 'ArrowRight') this.slideshow.next();
+      else if (key === 'ArrowLeft') this.slideshow.prev();
+    } else if (this.lightboxPhoto()) {
+      if (key === 'Escape') this.lightboxPhoto.set(null);
+      else if (key === 'ArrowRight') this.nextPhoto();
+      else if (key === 'ArrowLeft') this.prevPhoto();
+    } else if (this.showDownloadScreen && key === 'Escape') {
+      this.showDownloadScreen = false;
+    }
   }
 
-  slideshowPrev() {
-    this.slideshowIndex = this.slideshowIndex === 0 ? this.slideshowPhotos.length - 1 : this.slideshowIndex - 1;
+  onTouchStart(event: TouchEvent) {
+    const touch = event.changedTouches[0];
+    this.touchStart = touch ? { x: touch.clientX, y: touch.clientY } : null;
+  }
+
+  onTouchEnd(event: TouchEvent, next: () => void, prev: () => void) {
+    const touch = event.changedTouches[0];
+    if (!touch || !this.touchStart) return;
+    const direction = swipeDirection(touch.clientX - this.touchStart.x, touch.clientY - this.touchStart.y);
+    this.touchStart = null;
+    if (direction === 'next') next();
+    else if (direction === 'prev') prev();
+  }
+
+  private showNotice(message: string) {
+    this.notice.set(message);
+    if (this.noticeTimer) clearTimeout(this.noticeTimer);
+    this.noticeTimer = setTimeout(() => this.notice.set(null), 5000);
   }
 
   openLightbox(photo: GalleryPhoto) {
@@ -138,14 +190,18 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
   }
 
   confirmDownload() {
-    if (!this.downloadEmail) return;
-    this.api.requestDownload(this.slug, this.token, { email: this.downloadEmail }).subscribe({
+    this.preparingDownload = true;
+    this.api.requestDownload(this.slug, this.token, {}).subscribe({
       next: (res) => {
+        this.preparingDownload = false;
         this.showDownloadScreen = false;
         if (res.downloadUrl) window.open(res.downloadUrl, '_blank');
-        else alert(res.message || 'Tu descarga se está preparando.');
+        else this.showNotice(res.message || 'Tu descarga se está preparando.');
       },
-      error: (e) => this.onDownloadError(e),
+      error: (e) => {
+        this.preparingDownload = false;
+        this.onDownloadError(e);
+      },
     });
   }
 
@@ -156,18 +212,19 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
       sessionStorage.removeItem(`gallery_token_${this.slug}`);
       this.router.navigate(['/galeria', this.slug]);
     } else {
-      alert(action.message);
+      this.showNotice(action.message);
     }
   }
 
-  shareGallery() {
+  async shareGallery() {
     const url = `https://danlunaphoto.com/galeria/${this.slug}`;
-    if (navigator.share) {
-      navigator.share({ title: this.gallery.title, url });
-    } else {
-      navigator.clipboard.writeText(url);
-      alert('Link copiado');
-    }
+    // bind: share y writeText pierden su contexto si se llaman sueltos.
+    const device = {
+      share: navigator.share?.bind(navigator),
+      clipboard: navigator.clipboard ? { writeText: navigator.clipboard.writeText.bind(navigator.clipboard) } : undefined,
+    };
+    const message = await shareLink(device, this.displayTitle, url);
+    if (message) this.showNotice(message);
   }
 
   toggleSelect(id: string) {
