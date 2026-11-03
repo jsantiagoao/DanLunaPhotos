@@ -4,6 +4,11 @@ Todos los cambios notables del proyecto se documentan aquí.
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/1.0.0/).
 Versionado semántico según [SemVer](https://semver.org/lang/es/).
 
+## [1.8.1] - 2026-11-02
+
+### Changed
+- Los errores del API se traducen en un solo punto y siempre llegan en español (ADR-005 en LambdasDL).
+
 ---
 
 ## [1.8.0] - 2026-11-02
