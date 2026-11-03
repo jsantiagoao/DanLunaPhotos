@@ -1,5 +1,5 @@
 import {
-  coverTextPlacement, galleryAccessMessage, galleryDisplayTitle, gridImageUrl, isClientGalleryUrl, photoAspectRatio, shareLink, swipeDirection,
+  galleryAccessMessage, galleryDisplayTitle, gridImageUrl, isClientGalleryUrl, photoAspectRatio, shareLink, swipeDirection,
 } from './gallery-delivery.logic';
 
 describe('gallery-delivery.logic', () => {
@@ -73,18 +73,6 @@ describe('gallery-delivery.logic', () => {
       const mensaje = await shareLink({ clipboard: { writeText } }, 'Boda', URL_GALERIA);
       expect(mensaje).toContain('No se pudo copiar');
       expect(mensaje).toContain(URL_GALERIA);
-    });
-  });
-
-  describe('coverTextPlacement', () => {
-    it('should_keep_the_text_away_from_a_centered_or_high_subject', () => {
-      expect(coverTextPlacement(50)).toBe('low');
-      expect(coverTextPlacement(20)).toBe('low');
-      expect(coverTextPlacement(undefined)).toBe('low');
-    });
-
-    it('should_move_the_text_up_when_the_subject_is_low', () => {
-      expect(coverTextPlacement(80)).toBe('high');
     });
   });
 

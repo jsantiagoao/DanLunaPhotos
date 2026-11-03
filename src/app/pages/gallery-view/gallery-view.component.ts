@@ -12,7 +12,7 @@ import {
 } from './gallery.models';
 import { filterPhotos, neighbourPhoto } from './gallery-filter.logic';
 import { downloadErrorAction } from './download-error.logic';
-import { coverTextPlacement, galleryDisplayTitle, gridImageUrl, photoAspectRatio, shareLink, swipeDirection } from './gallery-delivery.logic';
+import { galleryDisplayTitle, gridImageUrl, photoAspectRatio, shareLink, swipeDirection } from './gallery-delivery.logic';
 import { GallerySlideshow } from './gallery-slideshow';
 
 @Component({
@@ -49,10 +49,6 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
 
   get displayTitle(): string {
     return galleryDisplayTitle(this.gallery);
-  }
-
-  get coverPlacement() {
-    return coverTextPlacement(this.gallery.coverFocalPoint?.y);
   }
 
   aspectRatio(photo: GalleryPhoto): string | null {

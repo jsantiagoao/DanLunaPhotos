@@ -13,7 +13,7 @@ Versionado semántico según [SemVer](https://semver.org/lang/es/).
 
 ### Changed
 - Pantallas de acceso y descarga rediseñadas, con la portada de la galería.
-- El título de la portada se aleja de las caras según el punto focal y tiene un tamaño más sobrio.
+- El título de la portada tiene un tamaño más sobrio y se queda donde lo pone la plantilla; la foto se encuadra con el punto focal.
 - La presentación avanza a ritmo constante y usa fotos en calidad web.
 - Los mensajes aparecen dentro de la página en lugar de ventanas del navegador.
 

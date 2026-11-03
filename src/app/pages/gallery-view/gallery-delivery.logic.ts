@@ -22,16 +22,6 @@ export function isClientGalleryUrl(url: string): boolean {
   return /^\/galeria(\/|$|\?)/.test(url);
 }
 
-export type CoverTextPlacement = 'low' | 'high';
-
-/**
- * Dónde va el texto de la portada: lejos del punto focal, que es donde suele estar
- * la cara. El sujeto casi siempre está al centro o arriba, así que por defecto va abajo.
- */
-export function coverTextPlacement(focalY: number | undefined): CoverTextPlacement {
-  return (focalY ?? 50) > 62 ? 'high' : 'low';
-}
-
 /** Reserva el alto real de la foto antes de que cargue, para que la página no salte. */
 export function photoAspectRatio(photo: { width?: number; height?: number }, gridLayout?: string): string | null {
   if (gridLayout === 'grid' || gridLayout === 'horizontal') return null;

@@ -1,6 +1,6 @@
 <div class="gallery" [class.dark]="design.theme === 'dark'" (contextmenu)="$event.preventDefault()">
   <!-- Cover Full Screen -->
-  <div class="cover-fullscreen" [class]="'cover-' + design.coverStyle + ' text-' + coverPlacement"
+  <div class="cover-fullscreen" [class]="'cover-' + design.coverStyle"
        [style.background-image]="'url(' + coverUrl + ')'"
        [style.background-position]="focalPoint"
        [style.--cover-text-color]="design.highlightColor || '#FFFFFF'">

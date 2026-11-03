@@ -5,11 +5,6 @@
     .cover-fullscreen { height: 100vh; background-size: cover; position: relative; display: flex; align-items: center; justify-content: center; background-color: #2D2420; transition: background-image 0.5s ease; }
     .cover-fullscreen::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 75% 60% at center, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.42) 55%, rgba(0,0,0,0.28) 100%); }
     .cover-fs-overlay { max-width: min(90vw, 1000px); text-align: center; color: var(--cover-text-color, #fff); display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
-    /* El texto va lejos del sujeto y el velo se concentra detrás de él. */
-    .text-low { align-items: flex-end; padding-bottom: clamp(3rem, 9vh, 6rem); }
-    .text-low::before { background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.42) 42%, rgba(0,0,0,0.12) 75%); }
-    .text-high { align-items: flex-start; padding-top: clamp(3rem, 9vh, 6rem); }
-    .text-high::before { background: linear-gradient(to bottom, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.42) 42%, rgba(0,0,0,0.12) 75%); }
     /* Cover styles */
     .cover-izquierda .cover-fs-overlay { align-items: flex-start; text-align: left; padding-left: 4rem; }
     .cover-novela::before { background: linear-gradient(90deg, rgba(255,255,255,0.92) 35%, transparent 55%); }
@@ -155,7 +150,7 @@
       .lb-content img { max-width: 95vw; max-height: 75vh; }
       .selection-bar { bottom: 1rem; padding: 0.6rem 1rem; font-size: 0.8rem; }
       .download-card { width: calc(100% - 2rem); padding: 2rem 1.5rem; }
-      .cover-fullscreen.text-low, .cover-fullscreen.text-high { padding-left: 1rem; padding-right: 1rem; }
+      .cover-fullscreen { padding-left: 1rem; padding-right: 1rem; }
       .cover-izquierda .cover-fs-overlay, .cover-novela .cover-fs-overlay, .cover-diario .cover-fs-overlay { padding-left: 2rem; }
     }
     @media (max-width: 480px) {
