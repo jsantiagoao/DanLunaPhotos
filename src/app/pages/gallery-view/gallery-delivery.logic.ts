@@ -22,6 +22,30 @@ export function isClientGalleryUrl(url: string): boolean {
   return /^\/galeria(\/|$|\?)/.test(url);
 }
 
+export type CoverTextPlacement = 'low' | 'high';
+
+/**
+ * Dónde va el texto de la portada: lejos del punto focal, que es donde suele estar
+ * la cara. El sujeto casi siempre está al centro o arriba, así que por defecto va abajo.
+ */
+export function coverTextPlacement(focalY: number | undefined): CoverTextPlacement {
+  return (focalY ?? 50) > 62 ? 'high' : 'low';
+}
+
+/** Reserva el alto real de la foto antes de que cargue, para que la página no salte. */
+export function photoAspectRatio(photo: { width?: number; height?: number }, gridLayout?: string): string | null {
+  if (gridLayout === 'grid' || gridLayout === 'horizontal') return null;
+  return photo.width && photo.height ? `${photo.width} / ${photo.height}` : null;
+}
+
+const SWIPE_MIN_PX = 50;
+
+/** Deslizar a la izquierda avanza. Un gesto más vertical que horizontal es scroll, no cambio de foto. */
+export function swipeDirection(deltaX: number, deltaY: number): 'next' | 'prev' | null {
+  if (Math.abs(deltaX) < SWIPE_MIN_PX || Math.abs(deltaX) <= Math.abs(deltaY)) return null;
+  return deltaX < 0 ? 'next' : 'prev';
+}
+
 /** Con una foto a todo el ancho, la miniatura de 800 px se vería borrosa. */
 export function gridImageUrl(photo: { thumbUrl: string; webUrl?: string }, gridLayout?: string): string {
   return gridLayout === 'single' ? photo.webUrl || photo.thumbUrl : photo.thumbUrl;

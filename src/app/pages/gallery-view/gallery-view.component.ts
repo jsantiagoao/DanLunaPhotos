@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit, OnDestroy } from '@angular/core';
+import { Component, HostListener, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GalleryIconComponent } from '../../components/atoms/gallery-icon/gallery-icon.component';
 import { FormsModule } from '@angular/forms';
@@ -12,7 +12,8 @@ import {
 } from './gallery.models';
 import { filterPhotos, neighbourPhoto } from './gallery-filter.logic';
 import { downloadErrorAction } from './download-error.logic';
-import { galleryDisplayTitle, gridImageUrl } from './gallery-delivery.logic';
+import { coverTextPlacement, galleryDisplayTitle, gridImageUrl, photoAspectRatio, swipeDirection } from './gallery-delivery.logic';
+import { GallerySlideshow } from './gallery-slideshow';
 
 @Component({
   selector: 'app-gallery-view',
@@ -39,14 +40,23 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
   showFavoritesOnly = false;
   showDownloadScreen = false;
   preparingDownload = false;
-  slideshowActive = false;
-  slideshowPhotos: GalleryPhoto[] = [];
-  slideshowIndex = 0;
+  readonly slideshow = new GallerySlideshow<GalleryPhoto>();
   lightboxWebLoaded = false;
-  private slideshowInterval: ReturnType<typeof setInterval> | null = null;
+  /** Aviso integrado: reemplaza a alert(), que interrumpe y se ve ajeno a la galería. */
+  notice = signal<string | null>(null);
+  private noticeTimer: ReturnType<typeof setTimeout> | null = null;
+  private touchStart: { x: number; y: number } | null = null;
 
   get displayTitle(): string {
     return galleryDisplayTitle(this.gallery);
+  }
+
+  get coverPlacement() {
+    return coverTextPlacement(this.gallery.coverFocalPoint?.y);
+  }
+
+  aspectRatio(photo: GalleryPhoto): string | null {
+    return photoAspectRatio(photo, this.design.gridLayout);
   }
 
   gridImage(photo: GalleryPhoto): string {
@@ -74,7 +84,8 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.slideshowInterval) clearInterval(this.slideshowInterval);
+    this.slideshow.stop();
+    if (this.noticeTimer) clearTimeout(this.noticeTimer);
   }
 
   scrollToGallery() {
@@ -92,25 +103,44 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
     return filterPhotos(this.photos(), this.activeSet, this.showFavoritesOnly);
   }
 
-  /** Foto actual del slideshow. Puede ser undefined si la lista esta vacia o el
-      indice se salio de rango; el tipo lo refleja para forzar acceso seguro. */
-  get currentSlideshowPhoto(): GalleryPhoto | undefined {
-    return this.slideshowPhotos[this.slideshowIndex];
-  }
-
   startSlideshow() {
-    this.slideshowPhotos = this.displayedPhotos();
-    this.slideshowIndex = 0;
-    this.slideshowActive = true;
-    this.slideshowInterval = setInterval(() => this.slideshowNext(), 4000);
+    this.slideshow.start(this.displayedPhotos());
   }
 
-  slideshowNext() {
-    this.slideshowIndex = (this.slideshowIndex + 1) % this.slideshowPhotos.length;
+  @HostListener('document:keydown', ['$event'])
+  onKeydown(event: KeyboardEvent) {
+    const key = event.key;
+    if (this.slideshow.active) {
+      if (key === 'Escape') this.slideshow.stop();
+      else if (key === 'ArrowRight') this.slideshow.next();
+      else if (key === 'ArrowLeft') this.slideshow.prev();
+    } else if (this.lightboxPhoto()) {
+      if (key === 'Escape') this.lightboxPhoto.set(null);
+      else if (key === 'ArrowRight') this.nextPhoto();
+      else if (key === 'ArrowLeft') this.prevPhoto();
+    } else if (this.showDownloadScreen && key === 'Escape') {
+      this.showDownloadScreen = false;
+    }
   }
 
-  slideshowPrev() {
-    this.slideshowIndex = this.slideshowIndex === 0 ? this.slideshowPhotos.length - 1 : this.slideshowIndex - 1;
+  onTouchStart(event: TouchEvent) {
+    const touch = event.changedTouches[0];
+    this.touchStart = touch ? { x: touch.clientX, y: touch.clientY } : null;
+  }
+
+  onTouchEnd(event: TouchEvent, next: () => void, prev: () => void) {
+    const touch = event.changedTouches[0];
+    if (!touch || !this.touchStart) return;
+    const direction = swipeDirection(touch.clientX - this.touchStart.x, touch.clientY - this.touchStart.y);
+    this.touchStart = null;
+    if (direction === 'next') next();
+    else if (direction === 'prev') prev();
+  }
+
+  private showNotice(message: string) {
+    this.notice.set(message);
+    if (this.noticeTimer) clearTimeout(this.noticeTimer);
+    this.noticeTimer = setTimeout(() => this.notice.set(null), 5000);
   }
 
   openLightbox(photo: GalleryPhoto) {
@@ -153,7 +183,7 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
         this.preparingDownload = false;
         this.showDownloadScreen = false;
         if (res.downloadUrl) window.open(res.downloadUrl, '_blank');
-        else alert(res.message || 'Tu descarga se está preparando.');
+        else this.showNotice(res.message || 'Tu descarga se está preparando.');
       },
       error: (e) => {
         this.preparingDownload = false;
@@ -169,7 +199,7 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
       sessionStorage.removeItem(`gallery_token_${this.slug}`);
       this.router.navigate(['/galeria', this.slug]);
     } else {
-      alert(action.message);
+      this.showNotice(action.message);
     }
   }
 
@@ -179,7 +209,7 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
       navigator.share({ title: this.displayTitle, url });
     } else {
       navigator.clipboard.writeText(url);
-      alert('Link copiado');
+      this.showNotice('Enlace copiado');
     }
   }
 

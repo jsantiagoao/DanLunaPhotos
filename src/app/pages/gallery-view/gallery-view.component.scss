@@ -5,6 +5,11 @@
     .cover-fullscreen { height: 100vh; background-size: cover; position: relative; display: flex; align-items: center; justify-content: center; background-color: #2D2420; transition: background-image 0.5s ease; }
     .cover-fullscreen::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 75% 60% at center, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.42) 55%, rgba(0,0,0,0.28) 100%); }
     .cover-fs-overlay { text-align: center; color: var(--cover-text-color, #fff); display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
+    /* El texto va lejos del sujeto y el velo se concentra detrás de él. */
+    .text-low { align-items: flex-end; padding-bottom: clamp(3rem, 9vh, 6rem); }
+    .text-low::before { background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.42) 42%, rgba(0,0,0,0.12) 75%); }
+    .text-high { align-items: flex-start; padding-top: clamp(3rem, 9vh, 6rem); }
+    .text-high::before { background: linear-gradient(to bottom, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.42) 42%, rgba(0,0,0,0.12) 75%); }
     /* Cover styles */
     .cover-izquierda .cover-fs-overlay { align-items: flex-start; text-align: left; padding-left: 4rem; }
     .cover-novela::before { background: linear-gradient(90deg, rgba(255,255,255,0.92) 35%, transparent 55%); }
@@ -32,7 +37,7 @@
     .cover-title.title-bold { font-family: 'DM Sans', sans-serif; font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 900; letter-spacing: 2px; }
     .cover-title.title-subtle { font-family: 'DM Sans', sans-serif; font-size: clamp(1.5rem, 3.5vw, 3rem); font-weight: 200; letter-spacing: 8px; }
     .cover-date { font-size: clamp(0.65rem, 1vw, 0.8rem); letter-spacing: 3px; opacity: 0.7; margin-top: 1rem; text-transform: uppercase; color: inherit; }
-    .cover-enter-btn { margin-top: 4rem; background: none; border: none; color: inherit; font-size: clamp(0.6rem, 1vw, 0.75rem); letter-spacing: 4px; text-transform: uppercase; cursor: pointer; padding: 1rem 2rem; min-height: 44px; border-top: 1px solid currentColor; opacity: 1; text-shadow: 0 1px 8px rgba(0,0,0,0.6); transition: all 0.3s; }
+    .cover-enter-btn { margin-top: 2rem; background: none; border: none; color: inherit; font-size: clamp(0.6rem, 1vw, 0.75rem); letter-spacing: 4px; text-transform: uppercase; cursor: pointer; padding: 1rem 2rem; min-height: 44px; border-top: 1px solid currentColor; opacity: 1; text-shadow: 0 1px 8px rgba(0,0,0,0.6); transition: all 0.3s; }
     .cover-enter-btn:hover { opacity: 1; letter-spacing: 5px; }
 
     /* Sticky nav bar */
@@ -66,8 +71,8 @@
     .spacing-normal { gap: 8px; column-gap: 8px; }
     .spacing-wide { gap: 16px; column-gap: 16px; }
 
-    .photo-item { position: relative; break-inside: avoid; margin-bottom: 8px; cursor: pointer; border-radius: 2px; overflow: hidden; background: linear-gradient(90deg, #f0ebe6 25%, #f9f5f2 50%, #f0ebe6 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; min-height: 120px; }
-    .photo-item img { width: 100%; display: block; transition: transform 0.3s; opacity: 0; animation: fadeIn 0.4s forwards; }
+    .photo-item { position: relative; break-inside: avoid; margin-bottom: 8px; cursor: pointer; border-radius: 2px; overflow: hidden; background-color: rgba(168,136,108,0.14); min-height: 120px; }
+    .photo-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s; opacity: 0; animation: fadeIn 0.5s forwards; }
     .photo-item:hover img { transform: scale(1.02); }
     @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
     @keyframes fadeIn { to { opacity: 1; } }
@@ -75,7 +80,7 @@
     .fav-btn:focus-visible, .select-check:focus-visible { opacity: 1; }
     .photo-item:hover .fav-btn { opacity: 1; }
     .fav-btn.active { opacity: 1; color: #e74c3c; background: rgba(255,255,255,0.9); }
-    .select-check { position: absolute; top: 8px; left: 8px; width: 22px; height: 22px; cursor: pointer; opacity: 0; transition: opacity 0.2s; accent-color: #AD8A6A; }
+    .select-check { position: absolute; top: 8px; left: 8px; width: 22px; height: 22px; cursor: pointer; opacity: 0; transition: opacity 0.2s; accent-color: #A8886C; }
     .photo-item:hover .select-check { opacity: 1; }
     .select-check:checked { opacity: 1; }
 
@@ -86,12 +91,12 @@
     /* Lightbox */
     .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.2s; }
     .lb-content { position: relative; max-width: 90vw; max-height: 90vh; }
-    .lb-content .lb-thumb { max-width: 90vw; max-height: 85vh; object-fit: contain; border-radius: 2px; position: absolute; inset: 0; filter: blur(8px); transition: opacity 0.3s; }
+    .lb-content .lb-thumb { max-width: 90vw; max-height: calc(100vh - 150px); object-fit: contain; border-radius: 2px; position: absolute; inset: 0; filter: blur(8px); transition: opacity 0.3s; }
     .lb-content .lb-thumb.loaded { opacity: 0; pointer-events: none; }
-    .lb-content .lb-web { max-width: 90vw; max-height: 85vh; object-fit: contain; border-radius: 2px; opacity: 0; transition: opacity 0.3s; }
+    .lb-content .lb-web { display: block; max-width: 90vw; max-height: calc(100vh - 150px); object-fit: contain; border-radius: 2px; opacity: 0; transition: opacity 0.3s; }
     .lb-content .lb-web.loaded { opacity: 1; }
-    .lb-actions { position: absolute; bottom: -50px; left: 50%; transform: translateX(-50%); display: flex; gap: 1rem; align-items: center; }
-    .lb-actions button, .lb-actions a { background: rgba(255,255,255,0.1); border: none; color: #fff; font-size: 1.5rem; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none; }
+    .lb-actions { position: absolute; bottom: -62px; left: 50%; transform: translateX(-50%); display: flex; gap: 0.5rem; align-items: center; padding: 6px; border-radius: 999px; background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); }
+    .lb-actions button, .lb-actions a { background: none; border: none; color: #fff; font-size: 1.5rem; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none; }
     .lb-actions button:hover, .lb-actions a:hover { background: rgba(255,255,255,0.2); }
     .fav-btn-lb.active { color: #e74c3c; }
     .lb-close { position: absolute; top: -48px; right: 0; width: 44px; height: 44px; background: none; border: none; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; }
@@ -104,17 +109,27 @@
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     /* Download screen */
-    .download-screen { position: fixed; inset: 0; background: #fff; color: #2D2420; z-index: 500; display: flex; align-items: center; justify-content: center; }
-    .download-card { width: 90%; max-width: 600px; text-align: center; position: relative; }
-    .download-header { text-align: left; margin-bottom: 4rem; }
+    .download-screen { position: fixed; inset: 0; background: #2D2420 center / cover no-repeat; color: #2D2420; z-index: 500; display: flex; align-items: center; justify-content: center; }
+    .download-screen::before { content: ''; position: absolute; inset: 0; background: rgba(45,36,32,0.62); backdrop-filter: blur(6px); }
+    .download-card { width: 90%; max-width: 560px; padding: 2.5rem; border-radius: 20px; background: rgba(255,255,255,0.94); box-shadow: 0 24px 70px rgba(0,0,0,0.35); text-align: center; position: relative; }
+    .download-header { text-align: left; margin-bottom: 2.5rem; padding-right: 2.5rem; }
     .download-title { display: block; font-family: 'Fraunces', serif; font-size: 1.2rem; letter-spacing: 1px; text-transform: uppercase; }
     .download-brand { display: block; font-size: 0.65rem; color: #999; letter-spacing: 1px; text-transform: uppercase; }
     .download-body h2 { font-family: 'Fraunces', serif; font-size: 1.5rem; margin: 0 0 1rem; }
     .download-body p { font-size: 0.85rem; color: #666; line-height: 1.7; margin-bottom: 2rem; max-width: 450px; margin-left: auto; margin-right: auto; }
     .btn-download { display: block; width: 100%; max-width: 400px; margin: 1.5rem auto 0; background: #2D2420; color: #fff; border: none; padding: 1rem; font-size: 0.8rem; letter-spacing: 3px; cursor: pointer; }
-    .btn-download:hover { background: #AD8A6A; }
+    .btn-download:hover { background: #A8886C; }
     .btn-download:disabled { opacity: 0.6; cursor: wait; }
-    .download-close { position: absolute; top: -2.5rem; right: 0; width: 44px; height: 44px; background: none; border: none; cursor: pointer; color: #6B625C; display: flex; align-items: center; justify-content: center; }
+    .download-progress { height: 4px; max-width: 400px; margin: 1rem auto 0; overflow: hidden; border-radius: 4px; background: rgba(168,136,108,0.25); }
+    .download-progress span { display: block; width: 40%; height: 100%; border-radius: 4px; background: #2D2420; animation: downloadSlide 1.3s ease-in-out infinite; }
+    @keyframes downloadSlide { from { transform: translateX(-100%); } to { transform: translateX(260%); } }
+    .gallery-notice { position: fixed; left: 50%; bottom: 2rem; z-index: 2100; transform: translateX(-50%); max-width: calc(100vw - 2rem); padding: 0.75rem 1.25rem; border-radius: 12px; background: #2D2420; color: #fff; font-size: 0.875rem; box-shadow: 0 8px 30px rgba(0,0,0,0.3); animation: fadeIn 0.2s; }
+    .download-close { position: absolute; top: 1rem; right: 1rem; width: 44px; height: 44px; background: none; border: none; cursor: pointer; color: #6B625C; display: flex; align-items: center; justify-content: center; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .photo-item img, .download-progress span, .gallery-notice { animation: none; opacity: 1; }
+      .photo-item:hover img { transform: none; }
+    }
 
     /* En pantallas táctiles no hay hover: favorita y selección deben verse siempre. */
     @media (hover: none) {
@@ -139,7 +154,8 @@
       .photo-grid { padding: 0.5rem; }
       .lb-content img { max-width: 95vw; max-height: 75vh; }
       .selection-bar { bottom: 1rem; padding: 0.6rem 1rem; font-size: 0.8rem; }
-      .download-card { width: 95%; padding: 2rem 1.5rem; }
+      .download-card { width: calc(100% - 2rem); padding: 2rem 1.5rem; }
+      .cover-fullscreen.text-low, .cover-fullscreen.text-high { padding-left: 1rem; padding-right: 1rem; }
       .cover-izquierda .cover-fs-overlay, .cover-novela .cover-fs-overlay, .cover-diario .cover-fs-overlay { padding-left: 2rem; }
     }
     @media (max-width: 480px) {

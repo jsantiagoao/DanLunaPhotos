@@ -1,4 +1,6 @@
-import { galleryAccessMessage, galleryDisplayTitle, gridImageUrl, isClientGalleryUrl } from './gallery-delivery.logic';
+import {
+  coverTextPlacement, galleryAccessMessage, galleryDisplayTitle, gridImageUrl, isClientGalleryUrl, photoAspectRatio, swipeDirection,
+} from './gallery-delivery.logic';
 
 describe('gallery-delivery.logic', () => {
   describe('galleryDisplayTitle', () => {
@@ -38,6 +40,47 @@ describe('gallery-delivery.logic', () => {
       expect(isClientGalleryUrl('/')).toBe(false);
       expect(isClientGalleryUrl('/galerias')).toBe(false);
       expect(isClientGalleryUrl('/paquetes/galeria')).toBe(false);
+    });
+  });
+
+  describe('coverTextPlacement', () => {
+    it('should_keep_the_text_away_from_a_centered_or_high_subject', () => {
+      expect(coverTextPlacement(50)).toBe('low');
+      expect(coverTextPlacement(20)).toBe('low');
+      expect(coverTextPlacement(undefined)).toBe('low');
+    });
+
+    it('should_move_the_text_up_when_the_subject_is_low', () => {
+      expect(coverTextPlacement(80)).toBe('high');
+    });
+  });
+
+  describe('photoAspectRatio', () => {
+    it('should_reserve_the_real_proportion_of_the_photo', () => {
+      expect(photoAspectRatio({ width: 6000, height: 4000 }, 'masonry')).toBe('6000 / 4000');
+      expect(photoAspectRatio({ width: 6000, height: 4000 }, 'single')).toBe('6000 / 4000');
+    });
+
+    it('should_not_interfere_with_layouts_that_set_their_own_size', () => {
+      expect(photoAspectRatio({ width: 6000, height: 4000 }, 'grid')).toBeNull();
+      expect(photoAspectRatio({ width: 6000, height: 4000 }, 'horizontal')).toBeNull();
+    });
+
+    it('should_do_nothing_without_dimensions', () => {
+      expect(photoAspectRatio({}, 'masonry')).toBeNull();
+      expect(photoAspectRatio({ width: 0, height: 0 }, 'masonry')).toBeNull();
+    });
+  });
+
+  describe('swipeDirection', () => {
+    it('should_go_forward_when_swiping_left_and_back_when_swiping_right', () => {
+      expect(swipeDirection(-80, 5)).toBe('next');
+      expect(swipeDirection(80, 5)).toBe('prev');
+    });
+
+    it('should_ignore_small_movements_and_vertical_scrolling', () => {
+      expect(swipeDirection(-20, 0)).toBeNull();
+      expect(swipeDirection(-80, 200)).toBeNull();
     });
   });
 

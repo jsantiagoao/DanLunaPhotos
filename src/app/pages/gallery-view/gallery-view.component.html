@@ -1,6 +1,6 @@
 <div class="gallery" [class.dark]="design.theme === 'dark'" (contextmenu)="$event.preventDefault()">
   <!-- Cover Full Screen -->
-  <div class="cover-fullscreen" [class]="'cover-' + design.coverStyle"
+  <div class="cover-fullscreen" [class]="'cover-' + design.coverStyle + ' text-' + coverPlacement"
        [style.background-image]="'url(' + coverUrl + ')'"
        [style.background-position]="focalPoint"
        [style.--cover-text-color]="design.highlightColor || '#FFFFFF'">
@@ -38,7 +38,7 @@
 
   <!-- Download screen -->
   @if (showDownloadScreen) {
-    <div class="download-screen">
+    <div class="download-screen" [style.background-image]="coverUrl ? 'url(' + coverUrl + ')' : null" [style.background-position]="focalPoint">
       <div class="download-card">
         <div class="download-header">
           <span class="download-title">{{ displayTitle }}</span>
@@ -48,6 +48,9 @@
           <h2>Descargar fotografías</h2>
           <p>Prepararemos un archivo ZIP con todas tus fotos en su calidad original. Puede tardar un momento si la galería es grande.</p>
           <button class="btn-download" [disabled]="preparingDownload" (click)="confirmDownload()">{{ preparingDownload ? 'PREPARANDO…' : 'DESCARGAR TODAS' }}</button>
+          @if (preparingDownload) {
+            <div class="download-progress" role="progressbar" aria-label="Preparando tu descarga"><span></span></div>
+          }
         </div>
         <button class="download-close" (click)="showDownloadScreen = false" aria-label="Cerrar"><app-gallery-icon name="close" [size]="22" /></button>
       </div>
@@ -57,7 +60,7 @@
   <!-- Grid -->
   <div class="photo-grid" [class]="'layout-' + design.gridLayout + ' spacing-' + design.spacing">
     @for (p of displayedPhotos(); track p._id) {
-      <div class="photo-item" (click)="openLightbox(p)">
+      <div class="photo-item" [style.aspect-ratio]="aspectRatio(p)" (click)="openLightbox(p)">
         <img [src]="gridImage(p)" [alt]="p.filename" loading="lazy" />
         <button class="fav-btn" [class.active]="p.isFavorite" [attr.aria-pressed]="!!p.isFavorite" aria-label="Marcar como favorita" (click)="toggleFav(p); $event.stopPropagation()"><app-gallery-icon name="heart" /></button>
         @if (gallery.downloads?.enabled) {
@@ -77,7 +80,8 @@
 
   <!-- Lightbox -->
   @if (lightboxPhoto(); as lb) {
-    <div class="lightbox" (click)="lightboxPhoto.set(null)">
+    <div class="lightbox" role="dialog" aria-modal="true" aria-label="Foto ampliada" (click)="lightboxPhoto.set(null)"
+         (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event, nextPhoto.bind(this), prevPhoto.bind(this))">
       <div class="lb-content" (click)="$event.stopPropagation()">
         <img class="lb-thumb" [src]="lb.thumbUrl" [class.loaded]="lightboxWebLoaded" />
         <img class="lb-web" [src]="lb.webUrl || lb.thumbUrl" (load)="lightboxWebLoaded = true" [class.loaded]="lightboxWebLoaded" />
@@ -94,16 +98,21 @@
     </div>
   }
 
+  @if (notice(); as message) {
+    <div class="gallery-notice" role="status">{{ message }}</div>
+  }
+
   <!-- Slideshow -->
-  @if (slideshowActive) {
-    <div class="slideshow" (click)="slideshowActive = false">
-      @if (currentSlideshowPhoto; as photo) {
-        <img [src]="photo.thumbUrl" [alt]="photo.filename" />
+  @if (slideshow.active) {
+    <div class="slideshow" role="dialog" aria-modal="true" aria-label="Presentación" (click)="slideshow.stop()"
+         (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event, slideshow.next.bind(slideshow), slideshow.prev.bind(slideshow))">
+      @if (slideshow.current; as photo) {
+        <img [src]="photo.webUrl || photo.thumbUrl" [alt]="photo.filename" />
       }
       <div class="slideshow-controls" (click)="$event.stopPropagation()">
-        <button (click)="slideshowPrev()" aria-label="Foto anterior"><app-gallery-icon name="prev" [size]="22" /></button>
-        <button (click)="slideshowActive = false" aria-label="Cerrar presentación"><app-gallery-icon name="close" [size]="22" /></button>
-        <button (click)="slideshowNext()" aria-label="Foto siguiente"><app-gallery-icon name="next" [size]="22" /></button>
+        <button (click)="slideshow.prev()" aria-label="Foto anterior"><app-gallery-icon name="prev" [size]="22" /></button>
+        <button (click)="slideshow.stop()" aria-label="Cerrar presentación"><app-gallery-icon name="close" [size]="22" /></button>
+        <button (click)="slideshow.next()" aria-label="Foto siguiente"><app-gallery-icon name="next" [size]="22" /></button>
       </div>
     </div>
   }

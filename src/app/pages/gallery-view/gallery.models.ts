@@ -35,6 +35,8 @@ export interface GalleryPhoto {
   originalUrl?: string;
   set?: string;
   isFavorite?: boolean;
+  width?: number;
+  height?: number;
 }
 
 export interface Gallery {
@@ -69,6 +71,8 @@ export interface DownloadResponse {
 export interface GalleryInfoResponse {
   title: string;
   coverUrl: string;
+  coverFocalPoint?: FocalPoint;
+  design?: GalleryDesign;
 }
 
 /** Respuesta de autenticacion del visor: token + datos de la galeria. */

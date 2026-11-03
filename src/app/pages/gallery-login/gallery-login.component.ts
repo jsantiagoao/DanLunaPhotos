@@ -12,39 +12,45 @@ import { galleryAccessMessage, galleryDisplayTitle } from '../gallery-view/galle
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="gallery-login" [style.background-image]="coverUrl ? 'url(' + coverUrl + ')' : ''">
-      <div class="overlay">
-        <div class="login-card">
-          <h1>{{ title || 'Galería' }}</h1>
+    <div class="gallery-login" [style.background-image]="coverUrl ? 'url(' + coverUrl + ')' : null" [style.background-position]="focalPoint">
+      <div class="veil">
+        <div class="entry">
+          <span class="logo" role="img" aria-label="Dan Luna Photo"></span>
+          <h1>{{ title || 'Tu galería' }}</h1>
           @if (unavailable(); as message) {
             <p class="unavailable" role="alert">{{ message }}</p>
           } @else {
-            <p>Ingresa tus credenciales para ver las fotos</p>
-            <div class="field"><input type="password" [(ngModel)]="password" placeholder="Contraseña" aria-label="Contraseña" (keydown.enter)="login()" /></div>
-            <div class="field"><input type="text" [(ngModel)]="pin" placeholder="PIN" aria-label="PIN" maxlength="6" (keydown.enter)="login()" /></div>
-            @if (error()) { <p class="error" role="alert">{{ error() }}</p> }
-            <button class="btn-login" (click)="login()" [disabled]="loading()">{{ loading() ? 'Verificando...' : 'Entrar' }}</button>
+            <p class="lead">Ingresa tus claves para ver tus fotos</p>
+            <form class="form" (submit)="$event.preventDefault(); login()">
+              <label class="field"><span>Contraseña</span><input type="password" name="password" autocomplete="off" [(ngModel)]="password" /></label>
+              <label class="field"><span>PIN</span><input type="text" name="pin" inputmode="numeric" autocomplete="off" maxlength="6" [(ngModel)]="pin" /></label>
+              @if (error()) { <p class="error" role="alert">{{ error() }}</p> }
+              <button type="submit" class="btn-login" [disabled]="loading()">{{ loading() ? 'Verificando…' : 'Entrar a mi galería' }}</button>
+            </form>
           }
-          <span class="brand">Dan Luna Photo</span>
         </div>
       </div>
     </div>
   `,
   styles: [`
-    .gallery-login { min-height: 100vh; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; }
-    .overlay { background: rgba(0,0,0,0.5); min-height: 100vh; width: 100%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
-    .login-card { background: #fff; border-radius: 16px; padding: 3rem 2.5rem; width: 90%; max-width: 380px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
-    h1 { font-family: 'Fraunces', serif; color: #2D2420; font-size: 1.8rem; margin: 0 0 0.5rem; }
-    p { color: #666; font-size: 0.9rem; margin: 0 0 1.5rem; }
-    .field { margin-bottom: 1rem; }
-    .field input { width: 100%; padding: 0.75rem 1rem; border: 1px solid #EAE7E1; border-radius: 8px; font-size: 1rem; text-align: center; box-sizing: border-box; }
-    .field input:focus { outline: none; border-color: #AD8A6A; }
-    .btn-login { width: 100%; background: #AD8A6A; color: #fff; border: none; padding: 0.85rem; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s; }
-    .btn-login:hover { background: #2D2420; }
-    .btn-login:disabled { opacity: 0.6; cursor: not-allowed; }
-    .unavailable { color: #2D2420; font-size: 1rem; line-height: 1.5; margin: 0; }
-    .error { color: #dc3545; font-size: 0.85rem; margin: 0 0 1rem; }
-    .brand { display: block; margin-top: 2rem; font-family: 'Fraunces', serif; color: #AD8A6A; font-size: 0.9rem; }
+    .gallery-login { min-height: 100vh; min-height: 100svh; background: #2D2420 center / cover no-repeat; }
+    .veil { display: flex; align-items: flex-end; justify-content: center; min-height: 100vh; min-height: 100svh; padding: 1.5rem; box-sizing: border-box; background: linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.18) 100%); }
+    .entry { width: 100%; max-width: 420px; padding-bottom: clamp(1rem, 7vh, 4rem); color: #fff; text-align: center; animation: entryIn 0.6s cubic-bezier(.16, 1, .3, 1); }
+    @keyframes entryIn { from { opacity: 0; transform: translateY(14px); } }
+    .logo { display: block; width: 120px; height: 44px; margin: 0 auto 1rem; background: currentColor; -webkit-mask: url('/assets/images/logo-mark.png') center / contain no-repeat; mask: url('/assets/images/logo-mark.png') center / contain no-repeat; }
+    h1 { margin: 0 0 0.5rem; font: 500 clamp(1.75rem, 5vw, 2.5rem)/1.15 'Fraunces', serif; text-shadow: 0 2px 20px rgba(0,0,0,0.5); }
+    .lead { margin: 0 0 1.5rem; font-size: 0.95rem; opacity: 0.92; }
+    .form { display: grid; gap: 0.75rem; }
+    .field { display: grid; gap: 0.3rem; text-align: left; font-size: 0.8rem; font-weight: 600; }
+    .field input { box-sizing: border-box; width: 100%; min-height: 48px; padding: 0 1rem; border: 1px solid rgba(255,255,255,0.55); border-radius: 10px; background: rgba(255,255,255,0.14); color: #fff; font-size: 1rem; backdrop-filter: blur(8px); }
+    .field input:focus { outline: 2px solid #fff; outline-offset: 1px; }
+    .btn-login { min-height: 50px; margin-top: 0.25rem; border: 0; border-radius: 10px; background: #FDF8F4; color: #2D2420; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+    .btn-login:hover { background: #fff; }
+    .btn-login:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+    .btn-login:disabled { opacity: 0.7; cursor: wait; }
+    .unavailable { margin: 0.5rem 0 0; font-size: 1rem; line-height: 1.5; }
+    .error { margin: 0; padding: 0.6rem 0.8rem; border-radius: 8px; background: rgba(255,255,255,0.94); color: #9B2C2C; font-size: 0.875rem; }
+    @media (prefers-reduced-motion: reduce) { .entry { animation: none; } }
   `]
 })
 export class GalleryLoginComponent {
@@ -56,6 +62,7 @@ export class GalleryLoginComponent {
   pin = '';
   title = '';
   coverUrl = '';
+  focalPoint = '50% 50%';
   error = signal('');
   loading = signal(false);
   /** Mensaje cuando la galería no se puede abrir: en ese caso no se ofrece un acceso inútil. */
@@ -67,7 +74,7 @@ export class GalleryLoginComponent {
     this.slug = this.route.snapshot.paramMap.get('slug') || '';
     // Load gallery info (cover + title)
     this.http.get<GalleryInfoResponse>(`${environment.apiUrl}/gallery/${this.slug}`).subscribe({
-      next: (data) => { this.title = galleryDisplayTitle(data); this.coverUrl = data.coverUrl; },
+      next: (data) => { this.title = galleryDisplayTitle(data); this.coverUrl = data.coverUrl; this.focalPoint = `${data.coverFocalPoint?.x ?? 50}% ${data.coverFocalPoint?.y ?? 50}%`; },
       error: (e) => this.unavailable.set(galleryAccessMessage(e?.status ?? 0)),
     });
   }
