@@ -6,6 +6,20 @@ Versionado semántico según [SemVer](https://semver.org/lang/es/).
 
 ---
 
+## [1.6.0] - 2026-11-02
+
+### Added
+- El visor se usa con teclado y deslizando el dedo.
+
+### Changed
+- Pantallas de acceso y descarga rediseñadas, con la portada de la galería.
+- El título de la portada se aleja de las caras según el punto focal y tiene un tamaño más sobrio.
+- La presentación avanza a ritmo constante y usa fotos en calidad web.
+- Los mensajes aparecen dentro de la página en lugar de ventanas del navegador.
+
+### Fixed
+- "Enlace copiado" solo aparece si de verdad se copió; si no, se muestra el enlace.
+
 ## [1.5.0] - 2026-11-02
 
 ### Changed

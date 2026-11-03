@@ -12,7 +12,7 @@ import {
 } from './gallery.models';
 import { filterPhotos, neighbourPhoto } from './gallery-filter.logic';
 import { downloadErrorAction } from './download-error.logic';
-import { coverTextPlacement, galleryDisplayTitle, gridImageUrl, photoAspectRatio, swipeDirection } from './gallery-delivery.logic';
+import { coverTextPlacement, galleryDisplayTitle, gridImageUrl, photoAspectRatio, shareLink, swipeDirection } from './gallery-delivery.logic';
 import { GallerySlideshow } from './gallery-slideshow';
 
 @Component({
@@ -203,14 +203,15 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
     }
   }
 
-  shareGallery() {
+  async shareGallery() {
     const url = `https://danlunaphoto.com/galeria/${this.slug}`;
-    if (navigator.share) {
-      navigator.share({ title: this.displayTitle, url });
-    } else {
-      navigator.clipboard.writeText(url);
-      this.showNotice('Enlace copiado');
-    }
+    // bind: share y writeText pierden su contexto si se llaman sueltos.
+    const device = {
+      share: navigator.share?.bind(navigator),
+      clipboard: navigator.clipboard ? { writeText: navigator.clipboard.writeText.bind(navigator.clipboard) } : undefined,
+    };
+    const message = await shareLink(device, this.displayTitle, url);
+    if (message) this.showNotice(message);
   }
 
   toggleSelect(id: string) {

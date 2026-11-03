@@ -4,7 +4,7 @@
     /* Cover Full Screen */
     .cover-fullscreen { height: 100vh; background-size: cover; position: relative; display: flex; align-items: center; justify-content: center; background-color: #2D2420; transition: background-image 0.5s ease; }
     .cover-fullscreen::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 75% 60% at center, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.42) 55%, rgba(0,0,0,0.28) 100%); }
-    .cover-fs-overlay { text-align: center; color: var(--cover-text-color, #fff); display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
+    .cover-fs-overlay { max-width: min(90vw, 1000px); text-align: center; color: var(--cover-text-color, #fff); display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
     /* El texto va lejos del sujeto y el velo se concentra detrás de él. */
     .text-low { align-items: flex-end; padding-bottom: clamp(3rem, 9vh, 6rem); }
     .text-low::before { background: linear-gradient(to top, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.42) 42%, rgba(0,0,0,0.12) 75%); }
@@ -28,13 +28,13 @@
     /* Máscara con transparencia real: el logo toma el color del texto de la portada. */
     .cover-logo-img { display: block; width: 110px; height: 40px; background: currentColor; -webkit-mask: url('/assets/images/logo-mark.png') center / contain no-repeat; mask: url('/assets/images/logo-mark.png') center / contain no-repeat; }
     .cover-novela .cover-title, .cover-diario .cover-title, .cover-novela .cover-brand, .cover-diario .cover-brand { text-shadow: none; }
-    .cover-brand { text-shadow: 0 1px 8px rgba(0,0,0,0.6); font-size: clamp(0.6rem, 1vw, 0.75rem); letter-spacing: 3px; text-transform: uppercase; opacity: 1; margin-bottom: 3rem; font-weight: 300; color: inherit; }
+    .cover-brand { text-shadow: 0 1px 8px rgba(0,0,0,0.6); font-size: clamp(0.6rem, 1vw, 0.75rem); letter-spacing: 3px; text-transform: uppercase; opacity: 1; margin-bottom: 1.25rem; font-weight: 300; color: inherit; }
     .cover-title { margin: 0; letter-spacing: 6px; text-transform: uppercase; text-shadow: 0 2px 24px rgba(0,0,0,0.65), 0 1px 3px rgba(0,0,0,0.5); color: inherit; }
-    .cover-title.title-serif { font-family: 'Fraunces', serif; font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 300; }
-    .cover-title.title-sans { font-family: 'DM Sans', sans-serif; font-size: clamp(2rem, 5.5vw, 4.5rem); font-weight: 700; letter-spacing: 6px; }
-    .cover-title.title-modern { font-family: 'DM Sans', sans-serif; font-size: clamp(2rem, 5.5vw, 4.5rem); font-weight: 200; letter-spacing: 4px; }
-    .cover-title.title-timeless { font-family: Georgia, serif; font-size: clamp(2rem, 5.5vw, 4.5rem); font-weight: 300; font-style: italic; letter-spacing: 3px; }
-    .cover-title.title-bold { font-family: 'DM Sans', sans-serif; font-size: clamp(2.5rem, 6vw, 5rem); font-weight: 900; letter-spacing: 2px; }
+    .cover-title.title-serif { font-family: 'Fraunces', serif; font-size: clamp(2rem, 4.5vw, 3.75rem); font-weight: 300; }
+    .cover-title.title-sans { font-family: 'DM Sans', sans-serif; font-size: clamp(1.75rem, 4vw, 3.25rem); font-weight: 700; letter-spacing: 4px; }
+    .cover-title.title-modern { font-family: 'DM Sans', sans-serif; font-size: clamp(1.75rem, 4vw, 3.25rem); font-weight: 200; letter-spacing: 4px; }
+    .cover-title.title-timeless { font-family: Georgia, serif; font-size: clamp(1.75rem, 4vw, 3.25rem); font-weight: 300; font-style: italic; letter-spacing: 3px; }
+    .cover-title.title-bold { font-family: 'DM Sans', sans-serif; font-size: clamp(2rem, 4.5vw, 3.75rem); font-weight: 900; letter-spacing: 2px; }
     .cover-title.title-subtle { font-family: 'DM Sans', sans-serif; font-size: clamp(1.5rem, 3.5vw, 3rem); font-weight: 200; letter-spacing: 8px; }
     .cover-date { font-size: clamp(0.65rem, 1vw, 0.8rem); letter-spacing: 3px; opacity: 0.7; margin-top: 1rem; text-transform: uppercase; color: inherit; }
     .cover-enter-btn { margin-top: 2rem; background: none; border: none; color: inherit; font-size: clamp(0.6rem, 1vw, 0.75rem); letter-spacing: 4px; text-transform: uppercase; cursor: pointer; padding: 1rem 2rem; min-height: 44px; border-top: 1px solid currentColor; opacity: 1; text-shadow: 0 1px 8px rgba(0,0,0,0.6); transition: all 0.3s; }

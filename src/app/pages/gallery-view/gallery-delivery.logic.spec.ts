@@ -1,5 +1,5 @@
 import {
-  coverTextPlacement, galleryAccessMessage, galleryDisplayTitle, gridImageUrl, isClientGalleryUrl, photoAspectRatio, swipeDirection,
+  coverTextPlacement, galleryAccessMessage, galleryDisplayTitle, gridImageUrl, isClientGalleryUrl, photoAspectRatio, shareLink, swipeDirection,
 } from './gallery-delivery.logic';
 
 describe('gallery-delivery.logic', () => {
@@ -40,6 +40,39 @@ describe('gallery-delivery.logic', () => {
       expect(isClientGalleryUrl('/')).toBe(false);
       expect(isClientGalleryUrl('/galerias')).toBe(false);
       expect(isClientGalleryUrl('/paquetes/galeria')).toBe(false);
+    });
+  });
+
+  describe('shareLink', () => {
+    const URL_GALERIA = 'https://danlunaphoto.com/galeria/boda';
+
+    it('should_use_the_native_share_without_a_message', async () => {
+      const share = jest.fn().mockResolvedValue(undefined);
+      await expect(shareLink({ share }, 'Boda', URL_GALERIA)).resolves.toBeNull();
+      expect(share).toHaveBeenCalledWith({ title: 'Boda', url: URL_GALERIA });
+    });
+
+    it('should_not_complain_when_the_client_closes_the_share_menu', async () => {
+      const share = jest.fn().mockRejectedValue({ name: 'AbortError' });
+      await expect(shareLink({ share }, 'Boda', URL_GALERIA)).resolves.toBeNull();
+    });
+
+    it('should_copy_when_there_is_no_native_share', async () => {
+      const writeText = jest.fn().mockResolvedValue(undefined);
+      await expect(shareLink({ clipboard: { writeText } }, 'Boda', URL_GALERIA)).resolves.toBe('Enlace copiado');
+    });
+
+    it('should_fall_back_to_copying_when_native_share_fails', async () => {
+      const writeText = jest.fn().mockResolvedValue(undefined);
+      const share = jest.fn().mockRejectedValue(new Error('no'));
+      await expect(shareLink({ share, clipboard: { writeText } }, 'Boda', URL_GALERIA)).resolves.toBe('Enlace copiado');
+    });
+
+    it('should_never_claim_it_copied_when_it_could_not', async () => {
+      const writeText = jest.fn().mockRejectedValue(new Error('denegado'));
+      const mensaje = await shareLink({ clipboard: { writeText } }, 'Boda', URL_GALERIA);
+      expect(mensaje).toContain('No se pudo copiar');
+      expect(mensaje).toContain(URL_GALERIA);
     });
   });
 

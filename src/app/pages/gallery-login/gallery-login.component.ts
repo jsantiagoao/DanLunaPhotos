@@ -40,7 +40,8 @@ import { galleryAccessMessage, galleryDisplayTitle } from '../gallery-view/galle
     .logo { display: block; width: 120px; height: 44px; margin: 0 auto 1rem; background: currentColor; -webkit-mask: url('/assets/images/logo-mark.png') center / contain no-repeat; mask: url('/assets/images/logo-mark.png') center / contain no-repeat; }
     h1 { margin: 0 0 0.5rem; font: 500 clamp(1.75rem, 5vw, 2.5rem)/1.15 'Fraunces', serif; text-shadow: 0 2px 20px rgba(0,0,0,0.5); }
     .lead { margin: 0 0 1.5rem; font-size: 0.95rem; opacity: 0.92; }
-    .form { display: grid; gap: 0.75rem; }
+    .form { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+    .form .error, .form .btn-login { grid-column: 1 / -1; }
     .field { display: grid; gap: 0.3rem; text-align: left; font-size: 0.8rem; font-weight: 600; }
     .field input { box-sizing: border-box; width: 100%; min-height: 48px; padding: 0 1rem; border: 1px solid rgba(255,255,255,0.55); border-radius: 10px; background: rgba(255,255,255,0.14); color: #fff; font-size: 1rem; backdrop-filter: blur(8px); }
     .field input:focus { outline: 2px solid #fff; outline-offset: 1px; }
@@ -50,6 +51,7 @@ import { galleryAccessMessage, galleryDisplayTitle } from '../gallery-view/galle
     .btn-login:disabled { opacity: 0.7; cursor: wait; }
     .unavailable { margin: 0.5rem 0 0; font-size: 1rem; line-height: 1.5; }
     .error { margin: 0; padding: 0.6rem 0.8rem; border-radius: 8px; background: rgba(255,255,255,0.94); color: #9B2C2C; font-size: 0.875rem; }
+    @media (max-width: 380px) { .form { grid-template-columns: 1fr; } }
     @media (prefers-reduced-motion: reduce) { .entry { animation: none; } }
   `]
 })

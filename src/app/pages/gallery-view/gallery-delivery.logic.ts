@@ -46,6 +46,32 @@ export function swipeDirection(deltaX: number, deltaY: number): 'next' | 'prev' 
   return deltaX < 0 ? 'next' : 'prev';
 }
 
+interface ShareDevice {
+  share?: (data: { title: string; url: string }) => Promise<void>;
+  clipboard?: { writeText: (text: string) => Promise<void> };
+}
+
+/**
+ * Comparte el enlace con lo que tenga el dispositivo y devuelve qué decirle a la clienta.
+ * Null si no hay nada que decir: cerrar el menú de compartir no es un error.
+ */
+export async function shareLink(device: ShareDevice, title: string, url: string): Promise<string | null> {
+  if (device.share) {
+    try {
+      await device.share({ title, url });
+      return null;
+    } catch (e) {
+      if ((e as { name?: string })?.name === 'AbortError') return null;
+    }
+  }
+  try {
+    await device.clipboard!.writeText(url);
+    return 'Enlace copiado';
+  } catch {
+    return `No se pudo copiar. Este es tu enlace: ${url}`;
+  }
+}
+
 /** Con una foto a todo el ancho, la miniatura de 800 px se vería borrosa. */
 export function gridImageUrl(photo: { thumbUrl: string; webUrl?: string }, gridLayout?: string): string {
   return gridLayout === 'single' ? photo.webUrl || photo.thumbUrl : photo.thumbUrl;
