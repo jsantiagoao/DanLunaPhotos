@@ -71,7 +71,8 @@
     .spacing-compact { --grid-gap: 2px; }
     .spacing-normal { --grid-gap: 8px; }
     .spacing-wide { --grid-gap: 16px; }
-    .layout-masonry { column-count: 3; column-gap: var(--grid-gap); }
+    .layout-masonry { display: flex; align-items: flex-start; gap: var(--grid-gap); }
+    .masonry-col { flex: 1 1 0; min-width: 0; }
     .layout-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--grid-gap); }
     .layout-grid .photo-item { aspect-ratio: 1; }
     .layout-horizontal { display: flex; flex-wrap: wrap; gap: var(--grid-gap); }
@@ -165,7 +166,6 @@
       .na-btn { width: 44px; height: 44px; }
       .fav-btn { width: 44px; height: 44px; }
       .select-check { width: 26px; height: 26px; }
-      .layout-masonry { column-count: 2; }
       .layout-grid { grid-template-columns: repeat(2, 1fr); }
       .layout-horizontal .photo-item { height: 180px; }
       .cover-fullscreen { height: 100svh; }

@@ -4,6 +4,14 @@ Todos los cambios notables del proyecto se documentan aquí.
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/1.0.0/).
 Versionado semántico según [SemVer](https://semver.org/lang/es/).
 
+## [Unreleased]
+
+### Changed
+- La portada de la galería ya no se oscurece: solo lleva un degradado arriba y otro abajo, como Pixieset.
+
+### Fixed
+- Masonry mostraba las fotos fuera de orden: llenaba cada columna de arriba abajo. Ahora se lee de izquierda a derecha.
+
 ## [1.8.1] - 2026-11-02
 
 ### Changed

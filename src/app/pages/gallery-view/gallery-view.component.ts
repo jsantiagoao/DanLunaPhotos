@@ -15,6 +15,10 @@ import { filterPhotos, neighbourPhoto } from './gallery-filter.logic';
 import { GalleryDownload } from './gallery-download';
 import { galleryDisplayTitle, gridImageUrl, photoAspectRatio, resolveDesign, shareLink, swipeDirection, withPublishedInfo } from './gallery-delivery.logic';
 import { GallerySlideshow } from './gallery-slideshow';
+import { masonryColumns } from './masonry-columns';
+
+/** Mismo corte que el @media de gallery-view.component.scss. */
+const NARROW_QUERY = '(max-width: 768px)';
 
 @Component({
   selector: 'app-gallery-view',
@@ -47,6 +51,9 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
   notice = signal<string | null>(null);
   private noticeTimer: ReturnType<typeof setTimeout> | null = null;
   private touchStart: { x: number; y: number } | null = null;
+  private narrowQuery: MediaQueryList | null = null;
+  private readonly onNarrowChange = () => this.columnCount.set(this.narrowQuery?.matches ? 2 : 3);
+  readonly columnCount = signal(3);
 
   get displayTitle(): string {
     return galleryDisplayTitle(this.gallery);
@@ -61,6 +68,9 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.narrowQuery = window.matchMedia?.(NARROW_QUERY) ?? null;
+    this.narrowQuery?.addEventListener('change', this.onNarrowChange);
+    this.onNarrowChange();
     this.slug = this.route.snapshot.paramMap.get('slug') || '';
     this.token = sessionStorage.getItem(`gallery_token_${this.slug}`) || '';
     const data = sessionStorage.getItem(`gallery_data_${this.slug}`);
@@ -100,6 +110,7 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.narrowQuery?.removeEventListener('change', this.onNarrowChange);
     this.slideshow.stop();
     this.download?.stop();
     if (this.noticeTimer) clearTimeout(this.noticeTimer);
@@ -118,6 +129,10 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
 
   displayedPhotos(): GalleryPhoto[] {
     return filterPhotos(this.photos(), this.activeSet, this.showFavoritesOnly);
+  }
+
+  masonryColumns(): GalleryPhoto[][] {
+    return masonryColumns(this.displayedPhotos(), this.columnCount());
   }
 
   startSlideshow() {

@@ -85,16 +85,30 @@
 
   <!-- Grid -->
   <div class="photo-grid" [class]="'layout-' + design.gridLayout + ' spacing-' + design.spacing">
-    @for (p of displayedPhotos(); track p._id) {
-      <div class="photo-item" [style.aspect-ratio]="aspectRatio(p)" (click)="openLightbox(p)">
-        <img [src]="gridImage(p)" [alt]="p.filename" loading="lazy" />
-        <button class="fav-btn" [class.active]="p.isFavorite" [attr.aria-pressed]="!!p.isFavorite" aria-label="Marcar como favorita" (click)="toggleFav(p); $event.stopPropagation()"><app-gallery-icon name="heart" /></button>
-        @if (gallery.downloads?.enabled) {
-          <input type="checkbox" class="select-check" aria-label="Seleccionar foto" [checked]="selectedIds.includes(p._id)" (click)="toggleSelect(p._id); $event.stopPropagation()" />
-        }
-      </div>
+    @if (design.gridLayout === 'masonry') {
+      @for (column of masonryColumns(); track $index) {
+        <div class="masonry-col">
+          @for (p of column; track p._id) {
+            <ng-container [ngTemplateOutlet]="photoItem" [ngTemplateOutletContext]="{ $implicit: p }" />
+          }
+        </div>
+      }
+    } @else {
+      @for (p of displayedPhotos(); track p._id) {
+        <ng-container [ngTemplateOutlet]="photoItem" [ngTemplateOutletContext]="{ $implicit: p }" />
+      }
     }
   </div>
+
+  <ng-template #photoItem let-p>
+    <div class="photo-item" [style.aspect-ratio]="aspectRatio(p)" (click)="openLightbox(p)">
+      <img [src]="gridImage(p)" [alt]="p.filename" loading="lazy" />
+      <button class="fav-btn" [class.active]="p.isFavorite" [attr.aria-pressed]="!!p.isFavorite" aria-label="Marcar como favorita" (click)="toggleFav(p); $event.stopPropagation()"><app-gallery-icon name="heart" /></button>
+      @if (gallery.downloads?.enabled) {
+        <input type="checkbox" class="select-check" aria-label="Seleccionar foto" [checked]="selectedIds.includes(p._id)" (click)="toggleSelect(p._id); $event.stopPropagation()" />
+      }
+    </div>
+  </ng-template>
 
   @if (download && download.state.kind !== 'idle' && !showDownloadScreen) {
     <div class="download-status" [class.above-selection]="selectedIds.length" role="status">
