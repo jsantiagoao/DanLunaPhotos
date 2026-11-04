@@ -3,7 +3,8 @@
 
     /* Cover Full Screen */
     .cover-fullscreen { box-sizing: border-box; height: 100vh; background-size: cover; position: relative; display: flex; align-items: center; justify-content: center; background-color: #2D2420; transition: background-image 0.5s ease; }
-    .cover-fullscreen::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 75% 60% at center, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.42) 55%, rgba(0,0,0,0.28) 100%); }
+    /* La foto no se apaga: solo un degradado arriba y otro abajo, como Pixieset. El texto se apoya en su sombra. */
+    .cover-fullscreen::before { content: ''; position: absolute; inset: 0; background: linear-gradient(rgba(0,0,0,0.2), transparent 18%), linear-gradient(transparent 60%, rgba(0,0,0,0.4)); }
     .cover-fs-overlay { box-sizing: border-box; max-width: min(90%, 1000px); text-align: center; color: var(--cover-text-color, #fff); display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
     .cover-heading { display: flex; flex-direction: column; align-items: inherit; max-width: 100%; }
 
@@ -14,21 +15,15 @@
      */
     .cover-izquierda, .cover-novela, .cover-diario { justify-content: flex-start; }
     .cover-izquierda .cover-fs-overlay, .cover-novela .cover-fs-overlay, .cover-diario .cover-fs-overlay { align-items: flex-start; text-align: left; padding-left: clamp(1.5rem, 5vw, 4rem); }
-    .cover-izquierda::before { background: rgba(0,0,0,0.42); }
     .cover-izquierda .cover-fs-overlay { max-width: 60%; }
     .cover-novela::before { background: linear-gradient(90deg, rgba(255,255,255,0.92) 35%, transparent 55%); }
     .cover-novela .cover-fs-overlay { max-width: 38%; color: var(--cover-text-color, #2D2420); }
     .cover-diario::before { background: linear-gradient(90deg, rgba(255,255,255,0.9) 30%, transparent 50%); }
     .cover-diario .cover-fs-overlay { max-width: 34%; color: var(--cover-text-color, #2D2420); }
     .cover-vintage, .cover-divisor { align-items: flex-end; padding-bottom: clamp(3rem, 10vh, 6rem); }
-    .cover-vintage::before { background: rgba(0,0,0,0.55); }
-    .cover-divisor::before { background: rgba(0,0,0,0.3); }
     .cover-marco { border: clamp(12px, 4vmin, 40px) solid #f5f5f5; }
-    .cover-raya::before { background: rgba(0,0,0,0.45); }
     .cover-raya .cover-heading::after { content: ''; display: block; width: 60%; height: 1px; background: currentColor; opacity: 0.5; margin: 1.25rem auto 0; }
-    .cover-sello::before { background: rgba(0,0,0,0.3); }
     .cover-sello .cover-heading { padding: 1.5rem 2rem; border: 1px solid color-mix(in srgb, currentColor 55%, transparent); }
-    .cover-contorno::before { background: rgba(0,0,0,0.55); }
     .cover-contorno .cover-fs-overlay { padding: 2.5rem 3rem; border: 1px solid color-mix(in srgb, currentColor 45%, transparent); }
     .cover-logo-icon { margin-bottom: 0.5rem; }
     /* Máscara con transparencia real: el logo toma el color del texto de la portada. */
