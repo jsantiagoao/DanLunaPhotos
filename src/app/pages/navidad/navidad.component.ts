@@ -5,13 +5,14 @@ import { NavbarComponent } from '../../components/organisms/navbar/navbar.compon
 import { BookingService } from '../agendar/booking.service';
 import { SeoService } from '../../shared/seo/seo.service';
 import { ChristmasCalendarComponent } from './christmas-calendar.component';
+import { ErrorDialogComponent } from '../../components/molecules/error-dialog/error-dialog.component';
 import {
   APARTADO_AMOUNT, CAMPAIGN_NAME, CAMPAIGN_SUBTITLE, CHRISTMAS_INCLUDES, LOCATION,
 } from './christmas-includes.data';
 import {
   EXTRA_PERSON_PRICE, MAX_AFORO, MAX_PERSONAS, MAX_PERSONAS_EXTRA, PET_SIZES,
   emptyChristmasForm, humanDate, humanSlot, priceChangeNotice, sessionTotal, toBookingRequest,
-  validateChristmasForm, whatsappConfirmUrl, type ChristmasForm, type CampaignLimits,
+  findChristmasFormProblem, whatsappConfirmUrl, type ChristmasForm, type CampaignLimits,
 } from './christmas-booking.logic';
 import { SESSION_MINUTES, initialCalendarMonth, type BusyInterval, type CampaignConfig } from './christmas-slots';
 import { resolvePaymentInfo, formatClabe, type PaymentInfo } from './christmas-payment';
@@ -31,7 +32,7 @@ import type { CampaignStatus } from '../agendar/booking.models';
   selector: 'app-navidad',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DecimalPipe, FormsModule, NavbarComponent, ChristmasCalendarComponent],
+  imports: [DecimalPipe, FormsModule, NavbarComponent, ChristmasCalendarComponent, ErrorDialogComponent],
   templateUrl: './navidad.component.html',
   styleUrl: './navidad.component.scss',
 })
@@ -43,6 +44,12 @@ export class NavidadComponent implements OnInit, OnDestroy {
   protected readonly loading = signal(false);
   protected readonly sending = signal(false);
   protected readonly error = signal<string | null>(null);
+  /**
+   * Error al pulsar "Reservar": va en un modal y no en el aviso de arriba, que la clienta
+   * no ve desde el botón. `formErrorField` es el campo al que vuelve el foco al cerrarlo.
+   */
+  protected readonly formError = signal<string | null>(null);
+  private formErrorField: string | null = null;
   protected readonly intervals = signal<BusyInterval[]>([]);
   /** Precio vigente y lugares de preventa; lo publica el backend con la agenda. */
   protected readonly campaign = signal<CampaignStatus | null>(null);
@@ -237,14 +244,14 @@ export class NavidadComponent implements OnInit, OnDestroy {
   protected reservar(): void {
     if (this.honeypot) return;
 
-    const problema = validateChristmasForm(this.form, this.limits());
-    if (problema) { this.error.set(problema); return; }
+    const problema = findChristmasFormProblem(this.form, this.limits());
+    if (problema) { this.mostrarErrorDeFormulario(problema.message, problema.field); return; }
 
     // Sin paquete configurado en la campaña no se puede registrar la sesión (quedaría
     // sin precio ni nombre en el panel). Es un error de configuración, no de la clienta:
     // se bloquea el envío y se avisa para que se corrija en Studio.
     if (!(this.config()?.content?.packageId || '').trim()) {
-      this.error.set('Esta campaña aún no tiene un paquete configurado. Escríbenos por WhatsApp para apartar tu lugar.');
+      this.mostrarErrorDeFormulario('Esta campaña aún no tiene un paquete configurado. Escríbenos por WhatsApp para apartar tu lugar.');
       return;
     }
 
@@ -287,11 +294,24 @@ export class NavidadComponent implements OnInit, OnDestroy {
       },
       error: (e) => {
         this.sending.set(false);
-        this.error.set(e?.error?.message || 'No pudimos apartar tu lugar. Intenta de nuevo.');
+        this.mostrarErrorDeFormulario(e?.error?.message || 'No pudimos apartar tu lugar. Intenta de nuevo.');
         // Un 409 significa que alguien mas se adelanto: hay que volver a elegir horario.
         if (e?.status === 409) { this.step.set('detalle'); this.loadAvailability(); }
       },
     });
+  }
+
+  private mostrarErrorDeFormulario(message: string, field: string | null = null): void {
+    this.formErrorField = field;
+    this.formError.set(message);
+  }
+
+  /** Al cerrar el modal, el foco va al campo que hay que corregir. */
+  protected cerrarErrorDeFormulario(): void {
+    const field = this.formErrorField;
+    this.formError.set(null);
+    this.formErrorField = null;
+    if (field && typeof document !== 'undefined') document.getElementById(field)?.focus();
   }
 
   // ── Confirmacion ────────────────────────────────────────────

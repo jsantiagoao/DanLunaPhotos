@@ -91,35 +91,52 @@ function digits(value: string): string {
   return (value || '').replace(/\D/g, '');
 }
 
+/** Un problema del formulario y el id del campo que hay que corregir (null si no hay campo). */
+export interface ChristmasFormProblem {
+  field: string | null;
+  message: string;
+}
+
 /** El primer problema del formulario, en la voz con la que se le habla a la clienta. */
 export function validateChristmasForm(form: ChristmasForm, limits: CampaignLimits = DEFAULT_LIMITS): string | null {
-  if ((form.name || '').trim().length < 3) return 'Escribe tu nombre completo';
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email || '')) return 'Escribe un correo electrónico válido';
-  if (digits(form.phone).length !== 10) return 'El teléfono debe tener 10 dígitos';
+  return findChristmasFormProblem(form, limits)?.message ?? null;
+}
+
+/** Como `validateChristmasForm`, pero dice de qué campo es, para llevar ahí el foco. */
+export function findChristmasFormProblem(
+  form: ChristmasForm,
+  limits: CampaignLimits = DEFAULT_LIMITS,
+): ChristmasFormProblem | null {
+  const problem = (field: string | null, message: string): ChristmasFormProblem => ({ field, message });
+
+  if ((form.name || '').trim().length < 3) return problem('x-name', 'Escribe tu nombre completo');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email || '')) return problem('x-email', 'Escribe un correo electrónico válido');
+  if (digits(form.phone).length !== 10) return problem('x-phone', 'El teléfono debe tener 10 dígitos');
 
   const personas = Number(form.personas);
   if (!personas || personas < 1 || personas > limits.maxPersonas) {
-    return `El número de personas debe estar entre 1 y ${limits.maxPersonas}`;
+    return problem('x-personas', `El número de personas debe estar entre 1 y ${limits.maxPersonas}`);
   }
 
   const extra = Number(form.personasExtra) || 0;
   if (extra < 0 || extra > limits.maxExtra) {
-    return `Puedes agregar hasta ${limits.maxExtra} personas extra`;
+    return problem('x-extra', `Puedes agregar hasta ${limits.maxExtra} personas extra`);
   }
   if (personas + extra > limits.aforo) {
-    return `En el set caben hasta ${limits.aforo} personas`;
+    return problem('x-extra', `En el set caben hasta ${limits.aforo} personas`);
   }
 
   if (form.mascota) {
-    if (!(PET_SIZES as readonly string[]).includes(form.mascotaTamano)) return 'Elige el tamaño de tu mascota';
-    if (!(form.mascotaNombre || '').trim()) return 'Escribe el nombre de tu mascota';
+    if (!(PET_SIZES as readonly string[]).includes(form.mascotaTamano)) return problem('x-pet-size', 'Elige el tamaño de tu mascota');
+    if (!(form.mascotaNombre || '').trim()) return problem('x-pet-name', 'Escribe el nombre de tu mascota');
   }
 
   if ((form.peticionEspecial || '').length > MAX_PETICION) {
-    return `La petición especial no puede pasar de ${MAX_PETICION} caracteres`;
+    return problem('x-peticion', `La petición especial no puede pasar de ${MAX_PETICION} caracteres`);
   }
 
-  if (!form.date || !form.time) return 'Elige el día y el horario de tu sesión';
+  // El día y la hora se eligen en el paso anterior: no hay campo aquí al cual llevar el foco.
+  if (!form.date || !form.time) return problem(null, 'Elige el día y el horario de tu sesión');
 
   return null;
 }

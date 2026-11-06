@@ -4,6 +4,11 @@ Todos los cambios notables del proyecto se documentan aquí.
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/1.0.0/).
 Versionado semántico según [SemVer](https://semver.org/lang/es/).
 
+## [Unreleased]
+
+### Fixed
+- Sesiones navideñas: los errores del formulario salían hasta arriba de la página y la clienta creía que "Reservar" no funcionaba. Ahora aparecen en un modal y, al cerrarlo, el cursor va al campo que hay que corregir. El aviso de cambio de precio se queda donde estaba.
+
 ## [1.8.2] - 2026-11-04
 
 ### Changed

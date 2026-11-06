@@ -1,0 +1,16 @@
+@if (message(); as text) {
+  <div class="error-dialog" (click)="closeFromBackdrop($event)">
+    <div class="error-dialog__card" role="alertdialog" aria-modal="true"
+         [attr.aria-labelledby]="titleId" [attr.aria-describedby]="messageId"
+         (keydown.escape)="close()">
+      <span class="error-dialog__icon" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12.5"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </span>
+      <h2 class="error-dialog__title" [id]="titleId">{{ title() }}</h2>
+      <p class="error-dialog__message" [id]="messageId">{{ text }}</p>
+      <button #closeButton type="button" class="error-dialog__button" (click)="close()">Entendido</button>
+    </div>
+  </div>
+}

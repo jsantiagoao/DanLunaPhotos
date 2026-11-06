@@ -1,6 +1,7 @@
 import {
   EXTRA_PERSON_PRICE, MAX_AFORO, MAX_PERSONAS, MAX_PERSONAS_EXTRA, PET_SIZES,
   emptyChristmasForm, priceChangeNotice, sessionTotal, toBookingRequest, validateChristmasForm, whatsappConfirmUrl,
+  findChristmasFormProblem,
 } from './christmas-booking.logic';
 
 /**
@@ -251,5 +252,46 @@ describe('priceChangeNotice', () => {
 
   it('no avisa si no hay campaña', () => {
     expect(priceChangeNotice(1800, null)).toBeNull();
+  });
+});
+
+/**
+ * Incidencia: el error salía hasta arriba y la clienta no sabía por qué "Reservar" no
+ * hacía nada. Ahora se muestra en un modal y, al cerrarlo, el foco va al campo que
+ * falta corregir: por eso el problema dice de qué campo es.
+ */
+describe('findChristmasFormProblem', () => {
+  it('should_return_null_when_the_form_is_valid', () => {
+    expect(findChristmasFormProblem(valido())).toBeNull();
+  });
+
+  it('should_point_to_the_phone_field_when_it_has_extra_digits', () => {
+    expect(findChristmasFormProblem(valido({ phone: '+52 442 123 4567' }))).toEqual({
+      field: 'x-phone', message: 'El teléfono debe tener 10 dígitos',
+    });
+  });
+
+  it.each([
+    [{ name: 'An' }, 'x-name'],
+    [{ email: 'ana@' }, 'x-email'],
+    [{ personas: 6 }, 'x-personas'],
+    [{ personas: 2, personasExtra: 4 }, 'x-extra'],
+    [{ mascota: true, mascotaNombre: 'Nieve' }, 'x-pet-size'],
+    [{ mascota: true, mascotaTamano: 'chico' }, 'x-pet-name'],
+    [{ peticionEspecial: 'x'.repeat(501) }, 'x-peticion'],
+  ])('should_name_the_field_with_the_problem %p', (over, field) => {
+    expect(findChristmasFormProblem(valido(over))?.field).toBe(field);
+  });
+
+  it('should_not_name_a_field_when_the_date_is_missing', () => {
+    // El día y la hora se eligen en el paso anterior: no hay campo al cual llevar el foco.
+    expect(findChristmasFormProblem(valido({ time: '' }))).toEqual({
+      field: null, message: 'Elige el día y el horario de tu sesión',
+    });
+  });
+
+  it('should_give_the_same_message_as_validateChristmasForm', () => {
+    const form = valido({ email: 'x' });
+    expect(findChristmasFormProblem(form)?.message).toBe(validateChristmasForm(form));
   });
 });
