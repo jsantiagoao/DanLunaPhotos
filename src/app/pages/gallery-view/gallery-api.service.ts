@@ -68,7 +68,8 @@ export class GalleryApiService {
     });
   }
 
-  trackView(slug: string): Observable<unknown> {
-    return this.http.post(`${this.base(slug)}/view`, {});
+  /** Con la sesión: el servidor cuenta una vista por sesión de la clienta, no por recarga. */
+  trackView(slug: string, token: string): Observable<unknown> {
+    return this.http.post(`${this.base(slug)}/view`, {}, { headers: this.authHeaders(token) });
   }
 }

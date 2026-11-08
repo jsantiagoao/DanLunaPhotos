@@ -165,4 +165,9 @@ describe('GalleryViewComponent · favoritas y descargas', () => {
     fixture.detectChanges();
     expect(c.displayedPhotos().map((p) => p._id)).toEqual(['a', 'c']);
   });
+
+  it('should_count_the_view_with_the_session_and_ignore_its_errors', () => {
+    setup();
+    expect(api['trackView']).toHaveBeenCalledWith('boda', 'tk');
+  });
 });

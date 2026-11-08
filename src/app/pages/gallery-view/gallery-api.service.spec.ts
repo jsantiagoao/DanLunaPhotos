@@ -77,9 +77,11 @@ describe('GalleryApiService', () => {
   });
 
   it('should_track_view', () => {
-    service.trackView(slug).subscribe();
+    service.trackView(slug, token).subscribe();
     const req = httpMock.expectOne(`${base}/view`);
     expect(req.request.method).toBe('POST');
+    // Con la sesión: el servidor cuenta una vista por sesión, no por recarga.
+    expect(req.request.headers.get('X-Gallery-Token')).toBe(token);
     req.flush({});
   });
 });

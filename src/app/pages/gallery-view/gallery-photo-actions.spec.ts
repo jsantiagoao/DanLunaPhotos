@@ -6,7 +6,7 @@ const settle = () => new Promise((r) => setTimeout(r, 0));
 describe('GalleryPhotoActions', () => {
   function setup(port: { setFavorite?: jest.Mock; downloadUrl?: jest.Mock } = {}) {
     const view: jest.Mocked<PhotoActionsView> = {
-      showFavorite: jest.fn(), notice: jest.fn(), sessionExpired: jest.fn(), openFile: jest.fn(),
+      showFavorite: jest.fn(), notice: jest.fn(), accessLost: jest.fn(), openFile: jest.fn(),
     };
     const actions = new GalleryPhotoActions({
       setFavorite: port.setFavorite ?? jest.fn((_id: string, f: boolean) => Promise.resolve(f)),
@@ -28,7 +28,7 @@ describe('GalleryPhotoActions', () => {
     const { actions, view } = setup({ setFavorite: jest.fn(() => Promise.reject({ status: 401 })) });
     actions.toggleFavorite('a', false);
     await settle();
-    expect(view.sessionExpired).toHaveBeenCalled();
+    expect(view.accessLost).toHaveBeenCalled();
     expect(view.showFavorite).toHaveBeenLastCalledWith('a', false);
     expect(view.notice).toHaveBeenCalledWith(FAVORITE_ERROR);
   });
@@ -58,7 +58,18 @@ describe('GalleryPhotoActions', () => {
   it('should_send_back_to_the_access_page_when_the_session_expired_on_a_download', async () => {
     const { actions, view } = setup({ downloadUrl: jest.fn(() => Promise.reject({ status: 401 })) });
     await actions.download('a');
-    expect(view.sessionExpired).toHaveBeenCalled();
+    expect(view.accessLost).toHaveBeenCalled();
     expect(view.notice).not.toHaveBeenCalled();
+  });
+
+  it('should_leave_the_gallery_when_it_expired_while_open', async () => {
+    const { actions, view } = setup({
+      setFavorite: jest.fn(() => Promise.reject({ status: 410 })),
+      downloadUrl: jest.fn(() => Promise.reject({ status: 410 })),
+    });
+    actions.toggleFavorite('a', false);
+    await settle();
+    await actions.download('b');
+    expect(view.accessLost).toHaveBeenCalledTimes(2);
   });
 });

@@ -91,7 +91,8 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
 
     this.loadPhotos();
     this.refreshPublishedInfo();
-    this.api.trackView(this.slug).subscribe();
+    // La vista es estadística: si falla, la clienta no tiene por qué enterarse.
+    this.api.trackView(this.slug, this.token).subscribe({ error: () => undefined });
   }
 
   private showGallery(gallery: Gallery) {
@@ -221,7 +222,7 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
     window.location.assign(url);
   }
 
-  private expireSession() {
+  private leaveToAccessPage() {
     sessionStorage.removeItem(`gallery_token_${this.slug}`);
     this.router.navigate(['/galeria', this.slug]);
   }
@@ -237,7 +238,7 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
         showFavorite: (id, favorite) =>
           this.photos.update((list) => list.map((p) => (p._id === id ? { ...p, isFavorite: favorite } : p))),
         notice: (message) => this.showNotice(message),
-        sessionExpired: () => this.expireSession(),
+        accessLost: () => this.leaveToAccessPage(),
         openFile: (url) => this.openFile(url),
       },
     );
@@ -251,7 +252,7 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
       },
       sessionStorage,
       this.slug,
-      () => this.expireSession(),
+      () => this.leaveToAccessPage(),
       (url) => this.openFile(url),
     );
   }

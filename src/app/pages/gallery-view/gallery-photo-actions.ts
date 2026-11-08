@@ -17,13 +17,15 @@ export interface PhotoActionsPort {
 export interface PhotoActionsView {
   showFavorite(photoId: string, favorite: boolean): void;
   notice(message: string): void;
-  sessionExpired(): void;
+  /** Sesión vencida (401) o galería vencida (410): la pantalla de acceso explica cuál. */
+  accessLost(): void;
   openFile(url: string): void;
 }
 
 export const DOWNLOAD_ERROR = 'No pudimos descargar la foto. Inténtalo de nuevo.';
 
-const isSessionExpired = (error: unknown) => (error as { status?: number } | null)?.status === 401;
+const ACCESS_LOST = [401, 410];
+const lostAccess = (error: unknown) => ACCESS_LOST.includes((error as { status?: number } | null)?.status ?? 0);
 /** Mensaje apto para la clienta: el interceptor de errores ya lo normalizó (403 sin descargas, 404 foto borrada). */
 const serverMessage = (error: unknown) => (error as { error?: { message?: string } } | null)?.error?.message || null;
 
@@ -38,7 +40,7 @@ export class GalleryPhotoActions {
           try {
             return await this.port.setFavorite(photoId, favorite);
           } catch (error) {
-            if (isSessionExpired(error)) this.view.sessionExpired();
+            if (lostAccess(error)) this.view.accessLost();
             throw error;
           }
         },
@@ -61,7 +63,7 @@ export class GalleryPhotoActions {
       try {
         this.view.openFile(await this.port.downloadUrl(photoId));
       } catch (error) {
-        if (isSessionExpired(error)) this.view.sessionExpired();
+        if (lostAccess(error)) this.view.accessLost();
         else this.view.notice(serverMessage(error) ?? DOWNLOAD_ERROR);
       }
     });

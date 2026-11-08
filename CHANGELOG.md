@@ -7,6 +7,8 @@ Versionado semántico según [SemVer](https://semver.org/lang/es/).
 ## [1.9.0] - 2026-11-08
 
 ### Fixed
+- Galería: si la galería vence mientras la clienta la tiene abierta, ya no se puede seguir viendo ni descargando; regresa a la pantalla de acceso, que explica que venció.
+- Galería: recargar la página ya no suma vistas; el sitio manda la sesión y el servidor cuenta una vista por sesión.
 - Galería: el corazón del visor ampliado no se veía relleno al marcar una favorita (el estilo no alcanzaba el ícono). La clienta volvía a tocarlo y la favorita se borraba. Ahora se ve igual que en la cuadrícula: corazón rojo sobre fondo claro.
 - Galería: después de tocar varias veces el corazón en el visor, la cuadrícula y el visor podían mostrar estados distintos. Ahora el visor lee la foto de la misma lista que la cuadrícula.
 
