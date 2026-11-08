@@ -13,6 +13,8 @@ Versionado semántico según [SemVer](https://semver.org/lang/es/).
 ### Added
 - Galería: varios toques seguidos sobre el corazón se resuelven sin errores. La pantalla cambia al instante, va una sola petición por foto y se guarda el último estado elegido. Si no se puede guardar, el corazón regresa y aparece un aviso.
 - Galería: la descarga de una foto desde el visor queda registrada en la Actividad de Studio y usa un enlace recién firmado (antes vencía a la hora). Los clics de más mientras descarga se ignoran.
+- Galería: si la descarga no se puede hacer, el aviso dice el motivo (descargas deshabilitadas, foto eliminada).
+- Galería: con "solo favoritas" activo, quitar el corazón en el visor ya no deja la navegación atorada; la foto sigue a la vista hasta cerrar el visor.
 
 ## [1.8.3] - 2026-11-05
 

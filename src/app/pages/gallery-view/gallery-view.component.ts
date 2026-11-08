@@ -13,15 +13,12 @@ import {
 } from './gallery.models';
 import { filterPhotos, neighbourPhoto } from './gallery-filter.logic';
 import { GalleryDownload } from './gallery-download';
-import { FavoriteSync } from './favorite-sync';
-import { SingleFlight } from './single-flight';
+import { GalleryPhotoActions } from './gallery-photo-actions';
 import { galleryDisplayTitle, gridImageUrl, photoAspectRatio, resolveDesign, shareLink, swipeDirection, withPublishedInfo } from './gallery-delivery.logic';
 import { GallerySlideshow } from './gallery-slideshow';
 import { masonryColumns } from './masonry-columns';
 
 /** Mismo corte que el @media de gallery-view.component.scss. */
-const isSessionExpired = (error: unknown) => (error as { status?: number } | null)?.status === 401;
-
 const NARROW_QUERY = '(max-width: 768px)';
 
 @Component({
@@ -52,8 +49,7 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
   showDownloadScreen = false;
   download!: GalleryDownload;
   readonly slideshow = new GallerySlideshow<GalleryPhoto>();
-  private readonly favorites = this.createFavoriteSync();
-  private readonly photoDownloads = new SingleFlight();
+  private readonly photoActions = this.createPhotoActions();
   lightboxWebLoaded = false;
   /** Aviso integrado: reemplaza a alert(), que interrumpe y se ve ajeno a la galería. */
   notice = signal<string | null>(null);
@@ -136,7 +132,7 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
   }
 
   displayedPhotos(): GalleryPhoto[] {
-    return filterPhotos(this.photos(), this.activeSet, this.showFavoritesOnly);
+    return filterPhotos(this.photos(), this.activeSet, this.showFavoritesOnly, this.lightboxId());
   }
 
   masonryColumns(): GalleryPhoto[][] {
@@ -208,26 +204,16 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
     }
   }
 
-  /** Los toques repetidos los resuelve FavoriteSync (optimista, gana la última intención). */
   toggleFav(photo: GalleryPhoto) {
-    this.favorites.toggle(photo._id, !!photo.isFavorite);
+    this.photoActions.toggleFavorite(photo._id, !!photo.isFavorite);
   }
 
   isDownloadingPhoto(photo: GalleryPhoto): boolean {
-    return this.photoDownloads.isPending(photo._id);
+    return this.photoActions.isDownloading(photo._id);
   }
 
-  /** Una descarga por foto a la vez: los clics de más se ignoran (SingleFlight). */
   downloadPhoto(photo: GalleryPhoto) {
-    void this.photoDownloads.run(photo._id, async () => {
-      try {
-        const { url } = await firstValueFrom(this.api.downloadPhoto(this.slug, this.token, photo._id));
-        this.openFile(url);
-      } catch (error) {
-        if (isSessionExpired(error)) this.expireSession();
-        else this.showNotice('No pudimos descargar la foto. Inténtalo de nuevo.');
-      }
-    });
+    void this.photoActions.download(photo._id);
   }
 
   /** La URL trae Content-Disposition: attachment, así que el navegador descarga sin salir de la galería. */
@@ -240,21 +226,20 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
     this.router.navigate(['/galeria', this.slug]);
   }
 
-  private createFavoriteSync(): FavoriteSync {
-    return new FavoriteSync(
+  private createPhotoActions(): GalleryPhotoActions {
+    return new GalleryPhotoActions(
       {
-        save: async (photoId, favorite) => {
-          try {
-            return (await firstValueFrom(this.api.setFavorite(this.slug, this.token, photoId, favorite))).favorite;
-          } catch (error) {
-            if (isSessionExpired(error)) this.expireSession();
-            throw error;
-          }
-        },
+        setFavorite: async (id, favorite) =>
+          (await firstValueFrom(this.api.setFavorite(this.slug, this.token, id, favorite))).favorite,
+        downloadUrl: async (id) => (await firstValueFrom(this.api.downloadPhoto(this.slug, this.token, id))).url,
       },
-      (photoId, favorite) =>
-        this.photos.update((list) => list.map((p) => (p._id === photoId ? { ...p, isFavorite: favorite } : p))),
-      (message) => this.showNotice(message),
+      {
+        showFavorite: (id, favorite) =>
+          this.photos.update((list) => list.map((p) => (p._id === id ? { ...p, isFavorite: favorite } : p))),
+        notice: (message) => this.showNotice(message),
+        sessionExpired: () => this.expireSession(),
+        openFile: (url) => this.openFile(url),
+      },
     );
   }
 

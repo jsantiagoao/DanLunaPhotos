@@ -134,4 +134,35 @@ describe('GalleryViewComponent · favoritas y descargas', () => {
     expect(opened).toEqual([]);
     expect(c.notice()).toContain('descargar');
   });
+
+  it('should_show_the_reason_when_the_server_refuses_the_download', async () => {
+    const { fixture, c, lbDownload, click } = setup();
+    api['downloadPhoto'].mockReturnValueOnce(
+      timer(0).pipe(switchMap(() => throwError(() => ({ status: 403, error: { message: 'Las descargas no están habilitadas en esta galería' } })))));
+    c.openLightbox(c.photos()[0]);
+    fixture.detectChanges();
+    click(lbDownload());
+    await settle();
+    expect(c.notice()).toBe('Las descargas no están habilitadas en esta galería');
+  });
+
+  it('should_keep_navigating_after_unmarking_a_photo_while_viewing_only_favorites', async () => {
+    const { fixture, c, lbHeart, click, reply } = setup();
+    for (const id of ['a', 'b', 'c']) {
+      c.toggleFav(c.photos().find((p) => p._id === id)!);
+      await reply(favoriteReplies[favoriteReplies.length - 1], { favorite: true });
+    }
+    c.showFavoritesOnly = true;
+    c.openLightbox(c.photos()[1]);
+    fixture.detectChanges();
+    click(lbHeart());
+    await reply(favoriteReplies[favoriteReplies.length - 1], { favorite: false });
+
+    expect(c.lightboxPhoto()?._id).toBe('b');
+    c.nextPhoto();
+    expect(c.lightboxPhoto()?._id).toBe('c');
+    c.closeLightbox();
+    fixture.detectChanges();
+    expect(c.displayedPhotos().map((p) => p._id)).toEqual(['a', 'c']);
+  });
 });

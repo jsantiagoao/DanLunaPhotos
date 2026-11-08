@@ -49,9 +49,11 @@ export class FavoriteSync {
     try {
       while (this.wanted.get(photoId) !== this.saved.get(photoId)) {
         const target = this.wanted.get(photoId)!;
-        this.saved.set(photoId, await this.port.save(photoId, target));
+        const result = await this.port.save(photoId, target);
+        this.saved.set(photoId, result);
+        // El servidor manda: si guardó otro estado del pedido, no se insiste (evita un ciclo).
+        if (result !== target) break;
       }
-      // Si el servidor dejó otro estado del pedido (no debería), manda lo del servidor.
       this.show(photoId, this.saved.get(photoId)!);
     } catch {
       this.show(photoId, this.saved.get(photoId)!);

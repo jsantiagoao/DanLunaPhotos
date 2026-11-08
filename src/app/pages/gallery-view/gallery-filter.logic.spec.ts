@@ -17,6 +17,10 @@ describe('gallery-filter.logic', () => {
       expect(filterPhotos(photos, '', true).map(p => p._id)).toEqual(['2', '4']);
     });
 
+    it('should_keep_the_photo_open_in_the_viewer_even_if_it_stopped_being_favorite', () => {
+      expect(filterPhotos(photos, '', true, '3').map(p => p._id)).toEqual(['2', '3', '4']);
+    });
+
     it('should_combine_set_and_favorites', () => {
       expect(filterPhotos(photos, 'B', true).map(p => p._id)).toEqual(['4']);
     });

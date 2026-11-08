@@ -99,4 +99,14 @@ describe('FavoriteSync', () => {
     expect(shown.get('a')).toBe(false);
     expect(server.calls[1].favorite).toBe(false);
   });
+
+  it('should_trust_the_server_and_stop_when_it_saves_another_state', async () => {
+    const save = jest.fn(() => Promise.resolve(false));
+    const shown = new Map<string, boolean>();
+    const sync = new FavoriteSync({ save }, (id, f) => shown.set(id, f), () => undefined);
+    sync.toggle('a', false);
+    await settle();
+    expect(save).toHaveBeenCalledTimes(1);
+    expect(shown.get('a')).toBe(false);
+  });
 });

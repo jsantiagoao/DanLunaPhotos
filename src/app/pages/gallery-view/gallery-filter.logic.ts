@@ -8,15 +8,20 @@ import { GalleryPhoto } from './gallery.models';
  * comportamiento del filtro y del lightbox sin montar la vista.
  */
 
-/** Fotos visibles segun el set activo y el toggle de favoritas. */
+/**
+ * Fotos visibles segun el set activo y el toggle de favoritas.
+ * `keepId` (la foto abierta en el visor) se queda aunque deje de ser favorita: si
+ * desapareciera, el visor ya no sabría cuál es la anterior ni la siguiente.
+ */
 export function filterPhotos(
   photos: GalleryPhoto[],
   activeSet: string,
   favoritesOnly: boolean,
+  keepId: string | null = null,
 ): GalleryPhoto[] {
   let list = photos;
   if (activeSet) list = list.filter((p) => p.set === activeSet);
-  if (favoritesOnly) list = list.filter((p) => p.isFavorite);
+  if (favoritesOnly) list = list.filter((p) => p.isFavorite || p._id === keepId);
   return list;
 }
 
