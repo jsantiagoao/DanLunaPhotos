@@ -4,6 +4,16 @@ Todos los cambios notables del proyecto se documentan aquí.
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/1.0.0/).
 Versionado semántico según [SemVer](https://semver.org/lang/es/).
 
+## [1.9.0] - 2026-11-08
+
+### Fixed
+- Galería: el corazón del visor ampliado no se veía relleno al marcar una favorita (el estilo no alcanzaba el ícono). La clienta volvía a tocarlo y la favorita se borraba. Ahora se ve igual que en la cuadrícula: corazón rojo sobre fondo claro.
+- Galería: después de tocar varias veces el corazón en el visor, la cuadrícula y el visor podían mostrar estados distintos. Ahora el visor lee la foto de la misma lista que la cuadrícula.
+
+### Added
+- Galería: varios toques seguidos sobre el corazón se resuelven sin errores. La pantalla cambia al instante, va una sola petición por foto y se guarda el último estado elegido. Si no se puede guardar, el corazón regresa y aparece un aviso.
+- Galería: la descarga de una foto desde el visor queda registrada en la Actividad de Studio y usa un enlace recién firmado (antes vencía a la hora). Los clics de más mientras descarga se ignoran.
+
 ## [1.8.3] - 2026-11-05
 
 ### Fixed
