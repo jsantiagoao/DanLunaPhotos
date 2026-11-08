@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, signal, OnInit, OnDestroy } from '@angular/core';
+import { Component, HostListener, computed, inject, signal, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { firstValueFrom } from 'rxjs';
 import { GalleryIconComponent } from '../../components/atoms/gallery-icon/gallery-icon.component';
@@ -13,11 +13,15 @@ import {
 } from './gallery.models';
 import { filterPhotos, neighbourPhoto } from './gallery-filter.logic';
 import { GalleryDownload } from './gallery-download';
+import { FavoriteSync } from './favorite-sync';
+import { SingleFlight } from './single-flight';
 import { galleryDisplayTitle, gridImageUrl, photoAspectRatio, resolveDesign, shareLink, swipeDirection, withPublishedInfo } from './gallery-delivery.logic';
 import { GallerySlideshow } from './gallery-slideshow';
 import { masonryColumns } from './masonry-columns';
 
 /** Mismo corte que el @media de gallery-view.component.scss. */
+const isSessionExpired = (error: unknown) => (error as { status?: number } | null)?.status === 401;
+
 const NARROW_QUERY = '(max-width: 768px)';
 
 @Component({
@@ -39,13 +43,17 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
   coverUrl = '';
   focalPoint = '50% 50%';
   photos = signal<GalleryPhoto[]>([]);
-  lightboxPhoto = signal<GalleryPhoto | null>(null);
+  /** El visor guarda el id y lee la foto de la lista: así visor y cuadrícula nunca se separan. */
+  private readonly lightboxId = signal<string | null>(null);
+  readonly lightboxPhoto = computed(() => this.photos().find((p) => p._id === this.lightboxId()) ?? null);
   activeSet = '';
   selectedIds: string[] = [];
   showFavoritesOnly = false;
   showDownloadScreen = false;
   download!: GalleryDownload;
   readonly slideshow = new GallerySlideshow<GalleryPhoto>();
+  private readonly favorites = this.createFavoriteSync();
+  private readonly photoDownloads = new SingleFlight();
   lightboxWebLoaded = false;
   /** Aviso integrado: reemplaza a alert(), que interrumpe y se ve ajeno a la galería. */
   notice = signal<string | null>(null);
@@ -147,7 +155,7 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
       else if (key === 'ArrowRight') this.slideshow.next();
       else if (key === 'ArrowLeft') this.slideshow.prev();
     } else if (this.lightboxPhoto()) {
-      if (key === 'Escape') this.lightboxPhoto.set(null);
+      if (key === 'Escape') this.closeLightbox();
       else if (key === 'ArrowRight') this.nextPhoto();
       else if (key === 'ArrowLeft') this.prevPhoto();
     } else if (this.showDownloadScreen && key === 'Escape') {
@@ -177,14 +185,18 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
 
   openLightbox(photo: GalleryPhoto) {
     this.lightboxWebLoaded = false;
-    this.lightboxPhoto.set(photo);
+    this.lightboxId.set(photo._id);
+  }
+
+  closeLightbox() {
+    this.lightboxId.set(null);
   }
 
   prevPhoto() {
     const prev = neighbourPhoto(this.displayedPhotos(), this.lightboxPhoto()?._id, -1);
     if (prev) {
       this.lightboxWebLoaded = false;
-      this.lightboxPhoto.set(prev);
+      this.lightboxId.set(prev._id);
     }
   }
 
@@ -192,16 +204,58 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
     const next = neighbourPhoto(this.displayedPhotos(), this.lightboxPhoto()?._id, 1);
     if (next) {
       this.lightboxWebLoaded = false;
-      this.lightboxPhoto.set(next);
+      this.lightboxId.set(next._id);
     }
   }
 
+  /** Los toques repetidos los resuelve FavoriteSync (optimista, gana la última intención). */
   toggleFav(photo: GalleryPhoto) {
-    this.api.toggleFavorite(this.slug, this.token, photo._id).subscribe((res) => {
-      photo.isFavorite = res.favorite;
-      this.photos.set([...this.photos()]);
-      if (this.lightboxPhoto()?._id === photo._id) this.lightboxPhoto.set({ ...photo });
+    this.favorites.toggle(photo._id, !!photo.isFavorite);
+  }
+
+  isDownloadingPhoto(photo: GalleryPhoto): boolean {
+    return this.photoDownloads.isPending(photo._id);
+  }
+
+  /** Una descarga por foto a la vez: los clics de más se ignoran (SingleFlight). */
+  downloadPhoto(photo: GalleryPhoto) {
+    void this.photoDownloads.run(photo._id, async () => {
+      try {
+        const { url } = await firstValueFrom(this.api.downloadPhoto(this.slug, this.token, photo._id));
+        this.openFile(url);
+      } catch (error) {
+        if (isSessionExpired(error)) this.expireSession();
+        else this.showNotice('No pudimos descargar la foto. Inténtalo de nuevo.');
+      }
     });
+  }
+
+  /** La URL trae Content-Disposition: attachment, así que el navegador descarga sin salir de la galería. */
+  openFile(url: string) {
+    window.location.assign(url);
+  }
+
+  private expireSession() {
+    sessionStorage.removeItem(`gallery_token_${this.slug}`);
+    this.router.navigate(['/galeria', this.slug]);
+  }
+
+  private createFavoriteSync(): FavoriteSync {
+    return new FavoriteSync(
+      {
+        save: async (photoId, favorite) => {
+          try {
+            return (await firstValueFrom(this.api.setFavorite(this.slug, this.token, photoId, favorite))).favorite;
+          } catch (error) {
+            if (isSessionExpired(error)) this.expireSession();
+            throw error;
+          }
+        },
+      },
+      (photoId, favorite) =>
+        this.photos.update((list) => list.map((p) => (p._id === photoId ? { ...p, isFavorite: favorite } : p))),
+      (message) => this.showNotice(message),
+    );
   }
 
   private createDownload(): GalleryDownload {
@@ -212,12 +266,8 @@ export class GalleryViewComponent implements OnInit, OnDestroy {
       },
       sessionStorage,
       this.slug,
-      () => {
-        sessionStorage.removeItem(`gallery_token_${this.slug}`);
-        this.router.navigate(['/galeria', this.slug]);
-      },
-      // La URL trae Content-Disposition: attachment, así que el navegador descarga sin salir de la galería.
-      (url) => window.location.assign(url),
+      () => this.expireSession(),
+      (url) => this.openFile(url),
     );
   }
 

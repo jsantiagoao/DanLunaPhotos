@@ -18,7 +18,7 @@ export type GalleryIconName = keyof typeof PATHS;
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <svg [attr.width]="size()" [attr.height]="size()" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+    <svg [attr.width]="size()" [attr.height]="size()" viewBox="0 0 24 24" [attr.fill]="filled() ? 'currentColor' : 'none'" stroke="currentColor"
          stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <path [attr.d]="path()"></path>
     </svg>
@@ -28,5 +28,7 @@ export type GalleryIconName = keyof typeof PATHS;
 export class GalleryIconComponent {
   readonly name = input.required<GalleryIconName>();
   readonly size = input(18);
+  /** Relleno con el color del texto, p. ej. el corazón de una favorita. */
+  readonly filled = input(false);
   protected readonly path = computed(() => PATHS[this.name()]);
 }

@@ -63,6 +63,11 @@ export interface FavoriteResponse {
   favorite: boolean;
 }
 
+export interface PhotoDownload {
+  url: string;
+  filename: string;
+}
+
 export interface DownloadJob {
   jobId: string;
   status: 'pending' | 'building' | 'ready' | 'failed';

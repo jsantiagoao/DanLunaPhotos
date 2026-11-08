@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { GalleryPhoto, FavoriteResponse, DownloadJob, GalleryInfoResponse } from './gallery.models';
+import { GalleryPhoto, FavoriteResponse, DownloadJob, GalleryInfoResponse, PhotoDownload } from './gallery.models';
 
 /**
  * Acceso a datos del visor de galeria (patron Repository/Facade).
@@ -40,12 +40,20 @@ export class GalleryApiService {
     });
   }
 
-  toggleFavorite(slug: string, token: string, photoId: string): Observable<FavoriteResponse> {
+  /** Estado deseado, no "alternar": repetir la petición deja lo mismo (idempotente). */
+  setFavorite(slug: string, token: string, photoId: string, favorite: boolean): Observable<FavoriteResponse> {
     return this.http.post<FavoriteResponse>(
       `${this.base(slug)}/favorite`,
-      { photoId },
+      { photoId, favorite },
       { headers: this.authHeaders(token) },
     );
+  }
+
+  /** Registra la descarga de una foto y devuelve un enlace recién firmado para bajarla. */
+  downloadPhoto(slug: string, token: string, photoId: string): Observable<PhotoDownload> {
+    return this.http.post<PhotoDownload>(`${this.base(slug)}/photo-download`, { photoId }, {
+      headers: this.authHeaders(token),
+    });
   }
 
   requestDownload(slug: string, token: string, body: DownloadRequest): Observable<DownloadJob> {

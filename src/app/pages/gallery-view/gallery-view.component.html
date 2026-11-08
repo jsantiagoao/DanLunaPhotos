@@ -31,7 +31,7 @@
       }
     </div>
     <div class="nav-actions">
-      <button class="na-btn" [class.active]="showFavoritesOnly" [attr.aria-pressed]="showFavoritesOnly" (click)="showFavoritesOnly = !showFavoritesOnly" title="Favoritas" aria-label="Ver solo favoritas"><app-gallery-icon name="heart" /></button>
+      <button class="na-btn" [class.active]="showFavoritesOnly" [attr.aria-pressed]="showFavoritesOnly" (click)="showFavoritesOnly = !showFavoritesOnly" title="Favoritas" aria-label="Ver solo favoritas"><app-gallery-icon name="heart" [filled]="showFavoritesOnly" /></button>
       @if (gallery.downloads?.enabled) {
         <button class="na-btn" (click)="showDownloadScreen = true" title="Descargar" aria-label="Descargar fotos"><app-gallery-icon name="download" /></button>
       }
@@ -103,7 +103,7 @@
   <ng-template #photoItem let-p>
     <div class="photo-item" [style.aspect-ratio]="aspectRatio(p)" (click)="openLightbox(p)">
       <img [src]="gridImage(p)" [alt]="p.filename" loading="lazy" />
-      <button class="fav-btn" [class.active]="p.isFavorite" [attr.aria-pressed]="!!p.isFavorite" aria-label="Marcar como favorita" (click)="toggleFav(p); $event.stopPropagation()"><app-gallery-icon name="heart" /></button>
+      <button class="fav-btn" [class.active]="p.isFavorite" [attr.aria-pressed]="!!p.isFavorite" aria-label="Marcar como favorita" (click)="toggleFav(p); $event.stopPropagation()"><app-gallery-icon name="heart" [filled]="!!p.isFavorite" /></button>
       @if (gallery.downloads?.enabled) {
         <input type="checkbox" class="select-check" aria-label="Seleccionar foto" [checked]="selectedIds.includes(p._id)" (click)="toggleSelect(p._id); $event.stopPropagation()" />
       }
@@ -141,20 +141,20 @@
 
   <!-- Lightbox -->
   @if (lightboxPhoto(); as lb) {
-    <div class="lightbox" role="dialog" aria-modal="true" aria-label="Foto ampliada" (click)="lightboxPhoto.set(null)"
+    <div class="lightbox" role="dialog" aria-modal="true" aria-label="Foto ampliada" (click)="closeLightbox()"
          (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event, nextPhoto.bind(this), prevPhoto.bind(this))">
       <div class="lb-content" (click)="$event.stopPropagation()">
         <img class="lb-thumb" [src]="lb.thumbUrl" [class.loaded]="lightboxWebLoaded" />
         <img class="lb-web" [src]="lb.webUrl || lb.thumbUrl" (load)="lightboxWebLoaded = true" [class.loaded]="lightboxWebLoaded" />
         <div class="lb-actions">
           <button (click)="prevPhoto()" aria-label="Foto anterior"><app-gallery-icon name="prev" [size]="22" /></button>
-          <button class="fav-btn-lb" [class.active]="lb.isFavorite" [attr.aria-pressed]="!!lb.isFavorite" aria-label="Marcar como favorita" (click)="toggleFav(lb)"><app-gallery-icon name="heart" [size]="20" /></button>
+          <button class="fav-btn-lb" [class.active]="lb.isFavorite" [attr.aria-pressed]="!!lb.isFavorite" aria-label="Marcar como favorita" (click)="toggleFav(lb)"><app-gallery-icon name="heart" [size]="20" [filled]="!!lb.isFavorite" /></button>
           @if (gallery.downloads?.enabled) {
-            <a [href]="lb.originalUrl" download class="dl-btn" aria-label="Descargar esta foto"><app-gallery-icon name="download" [size]="20" /></a>
+            <button class="dl-btn" aria-label="Descargar esta foto" [attr.aria-busy]="isDownloadingPhoto(lb)" [class.busy]="isDownloadingPhoto(lb)" (click)="downloadPhoto(lb)"><app-gallery-icon name="download" [size]="20" /></button>
           }
           <button (click)="nextPhoto()" aria-label="Foto siguiente"><app-gallery-icon name="next" [size]="22" /></button>
         </div>
-        <button class="lb-close" (click)="lightboxPhoto.set(null)" aria-label="Cerrar"><app-gallery-icon name="close" [size]="26" /></button>
+        <button class="lb-close" (click)="closeLightbox()" aria-label="Cerrar"><app-gallery-icon name="close" [size]="26" /></button>
       </div>
     </div>
   }

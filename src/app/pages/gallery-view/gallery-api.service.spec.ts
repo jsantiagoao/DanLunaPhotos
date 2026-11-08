@@ -34,13 +34,22 @@ describe('GalleryApiService', () => {
     req.flush([]);
   });
 
-  it('should_toggle_favorite_with_photo_id', () => {
-    service.toggleFavorite(slug, token, 'p1').subscribe();
+  it('should_send_the_wanted_favorite_state', () => {
+    service.setFavorite(slug, token, 'p1', false).subscribe();
     const req = httpMock.expectOne(`${base}/favorite`);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual({ photoId: 'p1', favorite: false });
+    expect(req.request.headers.get('X-Gallery-Token')).toBe(token);
+    req.flush({ favorite: false });
+  });
+
+  it('should_request_a_single_photo_download', () => {
+    service.downloadPhoto(slug, token, 'p1').subscribe();
+    const req = httpMock.expectOne(`${base}/photo-download`);
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual({ photoId: 'p1' });
     expect(req.request.headers.get('X-Gallery-Token')).toBe(token);
-    req.flush({ favorite: true });
+    req.flush({ url: 'https://s3/a.jpg', filename: 'a.jpg' });
   });
 
   it('should_request_download_of_all_photos', () => {

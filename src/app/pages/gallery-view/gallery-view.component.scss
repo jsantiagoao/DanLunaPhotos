@@ -62,7 +62,6 @@
     .na-btn { background: none; border: 1px solid #EAE7E1; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s; color: #666; }
     .na-btn:hover { border-color: #2D2420; color: #2D2420; }
     .na-btn.active { background: #2D2420; color: #fff; border-color: #2D2420; }
-    .na-btn.active svg, .fav-btn.active svg, .fav-btn-lb.active svg { fill: currentColor; }
     .dark .na-btn { border-color: #444; color: #ccc; }
 
     /* Photo grid */
@@ -88,6 +87,7 @@
     .photo-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.3s; opacity: 0; animation: fadeIn 0.5s forwards; }
     .photo-item:hover img { transform: scale(1.02); }
     @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    @keyframes pulse { from { opacity: 0.35; } to { opacity: 0.7; } }
     @keyframes fadeIn { to { opacity: 1; } }
     .fav-btn { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.45); border: none; color: #fff; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; }
     .fav-btn:focus-visible, .select-check:focus-visible { opacity: 1; }
@@ -111,7 +111,8 @@
     .lb-actions { position: absolute; bottom: -62px; left: 50%; transform: translateX(-50%); display: flex; gap: 0.5rem; align-items: center; padding: 6px; border-radius: 999px; background: rgba(255,255,255,0.1); backdrop-filter: blur(8px); }
     .lb-actions button, .lb-actions a { background: none; border: none; color: #fff; font-size: 1.5rem; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; text-decoration: none; }
     .lb-actions button:hover, .lb-actions a:hover { background: rgba(255,255,255,0.2); }
-    .fav-btn-lb.active { color: #e74c3c; }
+    .lb-actions .fav-btn-lb.active { color: #e74c3c; background: rgba(255,255,255,0.9); }
+    .lb-actions .dl-btn.busy { opacity: 0.5; cursor: progress; animation: pulse 1s ease-in-out infinite alternate; }
     .lb-close { position: absolute; top: -48px; right: 0; width: 44px; height: 44px; background: none; border: none; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 
     /* Slideshow */
