@@ -8,6 +8,7 @@ Versionado semántico según [SemVer](https://semver.org/lang/es/).
 
 ### Fixed
 - Reserva navideña (`/sesiones-navidad`): en el navegador de Instagram para Android, «Reservar» no respondía ni mostraba errores. El campo trampa contra robots, oculto y llamado «website», podía quedar rellenado por el autocompletado del navegador y el formulario salía sin avisar nada. Ahora el campo tiene un nombre que los autocompletados no reconocen, y si aun así llega lleno se limpia y aparece un aviso para tocar «Reservar» de nuevo.
+- Agendar (`/agendar`): mismo problema que la reserva navideña. El campo trampa «website» podía quedar autocompletado y «Reservar» salía sin avisar. Ahora el campo no tiene nombre ni etiqueta reconocibles y, si llega lleno, se limpia y se avisa para intentar de nuevo.
 
 ## [1.9.0] - 2026-11-08
 

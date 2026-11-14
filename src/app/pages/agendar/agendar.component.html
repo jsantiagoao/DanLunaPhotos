@@ -142,9 +142,11 @@
         }
 
         <!-- Honeypot -->
+        <!-- Sin nombre ni etiqueta que un autocompletado reconozca (antes "website") y con las marcas
+             que los autocompletados y gestores de contraseñas respetan para no rellenarlo. -->
         <div class="hp-field" aria-hidden="true">
-          <label for="website">Website</label>
-          <input id="website" type="text" [(ngModel)]="honeypot" name="website" tabindex="-1" autocomplete="off" />
+          <input id="agendar-hp-ref" type="text" [(ngModel)]="honeypot" name="agendar_hp_ref" tabindex="-1"
+                 autocomplete="off" data-lpignore="true" data-1p-ignore data-form-type="other" />
         </div>
 
         @if (error()) {

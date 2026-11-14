@@ -183,7 +183,15 @@ export class AgendarComponent implements OnInit {
   }
 
   submitBooking(): void {
-    if (!this.isFormValid() || this.loading() || this.honeypot) return;
+    if (!this.isFormValid() || this.loading()) return;
+
+    // El autocompletado de los navegadores integrados (p. ej. Instagram en Android) puede
+    // rellenar el campo trampa. Salir sin decir nada dejaba un "Reservar" que no responde.
+    if (this.honeypot) {
+      this.honeypot = '';
+      this.error.set('No pudimos enviar tu solicitud. Intenta de nuevo.');
+      return;
+    }
 
     const payload: BookingRequest = {
       name: this.sanitize(this.form.name.trim()),

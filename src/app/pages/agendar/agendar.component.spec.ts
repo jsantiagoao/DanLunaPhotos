@@ -1,6 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
 import { AgendarComponent } from './agendar.component';
+import { BookingService } from './booking.service';
 import { of, throwError } from 'rxjs';
 
 describe('AgendarComponent (unit)', () => {
@@ -128,6 +130,31 @@ describe('AgendarComponent (unit)', () => {
     expect(mockBookingSvc.reserve).not.toHaveBeenCalled();
   });
 
+  // Incidencia (navidad): en el navegador de Instagram para Android el autocompletado rellena
+  // el campo trampa y "Reservar" salia sin decir nada. Una persona nunca se queda sin respuesta.
+  it('should_answer_when_the_hidden_trap_field_was_autofilled', () => {
+    component.form = { name: 'María García', email: 'a@b.com', phone: '4421234567', type: 'bautizo', date: '2026-08-15', time: '10:00' };
+    component.honeypot = 'https://autocompletado.example';
+
+    component.submitBooking();
+
+    expect(mockBookingSvc.reserve).not.toHaveBeenCalled();
+    expect(component.error()).toContain('de nuevo');
+    expect(component.honeypot).toBe('');
+  });
+
+  it('should_reserve_on_the_next_try_after_an_autofilled_trap_field', () => {
+    component.form = { name: 'María García', email: 'a@b.com', phone: '4421234567', type: 'bautizo', date: '2026-08-15', time: '10:00' };
+    mockBookingSvc.reserve.mockReturnValue(of({ message: 'ok', sessionId: '1', date: '2026-08-15', time: '10:00' }));
+    component.honeypot = 'https://autocompletado.example';
+    component.submitBooking();
+
+    component.submitBooking();
+
+    expect(mockBookingSvc.reserve).toHaveBeenCalledTimes(1);
+    expect(component.step()).toBe('success');
+  });
+
   it('should not submit if already loading', () => {
     component.form = { name: 'María García', email: 'a@b.com', phone: '4421234567', type: 'bautizo', date: '2026-08-15', time: '10:00' };
     component.loading.set(true);
@@ -151,5 +178,29 @@ describe('AgendarComponent (unit)', () => {
     component.currentMonth.set(7);
     component.currentYear.set(2026);
     expect(component.isDayFullyBooked(15)).toBe(true);
+  });
+});
+
+describe('AgendarComponent (campo trampa en la plantilla)', () => {
+  it('should_hide_the_trap_field_from_autofill_services', () => {
+    TestBed.configureTestingModule({
+      providers: [
+        provideHttpClient(),
+        provideRouter([]),
+        { provide: BookingService, useValue: { getAvailability: () => of({ busySlots: [] }), getSessionTypes: () => of([]), reserve: jest.fn() } },
+      ],
+    });
+    const fixture = TestBed.createComponent(AgendarComponent);
+    fixture.componentInstance.step.set('form');
+    fixture.detectChanges();
+    const trap = (fixture.nativeElement as HTMLElement).querySelector('.hp-field input') as HTMLInputElement;
+
+    expect(trap).not.toBeNull();
+    // "website" y la etiqueta "Website" son lo que los autocompletados reconocen y rellenan.
+    expect(trap.name).not.toMatch(/website|url|sitio|web/i);
+    expect((fixture.nativeElement as HTMLElement).querySelector('.hp-field label')).toBeNull();
+    expect(trap.getAttribute('autocomplete')).toBe('off');
+    expect(trap.getAttribute('data-lpignore')).toBe('true');
+    expect(trap.getAttribute('data-1p-ignore')).not.toBeNull();
   });
 });
