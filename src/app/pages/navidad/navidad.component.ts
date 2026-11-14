@@ -242,7 +242,14 @@ export class NavidadComponent implements OnInit, OnDestroy {
   }
 
   protected reservar(): void {
-    if (this.honeypot) return;
+    // Los autocompletados de los navegadores integrados (p. ej. el de Instagram en Android)
+    // rellenan campos ocultos como si fueran de la clienta. Salir sin decir nada la dejaba con
+    // un "Reservar" que no responde: se limpia el campo y se le pide intentar de nuevo.
+    if (this.honeypot) {
+      this.honeypot = '';
+      this.mostrarErrorDeFormulario('No pudimos enviar tu solicitud. Toca «Reservar» de nuevo.');
+      return;
+    }
 
     const problema = findChristmasFormProblem(this.form, this.limits());
     if (problema) { this.mostrarErrorDeFormulario(problema.message, problema.field); return; }

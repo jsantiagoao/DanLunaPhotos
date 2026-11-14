@@ -4,6 +4,11 @@ Todos los cambios notables del proyecto se documentan aquí.
 Formato basado en [Keep a Changelog](https://keepachangelog.com/es/1.0.0/).
 Versionado semántico según [SemVer](https://semver.org/lang/es/).
 
+## [Sin publicar]
+
+### Fixed
+- Reserva navideña (`/sesiones-navidad`): en el navegador de Instagram para Android, «Reservar» no respondía ni mostraba errores. El campo trampa contra robots, oculto y llamado «website», podía quedar rellenado por el autocompletado del navegador y el formulario salía sin avisar nada. Ahora el campo tiene un nombre que los autocompletados no reconocen, y si aun así llega lleno se limpia y aparece un aviso para tocar «Reservar» de nuevo.
+
 ## [1.9.0] - 2026-11-08
 
 ### Fixed

@@ -117,6 +117,45 @@ describe('NavidadComponent', () => {
     expect(dialog(el)).toBeNull();
   });
 
+  /**
+   * Incidencia: en el navegador de Instagram para Android, "Reservar" no hacía nada ni mostraba
+   * errores. La única salida de `reservar()` sin ningún aviso era el campo trampa lleno: los
+   * autocompletados de los navegadores integrados rellenan campos ocultos como si fueran de la
+   * clienta. Una persona nunca debe quedarse sin respuesta.
+   */
+  it('should_answer_in_the_modal_when_the_hidden_trap_field_was_autofilled', () => {
+    const { el, page, submit } = render();
+    page.honeypot = 'https://autocompletado.example';
+    submit();
+
+    expect(dialog(el)).not.toBeNull();
+    expect(booking.reserve).not.toHaveBeenCalled();
+  });
+
+  it('should_let_the_person_reserve_on_the_next_try_after_an_autofilled_trap_field', () => {
+    const { el, page, submit } = render();
+    page.honeypot = 'https://autocompletado.example';
+    submit();
+    expect(page.honeypot).toBe('');
+
+    (el.querySelector('.error-dialog__button') as HTMLButtonElement).click();
+    submit();
+
+    expect(booking.reserve).toHaveBeenCalled();
+    expect(page.step()).toBe('listo');
+  });
+
+  it('should_hide_the_trap_field_from_autofill_services', () => {
+    const { el } = render();
+    const trap = el.querySelector('input.honeypot') as HTMLInputElement;
+
+    // "website" es un nombre que los autocompletados reconocen y rellenan.
+    expect(trap.name).not.toMatch(/website|url|sitio|web/i);
+    expect(trap.getAttribute('autocomplete')).toBe('off');
+    expect(trap.getAttribute('data-lpignore')).toBe('true');
+    expect(trap.getAttribute('data-1p-ignore')).not.toBeNull();
+  });
+
   it('should_reserve_when_the_form_is_valid', () => {
     const { el, page, submit } = render();
     submit();

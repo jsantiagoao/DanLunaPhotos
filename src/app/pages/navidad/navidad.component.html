@@ -254,7 +254,10 @@
         </div>
 
         <!-- Trampa para robots: oculta a la vista y al lector de pantalla -->
-        <input class="honeypot" type="text" name="website" tabindex="-1" autocomplete="off"
+        <!-- Sin un nombre que un autocompletado reconozca (antes "website") y con las marcas que
+             los gestores de contraseñas y autocompletados respetan para no rellenarlo. -->
+        <input class="honeypot" type="text" name="xmas_hp_ref" tabindex="-1" autocomplete="off"
+               data-lpignore="true" data-1p-ignore data-form-type="other"
                aria-hidden="true" [(ngModel)]="honeypot" />
 
             <div class="actions">
