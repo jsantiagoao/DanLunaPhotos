@@ -34,8 +34,9 @@ import { galleryAccessMessage, galleryDisplayTitle } from '../gallery-view/galle
   `,
   styles: [`
     .gallery-login { min-height: 100vh; min-height: 100svh; background: #2D2420 center / cover no-repeat; }
-    .veil { display: flex; align-items: flex-end; justify-content: center; min-height: 100vh; min-height: 100svh; padding: 1.5rem; box-sizing: border-box; background: linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.18) 100%); }
-    .entry { width: 100%; max-width: 420px; padding-bottom: clamp(1rem, 7vh, 4rem); color: #fff; text-align: center; animation: entryIn 0.6s cubic-bezier(.16, 1, .3, 1); }
+    /* El velo es ligero para que la foto se vea; la legibilidad del texto blanco (sobre cualquier foto, también una muy clara) la da la tarjeta de .entry. */
+    .veil { display: flex; align-items: flex-end; justify-content: center; min-height: 100vh; min-height: 100svh; padding: 1.5rem; box-sizing: border-box; background: linear-gradient(to top, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0.14) 42%, rgba(0,0,0,0) 72%); }
+    .entry { box-sizing: border-box; width: 100%; max-width: 420px; margin-bottom: clamp(1rem, 6vh, 3.5rem); padding: 1.5rem 1.25rem; border-radius: 20px; background: rgba(45,36,32,0.85); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); color: #fff; text-align: center; animation: entryIn 0.6s cubic-bezier(.16, 1, .3, 1); }
     @keyframes entryIn { from { opacity: 0; transform: translateY(14px); } }
     .logo { display: block; width: 120px; height: 44px; margin: 0 auto 1rem; background: currentColor; -webkit-mask: url('/assets/images/logo-mark.png') center / contain no-repeat; mask: url('/assets/images/logo-mark.png') center / contain no-repeat; }
     h1 { margin: 0 0 0.5rem; font: 500 clamp(1.75rem, 5vw, 2.5rem)/1.15 'Fraunces', serif; text-shadow: 0 2px 20px rgba(0,0,0,0.5); }
