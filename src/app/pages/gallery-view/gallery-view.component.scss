@@ -4,7 +4,7 @@
     /* Cover Full Screen */
     .cover-fullscreen { box-sizing: border-box; height: 100vh; background-size: cover; position: relative; display: flex; align-items: center; justify-content: center; background-color: #2D2420; transition: background-image 0.5s ease; }
     /* La foto no se apaga: solo un degradado arriba y otro abajo, como Pixieset. El texto se apoya en su sombra. */
-    .cover-fullscreen::before { content: ''; position: absolute; inset: 0; background: linear-gradient(rgba(0,0,0,0.2), transparent 18%), linear-gradient(transparent 60%, rgba(0,0,0,0.4)); }
+    .cover-fullscreen::before { content: ''; position: absolute; inset: 0; background: linear-gradient(rgba(0,0,0,0.1), transparent 18%), linear-gradient(transparent 60%, rgba(0,0,0,0.25)); }
     .cover-fs-overlay { box-sizing: border-box; max-width: min(90%, 1000px); text-align: center; color: var(--cover-text-color, #fff); display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
     .cover-heading { display: flex; flex-direction: column; align-items: inherit; max-width: 100%; }
 

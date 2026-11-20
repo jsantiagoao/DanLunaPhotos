@@ -7,6 +7,7 @@ Versionado semántico según [SemVer](https://semver.org/lang/es/).
 ## [Sin publicar]
 
 ### Fixed
+- Galería de la clienta: la portada se ve más clara. En la pantalla de acceso el velo oscuro cubría casi toda la foto; ahora es ligero y los textos y el formulario van sobre una tarjeta oscura, así que se leen aun con fotos muy claras. En la portada de la galería se redujeron los degradados de arriba y de abajo (de 0.2/0.4 a 0.1/0.25).
 - Reserva navideña (`/sesiones-navidad`): en el navegador de Instagram para Android, «Reservar» no respondía ni mostraba errores. El campo trampa contra robots, oculto y llamado «website», podía quedar rellenado por el autocompletado del navegador y el formulario salía sin avisar nada. Ahora el campo tiene un nombre que los autocompletados no reconocen, y si aun así llega lleno se limpia y aparece un aviso para tocar «Reservar» de nuevo.
 - Agendar (`/agendar`): mismo problema que la reserva navideña. El campo trampa «website» podía quedar autocompletado y «Reservar» salía sin avisar. Ahora el campo no tiene nombre ni etiqueta reconocibles y, si llega lleno, se limpia y se avisa para intentar de nuevo.
 
